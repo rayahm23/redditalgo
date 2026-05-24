@@ -1,1 +1,167 @@
-[]
+[
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "AMD",
+    "rank": 1,
+    "final_score": 70.77,
+    "recommendation_type": "Earnings chatter",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "ASTS",
+    "rank": 2,
+    "final_score": 64.98,
+    "recommendation_type": "Momentum setup",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "RKLB",
+    "rank": 3,
+    "final_score": 62.73,
+    "recommendation_type": "Momentum setup",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "SMH",
+    "rank": 4,
+    "final_score": 61.57,
+    "recommendation_type": "Earnings chatter",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "TSLA",
+    "rank": 5,
+    "final_score": 58.75,
+    "recommendation_type": "Momentum setup",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "CAKE",
+    "rank": 6,
+    "final_score": 58.52,
+    "recommendation_type": "Momentum setup",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "CAPEX",
+    "rank": 7,
+    "final_score": 58.18,
+    "recommendation_type": "Earnings chatter",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "NVDA",
+    "rank": 8,
+    "final_score": 54.59,
+    "recommendation_type": "Watchlist",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "RDDT",
+    "rank": 9,
+    "final_score": 54.32,
+    "recommendation_type": "Watchlist",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "MSFT",
+    "rank": 10,
+    "final_score": 53.37,
+    "recommendation_type": "Watchlist",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "NXXT",
+    "rank": 11,
+    "final_score": 52.55,
+    "recommendation_type": "Watchlist",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "ON",
+    "rank": 12,
+    "final_score": 52.27,
+    "recommendation_type": "Watchlist",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "SO",
+    "rank": 13,
+    "final_score": 52.27,
+    "recommendation_type": "Watchlist",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "INTC",
+    "rank": 14,
+    "final_score": 51.93,
+    "recommendation_type": "Earnings chatter",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  },
+  {
+    "scan_date": "2026-05-24",
+    "ticker": "HOLO",
+    "rank": 15,
+    "final_score": 51.75,
+    "recommendation_type": "Earnings chatter",
+    "next_day_return": null,
+    "three_day_return": null,
+    "seven_day_return": null,
+    "spy_relative_return": null
+  }
+]

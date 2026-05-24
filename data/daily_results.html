@@ -9,9 +9,8 @@
     @media (prefers-color-scheme: dark) { :root { --border: #30363d; --muted: #8b949e; --card: #161b22; --bg: #0d1117; --text: #e6edf3; } }
     body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }
     .wrap { max-width: 1120px; margin: 0 auto; padding: 32px 18px; }
-    header { margin-bottom: 22px; }
     h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 44px); }
-    .meta, .disclaimer { color: var(--muted); font-size: 14px; }
+    .meta, .disclaimer, .muted { color: var(--muted); font-size: 14px; }
     .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
     .toolbar a { color: inherit; border: 1px solid var(--border); border-radius: 999px; padding: 8px 12px; text-decoration: none; background: var(--card); }
     .grid { display: grid; gap: 14px; }
@@ -20,51 +19,69 @@
     .topline { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
     h2 { margin: 0; font-size: 24px; letter-spacing: 0.04em; }
     .score { font-weight: 800; border-radius: 10px; padding: 5px 9px; background: #0969da; color: white; }
+    .recommendation { border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 700; background: #ddf4ff; color: #0550ae; }
     .risk { border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
     .risk-low { background: #dafbe1; color: #116329; } .risk-medium { background: #fff8c5; color: #7d4e00; } .risk-high { background: #ffebe9; color: #82071e; }
     .summary { margin: 10px 0 12px; }
     .metrics { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
     .metrics span { border: 1px solid var(--border); border-radius: 999px; padding: 6px 9px; font-size: 13px; }
-    details { color: var(--muted); } summary { cursor: pointer; font-weight: 650; }
+    details { color: var(--muted); margin-top: 8px; } summary { cursor: pointer; font-weight: 650; color: var(--text); }
+    .breakdown-list { columns: 2; }
     a { color: #0969da; } li { margin: 4px 0; }
     .empty { border: 1px dashed var(--border); padding: 20px; border-radius: 12px; color: var(--muted); }
-    @media (max-width: 640px) { .card { grid-template-columns: 1fr; } .rank { padding: 0; } }
+    @media (max-width: 640px) { .card { grid-template-columns: 1fr; } .rank { padding: 0; } .breakdown-list { columns: 1; } }
   </style>
 </head>
 <body>
   <main class="wrap">
     <header>
       <h1>Reddit Alpha Scanner</h1>
-      <div class="meta">Generated at: 2026-05-24T20:04:52.274745+00:00</div>
-      <div class="toolbar">
-        <a href="daily_results.json">Raw JSON</a>
-        <a href="history/">History folder</a>
-      </div>
-      <p class="disclaimer">Research/watchlist tool only. Not financial advice. No auto-trading.</p>
+      <div class="meta">Generated at: 2026-05-24T21:00:10.368427+00:00</div>
+      <div class="toolbar"><a href="daily_results.json">Raw JSON</a><a href="history/">History folder</a></div>
+      <p class="disclaimer">Research/watchlist tool only. Not financial advice. Mentions are filtered to the last 7 days, compared with historical baselines, and penalized for pump/noise risk.</p>
     </header>
     <section class="grid">
             <article class="card">
               <div class="rank">#1</div>
               <div class="main">
                 <div class="topline">
-                  <h2>ASTS</h2>
-                  <span class="score">100.0</span>
+                  <h2>AMD</h2>
+                  <span class="score">70.8</span>
+                  <span class="recommendation">Earnings chatter</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with mixed sentiment and a low-risk market profile.</p>
+                <p class="summary">Earnings chatter: Earnings led discussion with positive sentiment, 9.00x mention acceleration, and pump risk 0.19.</p>
                 <div class="metrics">
-                  <span><b>3</b> mentions</span>
-                  <span><b>2</b> posts</span>
-                  <span><b>-0.15</b> sentiment</span>
-                  <span><b>332</b> upvotes</span>
-                  <span><b>341</b> comments</span>
-                  <span><b>$105.86</b> price</span>
-                  <span><b>31.6B</b> market cap</span>
-                  <span><b>16.8M</b> avg volume</span>
+                  <span><b>9</b> mentions</span>
+                  <span><b>9x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>3</b> posts</span>
+                  <span><b>3</b> subreddits</span>
+                  <span><b>Earnings</b> type</span>
+                  <span><b>0.39</b> sentiment</span>
+                  <span><b>0.67</b> conviction</span>
+                  <span><b>0.50</b> market confirm</span>
+                  <span><b>0.19</b> pump risk</span>
+                  <span><b>$467.51</b> price</span>
+                  <span><b>3.99%</b> 1d</span>
+                  <span><b>10.24%</b> 5d</span>
+                  <span><b>0.90</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.7068</li><li><b>Sentiment:</b> 0.6964</li><li><b>Net conviction:</b> 0.6666</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.7500</li><li><b>Pump risk penalty:</b> 0.0381</li><li><b>Raw score 0-1:</b> 0.7077</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>Ticker is repeated many times within the same post/comment context.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/stocks: The bull market is raging: what to buy?</li><li>r/stocks: 4 month update on r/Stocks favourite stock picks - up 43.62%!</li></ul>
+                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li><li>r/stocks: Why $AMD will easily surpass $1T and could come knocking at $NVDA door. <span class="muted">(Other, weight 1.00)</span></li><li>r/investing: I feel like it’s very difficult to get a read on the AI trade… (chips, smh, intc, bubble) <span class="muted">(Earnings, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -73,24 +90,43 @@
               <div class="rank">#2</div>
               <div class="main">
                 <div class="topline">
-                  <h2>MU</h2>
-                  <span class="score">100.0</span>
+                  <h2>ASTS</h2>
+                  <span class="score">65.0</span>
+                  <span class="recommendation">Momentum setup</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with positive sentiment and a low-risk market profile.</p>
+                <p class="summary">Momentum setup: Question led discussion with mixed sentiment, 5.00x mention acceleration, and pump risk 0.11.</p>
                 <div class="metrics">
-                  <span><b>2</b> mentions</span>
-                  <span><b>2</b> posts</span>
-                  <span><b>0.28</b> sentiment</span>
-                  <span><b>306</b> upvotes</span>
-                  <span><b>385</b> comments</span>
-                  <span><b>$751.00</b> price</span>
-                  <span><b>846.9B</b> market cap</span>
-                  <span><b>45.4M</b> avg volume</span>
+                  <span><b>5</b> mentions</span>
+                  <span><b>5x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>3</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>Question</b> type</span>
+                  <span><b>0.17</b> sentiment</span>
+                  <span><b>0.54</b> conviction</span>
+                  <span><b>0.75</b> market confirm</span>
+                  <span><b>0.11</b> pump risk</span>
+                  <span><b>$105.86</b> price</span>
+                  <span><b>10.01%</b> 1d</span>
+                  <span><b>26.52%</b> 5d</span>
+                  <span><b>1.82</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.5782</li><li><b>Sentiment:</b> 0.5845</li><li><b>Net conviction:</b> 0.5416</li><li><b>Market confirmation:</b> 0.7500</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0222</li><li><b>Raw score 0-1:</b> 0.6498</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/stocks: The bull market is raging: what to buy?</li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028</li></ul>
+                  <ul><li>r/stocks: The bull market is raging: what to buy? <span class="muted">(Question, weight 1.00)</span></li><li>r/stocks: 4 month update on r/Stocks favourite stock picks - up 43.62%! <span class="muted">(Meme, weight 1.00)</span></li><li>r/stocks: consolidating big winners for an unproved Winner? <span class="muted">(Question, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -99,24 +135,43 @@
               <div class="rank">#3</div>
               <div class="main">
                 <div class="topline">
-                  <h2>AMD</h2>
-                  <span class="score">100.0</span>
+                  <h2>RKLB</h2>
+                  <span class="score">62.7</span>
+                  <span class="recommendation">Momentum setup</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with positive sentiment and a low-risk market profile.</p>
+                <p class="summary">Momentum setup: Question led discussion with mixed sentiment, 4.00x mention acceleration, and pump risk 0.11.</p>
                 <div class="metrics">
-                  <span><b>8</b> mentions</span>
-                  <span><b>2</b> posts</span>
-                  <span><b>0.48</b> sentiment</span>
-                  <span><b>289</b> upvotes</span>
-                  <span><b>203</b> comments</span>
-                  <span><b>$467.51</b> price</span>
-                  <span><b>762.3B</b> market cap</span>
-                  <span><b>38.7M</b> avg volume</span>
+                  <span><b>4</b> mentions</span>
+                  <span><b>4x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>3</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>Question</b> type</span>
+                  <span><b>0.17</b> sentiment</span>
+                  <span><b>0.54</b> conviction</span>
+                  <span><b>0.60</b> market confirm</span>
+                  <span><b>0.11</b> pump risk</span>
+                  <span><b>$135.76</b> price</span>
+                  <span><b>8.22%</b> 1d</span>
+                  <span><b>8.81%</b> 5d</span>
+                  <span><b>1.35</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.5782</li><li><b>Sentiment:</b> 0.5845</li><li><b>Net conviction:</b> 0.5416</li><li><b>Market confirmation:</b> 0.6000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0222</li><li><b>Raw score 0-1:</b> 0.6273</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT)</li><li>r/stocks: Why $AMD will easily surpass $1T and could come knocking at $NVDA door.</li></ul>
+                  <ul><li>r/stocks: The bull market is raging: what to buy? <span class="muted">(Question, weight 1.00)</span></li><li>r/stocks: 4 month update on r/Stocks favourite stock picks - up 43.62%! <span class="muted">(Meme, weight 1.00)</span></li><li>r/stocks: consolidating big winners for an unproved Winner? <span class="muted">(Question, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -125,24 +180,43 @@
               <div class="rank">#4</div>
               <div class="main">
                 <div class="topline">
-                  <h2>NVDA</h2>
-                  <span class="score">100.0</span>
-                  <span class="risk risk-low">low risk</span>
+                  <h2>SMH</h2>
+                  <span class="score">61.6</span>
+                  <span class="recommendation">Earnings chatter</span>
+                  <span class="risk risk-medium">medium risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with positive sentiment and a low-risk market profile.</p>
+                <p class="summary">Earnings chatter: Earnings led discussion with mixed sentiment, 6.00x mention acceleration, and pump risk 0.14.</p>
                 <div class="metrics">
-                  <span><b>9</b> mentions</span>
-                  <span><b>2</b> posts</span>
-                  <span><b>0.48</b> sentiment</span>
-                  <span><b>99</b> upvotes</span>
-                  <span><b>106</b> comments</span>
-                  <span><b>$215.33</b> price</span>
-                  <span><b>5215.5B</b> market cap</span>
-                  <span><b>171.3M</b> avg volume</span>
+                  <span><b>6</b> mentions</span>
+                  <span><b>6x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>1</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>Earnings</b> type</span>
+                  <span><b>0.22</b> sentiment</span>
+                  <span><b>0.75</b> conviction</span>
+                  <span><b>0.50</b> market confirm</span>
+                  <span><b>0.14</b> pump risk</span>
+                  <span><b>$576.32</b> price</span>
+                  <span><b>1.49%</b> 1d</span>
+                  <span><b>3.59%</b> 5d</span>
+                  <span><b>0.77</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.4518</li><li><b>Sentiment:</b> 0.6096</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0286</li><li><b>Raw score 0-1:</b> 0.6157</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>Ticker is repeated many times within the same post/comment context.</p>
+                  <ul><li>Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/stocks: The Capex Unwind Thesis 2027 - 2028</li><li>r/stocks: Why $AMD will easily surpass $1T and could come knocking at $NVDA door.</li></ul>
+                  <ul><li>r/investing: I feel like it’s very difficult to get a read on the AI trade… (chips, smh, intc, bubble) <span class="muted">(Earnings, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -151,24 +225,43 @@
               <div class="rank">#5</div>
               <div class="main">
                 <div class="topline">
-                  <h2>MSFT</h2>
-                  <span class="score">100.0</span>
+                  <h2>TSLA</h2>
+                  <span class="score">58.8</span>
+                  <span class="recommendation">Momentum setup</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with positive sentiment and a low-risk market profile.</p>
+                <p class="summary">Momentum setup: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.</p>
                 <div class="metrics">
                   <span><b>2</b> mentions</span>
+                  <span><b>2x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
                   <span><b>2</b> posts</span>
-                  <span><b>0.44</b> sentiment</span>
-                  <span><b>296</b> upvotes</span>
-                  <span><b>229</b> comments</span>
-                  <span><b>$418.57</b> price</span>
-                  <span><b>3109.3B</b> market cap</span>
-                  <span><b>34.1M</b> avg volume</span>
+                  <span><b>2</b> subreddits</span>
+                  <span><b>News</b> type</span>
+                  <span><b>0.26</b> sentiment</span>
+                  <span><b>0.62</b> conviction</span>
+                  <span><b>0.50</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
+                  <span><b>$426.01</b> price</span>
+                  <span><b>1.95%</b> 1d</span>
+                  <span><b>0.89%</b> 5d</span>
+                  <span><b>0.74</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.7459</li><li><b>Sentiment:</b> 0.6305</li><li><b>Net conviction:</b> 0.6250</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.5000</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5875</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT)</li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028</li></ul>
+                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li><li>r/stocks: Here’s what you get for $2T for SpaceX IPO <span class="muted">(Other, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -177,24 +270,43 @@
               <div class="rank">#6</div>
               <div class="main">
                 <div class="topline">
-                  <h2>TSLA</h2>
-                  <span class="score">100.0</span>
-                  <span class="risk risk-low">low risk</span>
+                  <h2>CAKE</h2>
+                  <span class="score">58.5</span>
+                  <span class="recommendation">Momentum setup</span>
+                  <span class="risk risk-medium">medium risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with positive sentiment and a low-risk market profile.</p>
+                <p class="summary">Momentum setup: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.</p>
                 <div class="metrics">
                   <span><b>2</b> mentions</span>
-                  <span><b>2</b> posts</span>
-                  <span><b>0.26</b> sentiment</span>
-                  <span><b>506</b> upvotes</span>
-                  <span><b>472</b> comments</span>
-                  <span><b>$426.01</b> price</span>
-                  <span><b>1600.0B</b> market cap</span>
-                  <span><b>61.8M</b> avg volume</span>
+                  <span><b>2x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>1</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>News</b> type</span>
+                  <span><b>0.44</b> sentiment</span>
+                  <span><b>0.75</b> conviction</span>
+                  <span><b>0.50</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
+                  <span><b>$61.14</b> price</span>
+                  <span><b>0.94%</b> 1d</span>
+                  <span><b>2.77%</b> 5d</span>
+                  <span><b>0.65</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.6995</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5852</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/stocks: Here’s what you get for $2T for SpaceX IPO</li><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT)</li></ul>
+                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -203,24 +315,43 @@
               <div class="rank">#7</div>
               <div class="main">
                 <div class="topline">
-                  <h2>RKLB</h2>
-                  <span class="score">96.7</span>
-                  <span class="risk risk-low">low risk</span>
+                  <h2>CAPEX</h2>
+                  <span class="score">58.2</span>
+                  <span class="recommendation">Earnings chatter</span>
+                  <span class="risk risk-medium">medium risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with mixed sentiment and a low-risk market profile.</p>
+                <p class="summary">Earnings chatter: Earnings led discussion with mixed sentiment, 3.00x mention acceleration, and pump risk 0.00.</p>
                 <div class="metrics">
-                  <span><b>2</b> mentions</span>
-                  <span><b>2</b> posts</span>
-                  <span><b>-0.15</b> sentiment</span>
-                  <span><b>332</b> upvotes</span>
-                  <span><b>341</b> comments</span>
-                  <span><b>$135.76</b> price</span>
-                  <span><b>78.6B</b> market cap</span>
-                  <span><b>24.3M</b> avg volume</span>
+                  <span><b>3</b> mentions</span>
+                  <span><b>3x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>1</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>Earnings</b> type</span>
+                  <span><b>0.22</b> sentiment</span>
+                  <span><b>0.75</b> conviction</span>
+                  <span><b>0.50</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
+                  <span><b>$3,153.38</b> price</span>
+                  <span><b>0.23%</b> 1d</span>
+                  <span><b>0.45%</b> 5d</span>
+                  <span><b>n/a</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.7500</li><li><b>Engagement quality:</b> 0.4518</li><li><b>Sentiment:</b> 0.6096</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5818</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/stocks: The bull market is raging: what to buy?</li><li>r/stocks: 4 month update on r/Stocks favourite stock picks - up 43.62%!</li></ul>
+                  <ul><li>r/investing: I feel like it’s very difficult to get a read on the AI trade… (chips, smh, intc, bubble) <span class="muted">(Earnings, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -229,24 +360,43 @@
               <div class="rank">#8</div>
               <div class="main">
                 <div class="topline">
-                  <h2>RDDT</h2>
-                  <span class="score">94.4</span>
+                  <h2>NVDA</h2>
+                  <span class="score">54.6</span>
+                  <span class="recommendation">Watchlist</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with positive sentiment and a low-risk market profile.</p>
+                <p class="summary">Watchlist: DD led discussion with positive sentiment, 9.00x mention acceleration, and pump risk 0.26.</p>
                 <div class="metrics">
-                  <span><b>2</b> mentions</span>
-                  <span><b>1</b> posts</span>
-                  <span><b>0.44</b> sentiment</span>
-                  <span><b>243</b> upvotes</span>
-                  <span><b>163</b> comments</span>
-                  <span><b>$141.67</b> price</span>
-                  <span><b>27.3B</b> market cap</span>
-                  <span><b>4.9M</b> avg volume</span>
+                  <span><b>9</b> mentions</span>
+                  <span><b>9x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>2</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>DD</b> type</span>
+                  <span><b>0.48</b> sentiment</span>
+                  <span><b>0.56</b> conviction</span>
+                  <span><b>0</b> market confirm</span>
+                  <span><b>0.26</b> pump risk</span>
+                  <span><b>$215.33</b> price</span>
+                  <span><b>-1.90%</b> 1d</span>
+                  <span><b>-4.43%</b> 5d</span>
+                  <span><b>0.98</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.6356</li><li><b>Sentiment:</b> 0.7389</li><li><b>Net conviction:</b> 0.5625</li><li><b>Market confirmation:</b> 0</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0514</li><li><b>Raw score 0-1:</b> 0.5459</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>Ticker is repeated many times within the same post/comment context. Sentiment is high but market confirmation is weak.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT)</li></ul>
+                  <ul><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD, weight 1.00)</span></li><li>r/stocks: Why $AMD will easily surpass $1T and could come knocking at $NVDA door. <span class="muted">(Other, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -255,24 +405,43 @@
               <div class="rank">#9</div>
               <div class="main">
                 <div class="topline">
-                  <h2>CAKE</h2>
-                  <span class="score">90.4</span>
-                  <span class="risk risk-medium">medium risk</span>
+                  <h2>RDDT</h2>
+                  <span class="score">54.3</span>
+                  <span class="recommendation">Watchlist</span>
+                  <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with positive sentiment and a medium-risk market profile.</p>
+                <p class="summary">Watchlist: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.</p>
                 <div class="metrics">
                   <span><b>2</b> mentions</span>
+                  <span><b>2x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>News</b> type</span>
                   <span><b>0.44</b> sentiment</span>
-                  <span><b>243</b> upvotes</span>
-                  <span><b>163</b> comments</span>
-                  <span><b>$61.14</b> price</span>
-                  <span><b>3.0B</b> market cap</span>
-                  <span><b>1.2M</b> avg volume</span>
+                  <span><b>0.75</b> conviction</span>
+                  <span><b>0.22</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
+                  <span><b>$141.67</b> price</span>
+                  <span><b>-5.58%</b> 1d</span>
+                  <span><b>-10.43%</b> 5d</span>
+                  <span><b>1.60</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.6995</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.2200</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5432</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT)</li></ul>
+                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -281,24 +450,43 @@
               <div class="rank">#10</div>
               <div class="main">
                 <div class="topline">
-                  <h2>TLDR</h2>
-                  <span class="score">90.0</span>
-                  <span class="risk risk-high">high risk</span>
+                  <h2>MSFT</h2>
+                  <span class="score">53.4</span>
+                  <span class="recommendation">Watchlist</span>
+                  <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with positive sentiment and a high-risk market profile.</p>
+                <p class="summary">Watchlist: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.</p>
                 <div class="metrics">
                   <span><b>2</b> mentions</span>
+                  <span><b>2x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
                   <span><b>2</b> posts</span>
-                  <span><b>0.45</b> sentiment</span>
-                  <span><b>1.4K</b> upvotes</span>
-                  <span><b>389</b> comments</span>
-                  <span><b>$25.01</b> price</span>
-                  <span><b>n/a</b> market cap</span>
-                  <span><b>5.3K</b> avg volume</span>
+                  <span><b>2</b> subreddits</span>
+                  <span><b>News</b> type</span>
+                  <span><b>0.44</b> sentiment</span>
+                  <span><b>0.69</b> conviction</span>
+                  <span><b>0</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
+                  <span><b>$418.57</b> price</span>
+                  <span><b>-0.12%</b> 1d</span>
+                  <span><b>-0.79%</b> 5d</span>
+                  <span><b>0.66</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.7393</li><li><b>Sentiment:</b> 0.7179</li><li><b>Net conviction:</b> 0.6875</li><li><b>Market confirmation:</b> 0</li><li><b>Subreddit spread:</b> 0.5000</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5337</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/wallstreetbets: Mid-40s guy here. If you&#x27;ve booked your mid-6-to-7 digit AI gains by now &amp; you haven&#x27;t had this much $ before, do me these three favors.</li><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT)</li></ul>
+                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -307,24 +495,43 @@
               <div class="rank">#11</div>
               <div class="main">
                 <div class="topline">
-                  <h2>BNO</h2>
-                  <span class="score">89.9</span>
-                  <span class="risk risk-medium">medium risk</span>
+                  <h2>NXXT</h2>
+                  <span class="score">52.5</span>
+                  <span class="recommendation">Watchlist</span>
+                  <span class="risk risk-high">high risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with mixed sentiment and a medium-risk market profile.</p>
+                <p class="summary">Watchlist: Other led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.30.</p>
                 <div class="metrics">
-                  <span><b>1</b> mentions</span>
+                  <span><b>2</b> mentions</span>
+                  <span><b>2x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
-                  <span><b>-0.10</b> sentiment</span>
-                  <span><b>883</b> upvotes</span>
-                  <span><b>313</b> comments</span>
-                  <span><b>$55.00</b> price</span>
-                  <span><b>n/a</b> market cap</span>
-                  <span><b>6.4M</b> avg volume</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>Other</b> type</span>
+                  <span><b>0.43</b> sentiment</span>
+                  <span><b>1</b> conviction</span>
+                  <span><b>0.75</b> market confirm</span>
+                  <span><b>0.30</b> pump risk</span>
+                  <span><b>$0.86</b> price</span>
+                  <span><b>23.00%</b> 1d</span>
+                  <span><b>207.50%</b> 5d</span>
+                  <span><b>3.13</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.3274</li><li><b>Sentiment:</b> 0.7171</li><li><b>Net conviction:</b> 1</li><li><b>Market confirmation:</b> 0.7500</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0600</li><li><b>Raw score 0-1:</b> 0.5255</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>Penny stock price increases pump risk. Very small market cap increases pump risk.</p>
+                  <ul><li>Penny stock: latest price is below $5.</li><li>Small market cap: market cap is below $300M.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/wallstreetbets: Iran War: U.S. and Iran Agree in Principle to Reopen Strait of Hormuz, U.S. Official Says</li></ul>
+                  <ul><li>r/Shortsqueeze: NXXT setup for a mild squeeze. <span class="muted">(Other, weight 0.70)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -334,23 +541,42 @@
               <div class="main">
                 <div class="topline">
                   <h2>ON</h2>
-                  <span class="score">89.5</span>
+                  <span class="score">52.3</span>
+                  <span class="recommendation">Watchlist</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with positive sentiment and a low-risk market profile.</p>
+                <p class="summary">Watchlist: News led discussion with positive sentiment, 1.00x mention acceleration, and pump risk 0.00.</p>
                 <div class="metrics">
                   <span><b>1</b> mentions</span>
+                  <span><b>1x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>News</b> type</span>
                   <span><b>0.44</b> sentiment</span>
-                  <span><b>243</b> upvotes</span>
-                  <span><b>163</b> comments</span>
+                  <span><b>0.75</b> conviction</span>
+                  <span><b>0.50</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
                   <span><b>$116.20</b> price</span>
-                  <span><b>45.2B</b> market cap</span>
-                  <span><b>9.8M</b> avg volume</span>
+                  <span><b>6.01%</b> 1d</span>
+                  <span><b>2.73%</b> 5d</span>
+                  <span><b>0.87</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.2500</li><li><b>Engagement quality:</b> 0.6995</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5227</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT)</li></ul>
+                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -360,23 +586,42 @@
               <div class="main">
                 <div class="topline">
                   <h2>SO</h2>
-                  <span class="score">89.5</span>
+                  <span class="score">52.3</span>
+                  <span class="recommendation">Watchlist</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with positive sentiment and a low-risk market profile.</p>
+                <p class="summary">Watchlist: News led discussion with positive sentiment, 1.00x mention acceleration, and pump risk 0.00.</p>
                 <div class="metrics">
                   <span><b>1</b> mentions</span>
+                  <span><b>1x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>News</b> type</span>
                   <span><b>0.44</b> sentiment</span>
-                  <span><b>243</b> upvotes</span>
-                  <span><b>163</b> comments</span>
+                  <span><b>0.75</b> conviction</span>
+                  <span><b>0.50</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
                   <span><b>$94.55</b> price</span>
-                  <span><b>106.6B</b> market cap</span>
-                  <span><b>5.2M</b> avg volume</span>
+                  <span><b>0.33%</b> 1d</span>
+                  <span><b>2.16%</b> 5d</span>
+                  <span><b>0.65</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.2500</li><li><b>Engagement quality:</b> 0.6995</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5227</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT)</li></ul>
+                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -385,24 +630,43 @@
               <div class="rank">#14</div>
               <div class="main">
                 <div class="topline">
-                  <h2>NBIS</h2>
-                  <span class="score">88.9</span>
+                  <h2>INTC</h2>
+                  <span class="score">51.9</span>
+                  <span class="recommendation">Earnings chatter</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with mixed sentiment and a low-risk market profile.</p>
+                <p class="summary">Earnings chatter: Earnings led discussion with mixed sentiment, 2.00x mention acceleration, and pump risk 0.00.</p>
                 <div class="metrics">
-                  <span><b>1</b> mentions</span>
+                  <span><b>2</b> mentions</span>
+                  <span><b>2x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
-                  <span><b>0.12</b> sentiment</span>
-                  <span><b>253</b> upvotes</span>
-                  <span><b>319</b> comments</span>
-                  <span><b>$214.77</b> price</span>
-                  <span><b>54.5B</b> market cap</span>
-                  <span><b>17.0M</b> avg volume</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>Earnings</b> type</span>
+                  <span><b>0.22</b> sentiment</span>
+                  <span><b>0.75</b> conviction</span>
+                  <span><b>0.50</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
+                  <span><b>$119.84</b> price</span>
+                  <span><b>1.13%</b> 1d</span>
+                  <span><b>10.18%</b> 5d</span>
+                  <span><b>0.70</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.4518</li><li><b>Sentiment:</b> 0.6096</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5193</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/stocks: The bull market is raging: what to buy?</li></ul>
+                  <ul><li>r/investing: I feel like it’s very difficult to get a read on the AI trade… (chips, smh, intc, bubble) <span class="muted">(Earnings, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -411,24 +675,43 @@
               <div class="rank">#15</div>
               <div class="main">
                 <div class="topline">
-                  <h2>NOK</h2>
-                  <span class="score">88.9</span>
-                  <span class="risk risk-low">low risk</span>
+                  <h2>HOLO</h2>
+                  <span class="score">51.8</span>
+                  <span class="recommendation">Earnings chatter</span>
+                  <span class="risk risk-high">high risk</span>
                 </div>
-                <p class="summary">Emerging reddit attention with mixed sentiment and a low-risk market profile.</p>
+                <p class="summary">Earnings chatter: Earnings led discussion with positive sentiment, 4.00x mention acceleration, and pump risk 0.33.</p>
                 <div class="metrics">
-                  <span><b>1</b> mentions</span>
+                  <span><b>4</b> mentions</span>
+                  <span><b>4x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
-                  <span><b>0.12</b> sentiment</span>
-                  <span><b>253</b> upvotes</span>
-                  <span><b>319</b> comments</span>
-                  <span><b>$15.47</b> price</span>
-                  <span><b>86.4B</b> market cap</span>
-                  <span><b>85.4M</b> avg volume</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>Earnings</b> type</span>
+                  <span><b>0.27</b> sentiment</span>
+                  <span><b>0.38</b> conviction</span>
+                  <span><b>0.60</b> market confirm</span>
+                  <span><b>0.33</b> pump risk</span>
+                  <span><b>$1.89</b> price</span>
+                  <span><b>2.16%</b> 1d</span>
+                  <span><b>11.83%</b> 5d</span>
+                  <span><b>1.12</b> rel vol</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.3327</li><li><b>Sentiment:</b> 0.6361</li><li><b>Net conviction:</b> 0.3750</li><li><b>Market confirmation:</b> 0.6000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0657</li><li><b>Raw score 0-1:</b> 0.5175</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>Ticker is repeated many times within the same post/comment context. Penny stock price increases pump risk. Very small market cap increases pump risk.</p>
+                  <ul><li>Penny stock: latest price is below $5.</li><li>Small market cap: market cap is below $300M.</li></ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/stocks: The bull market is raging: what to buy?</li></ul>
+                  <ul><li>r/pennystocks: $HOLO Public Filing Red Flags: Reverse Splits, Convertible Notes, Revenue Substance, and Dilution Risk <span class="muted">(Earnings, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
