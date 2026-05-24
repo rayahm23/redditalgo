@@ -184,11 +184,25 @@ final_score =
 
 Every result includes a `score_breakdown` object explaining these components.
 
+## Signal confidence
+
+Each ranked ticker includes:
+
+- `signal_confidence_score`: 0-1 composite from subreddit spread, discussion quality, analyst target language, market confirmation, low pump risk, unique users, and catalyst confidence.
+- `signal_confidence_label`: `LOW`, `MEDIUM`, or `HIGH`.
+
+Supporting component fields are also exported (`discussion_quality_score`, `analyst_target_score`, `catalyst_confidence_score`, `unique_users_score`, `unique_users`).
+
 ## Recommendation types
 
-- `Momentum setup`: stronger score with market confirmation.
-- `Possible squeeze`: strong attention acceleration and bullish conviction.
-- `Earnings chatter`: discussion dominated by earnings/guidance language.
+- `Analyst upside watch`: strong analyst/upside language with high discussion quality.
+- `Earnings momentum`: earnings-led catalyst with market confirmation.
+- `AI sympathy trade`: AI catalyst language with strong attention acceleration.
+- `Meme squeeze`: high acceleration with elevated pump risk.
+- `Panic selloff`: elevated bearish attention and negative sentiment.
+- `Institutional-style accumulation`: strong discussion quality with low hype/pump risk.
+- `Retail breakout`: stronger score with market confirmation and rising attention.
+- `Contrarian watchlist`: negative sentiment with moderate quality and manageable noise.
 - `Watchlist`: worth monitoring but not enough confirmation for a stronger label.
 - `High-risk pump`: high pump/noise risk.
 - `Avoid / too noisy`: low score or weak market confirmation with elevated noise.

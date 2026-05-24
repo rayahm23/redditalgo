@@ -121,8 +121,26 @@ def normalize_apify_item(item: dict[str, Any], top_comments_limit: int) -> dict[
     )
     post_id = str(_first_value(item, "id", "postId", "redditId", "fullName", default=permalink))
 
+    author = str(
+        _first_value(
+            item,
+            "author",
+            "username",
+            "user",
+            "authorName",
+            "author_name",
+            default="",
+        )
+        or ""
+    )
+    if isinstance(item.get("author"), dict):
+        author = str(
+            _first_value(item["author"], "name", "username", "userName", default=author) or author
+        )
+
     return {
         "id": post_id,
+        "author": author,
         "subreddit": subreddit,
         "title": str(_first_value(item, "title", "heading", default="") or ""),
         "selftext": str(_first_value(item, "selftext", "body", "text", "description", default="") or ""),

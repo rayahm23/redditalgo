@@ -46,8 +46,12 @@ def _submission_to_dict(submission: Any, top_comments_limit: int) -> dict[str, A
     if permalink and permalink.startswith("/"):
         permalink = f"https://reddit.com{permalink}"
 
+    author = getattr(submission, "author", None)
+    author_name = str(getattr(author, "name", "") or "") if author is not None else ""
+
     return {
         "id": getattr(submission, "id", None),
+        "author": author_name,
         "subreddit": str(getattr(submission, "subreddit", "")),
         "title": getattr(submission, "title", "") or "",
         "selftext": getattr(submission, "selftext", "") or "",

@@ -151,3 +151,5 @@ def test_rank_tickers_excludes_invalid_market_data_and_adds_breakdowns():
     assert "score_breakdown" in results[0]
     assert "risk_reasons" in results[0]
     assert results[0]["top_sources"][0]["recency_weight"] == 0.85
+    assert "signal_confidence_score" in results[0]
+    assert results[0]["signal_confidence_label"] in {"LOW", "MEDIUM", "HIGH"}
