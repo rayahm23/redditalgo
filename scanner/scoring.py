@@ -113,8 +113,9 @@ def calculate_final_score(aggregate: TickerAggregate, market_data: MarketData) -
     validity_bonus = 8 if market_data.valid else 0
     risk_penalty = {"high": 10, "medium": 4, "low": 0}[determine_risk_flag(market_data)]
 
-    score = attention_score + engagement_score + sentiment_score + validity_bonus - risk_penalty
-    return round(max(0.0, min(100.0, score)), 2)
+    raw_score = attention_score + engagement_score + sentiment_score + validity_bonus
+    score = min(100.0, raw_score) - risk_penalty
+    return round(max(0.0, score), 2)
 
 
 def build_summary(aggregate: TickerAggregate, risk_flag: str) -> str:

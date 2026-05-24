@@ -18,8 +18,7 @@ def write_results(results: list[dict], output_path: Path, history_dir: Path, run
     output_path.parent.mkdir(parents=True, exist_ok=True)
     history_dir.mkdir(parents=True, exist_ok=True)
 
-    payload = json.dumps(results, indent=2) + "
-"
+    payload = json.dumps(results, indent=2) + "\n"
     output_path.write_text(payload, encoding="utf-8")
     (history_dir / f"{run_date}.json").write_text(payload, encoding="utf-8")
 
