@@ -53,9 +53,11 @@ REDDIT_USER_AGENT=reddit-alpha-scanner/0.1 by your_reddit_username
 The top 15 ranked tickers are written to:
 
 - `data/daily_results.json`
+- `data/daily_results.html`
 - `data/history/YYYY-MM-DD.json`
+- `data/history/YYYY-MM-DD.html`
 
-Each result includes rank, ticker, final score, mention counts, unique posts, sentiment, engagement, market fields, risk flag, summary, top sources, and generation timestamp.
+Each result includes rank, ticker, final score, raw and recency-weighted mention counts, unique posts, sentiment, engagement, market fields, risk flag, risk explanation, score breakdown, summary, top sources, and generation timestamp.
 
 ## Local setup
 
@@ -112,19 +114,27 @@ The workflow installs dependencies, runs `python -m scanner.pipeline`, and commi
 
 The final score is an explainable 0-100 value based on:
 
-- mention count
+- raw mention count
+- recency-weighted mention count
 - number of unique Reddit posts
+- recency-weighted post count
 - total upvotes
 - average sentiment
 - comment volume
 - market data validity
 - risk penalty
 
+Posts are filtered to the last 7 days. Recency weights are applied by post age: today `1.00`, yesterday `0.85`, then `0.70`, `0.55`, `0.40`, `0.25`, and `0.10` through day 6. Posts older than 7 days, or posts without a valid timestamp, are excluded from scoring.
+
+Each JSON/HTML result includes a `score_breakdown` showing attention, engagement, sentiment, market-validity bonus, risk penalty, raw score before cap, capped score before risk, and the formula used.
+
 Risk is flagged as:
 
 - `high`: penny stock, low average volume, small market cap, or invalid market data
 - `medium`: valid market data without low-risk liquidity/size signals
 - `low`: larger, liquid tickers with stronger market cap and volume signals
+
+Each result also includes `risk_reasons` and `risk_thresholds`, so you can see exactly why the risk flag was assigned.
 
 ## Future Vercel dashboard
 

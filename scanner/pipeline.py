@@ -45,7 +45,7 @@ def run_pipeline(config: ScannerConfig | None = None) -> list[dict]:
     run_date = generated_at[:10]
 
     posts = fetch_posts(config)
-    aggregates = aggregate_posts(posts, excluded=config.excluded_tickers)
+    aggregates = aggregate_posts(posts, excluded=config.excluded_tickers, reference_time=generated_at)
     market_data = get_market_data_for_tickers(set(aggregates.keys()))
     results = rank_tickers(aggregates, market_data, limit=15, generated_at=generated_at)
     write_results(results, config.output_path, config.history_dir, run_date)

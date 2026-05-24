@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any
 
 
-def _format_number(value: Any) -> str:
+def _format_number(value: Any, digits: int = 1) -> str:
     if value is None:
         return "n/a"
     try:
@@ -15,12 +15,14 @@ def _format_number(value: Any) -> str:
     except (TypeError, ValueError):
         return "n/a"
     if abs(number) >= 1_000_000_000:
-        return f"{number / 1_000_000_000:.1f}B"
+        return f"{number / 1_000_000_000:.{digits}f}B"
     if abs(number) >= 1_000_000:
-        return f"{number / 1_000_000:.1f}M"
+        return f"{number / 1_000_000:.{digits}f}M"
     if abs(number) >= 1_000:
-        return f"{number / 1_000:.1f}K"
-    return f"{number:,.0f}"
+        return f"{number / 1_000:.{digits}f}K"
+    if number.is_integer():
+        return f"{number:,.0f}"
+    return f"{number:,.{digits}f}"
 
 
 def _format_price(value: Any) -> str:
@@ -42,10 +44,42 @@ def _source_html(source: dict[str, Any]) -> str:
     title = escape(str(source.get("title") or "Untitled source"))
     subreddit = escape(str(source.get("subreddit") or "unknown"))
     permalink = str(source.get("permalink") or "")
-    label = f"r/{subreddit}: {title}"
+    weight = source.get("recency_weight")
+    weight_text = f" <span class=\"muted\">(weight {float(weight):.2f})</span>" if weight is not None else ""
+    label = f"r/{subreddit}: {title}{weight_text}"
     if permalink:
         return f'<li><a href="{escape(permalink)}">{label}</a></li>'
     return f"<li>{label}</li>"
+
+
+def _breakdown_html(breakdown: dict[str, Any]) -> str:
+    if not breakdown:
+        return "<p>No score breakdown available for this run.</p>"
+    parts = [
+        ("Attention", breakdown.get("attention_score")),
+        ("Engagement", breakdown.get("engagement_score")),
+        ("Sentiment", breakdown.get("sentiment_score")),
+        ("Market validity bonus", breakdown.get("market_validity_bonus")),
+        ("Risk penalty", breakdown.get("risk_penalty")),
+        ("Raw before cap", breakdown.get("raw_score_before_cap")),
+        ("Capped before risk", breakdown.get("capped_score_before_risk")),
+    ]
+    items = "".join(f"<li><b>{escape(label)}:</b> {_format_number(value, 2)}</li>" for label, value in parts)
+    formula = escape(str(breakdown.get("formula", "")))
+    weights = breakdown.get("recency_weights") or []
+    weight_text = ", ".join(str(weight) for weight in weights)
+    return f"""
+      <ul class="breakdown-list">{items}</ul>
+      <p class="muted"><b>Formula:</b> {formula}</p>
+      <p class="muted"><b>7-day recency weights:</b> today through day 6 = {escape(weight_text)}</p>
+    """
+
+
+def _risk_reasons_html(row: dict[str, Any]) -> str:
+    reasons = row.get("risk_reasons") or []
+    if not reasons:
+        return "<li>No risk reason details available for this run.</li>"
+    return "".join(f"<li>{escape(str(reason))}</li>" for reason in reasons)
 
 
 def render_results_html(results: list[dict[str, Any]]) -> str:
@@ -56,6 +90,8 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
     for row in results:
         risk = escape(str(row.get("risk_flag") or "unknown"))
         sources = "".join(_source_html(source) for source in row.get("top_sources", []))
+        weighted_mentions = row.get("weighted_mention_count", row.get("mention_count", 0))
+        weighted_posts = row.get("weighted_unique_posts", row.get("unique_posts", 0))
         rows.append(
             f"""
             <article class="card">
@@ -68,8 +104,10 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
                 </div>
                 <p class="summary">{escape(str(row.get("summary", "")))}</p>
                 <div class="metrics">
-                  <span><b>{row.get("mention_count", 0)}</b> mentions</span>
+                  <span><b>{row.get("mention_count", 0)}</b> raw mentions</span>
+                  <span><b>{_format_number(weighted_mentions, 2)}</b> weighted mentions</span>
                   <span><b>{row.get("unique_posts", 0)}</b> posts</span>
+                  <span><b>{_format_number(weighted_posts, 2)}</b> weighted posts</span>
                   <span><b>{float(row.get("avg_sentiment", 0)):.2f}</b> sentiment</span>
                   <span><b>{_format_number(row.get("total_upvotes"))}</b> upvotes</span>
                   <span><b>{_format_number(row.get("comment_volume"))}</b> comments</span>
@@ -77,6 +115,14 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
                   <span><b>{_format_number(row.get("market_cap"))}</b> market cap</span>
                   <span><b>{_format_number(row.get("avg_volume"))}</b> avg volume</span>
                 </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  {_breakdown_html(row.get("score_breakdown") or {})}
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <ul>{_risk_reasons_html(row)}</ul>
+                </details>
                 <details>
                   <summary>Top Reddit sources</summary>
                   <ul>{sources or "<li>No source links available</li>"}</ul>
@@ -100,7 +146,7 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
     .wrap {{ max-width: 1120px; margin: 0 auto; padding: 32px 18px; }}
     header {{ margin-bottom: 22px; }}
     h1 {{ margin: 0 0 8px; font-size: clamp(28px, 4vw, 44px); }}
-    .meta, .disclaimer {{ color: var(--muted); font-size: 14px; }}
+    .meta, .disclaimer, .muted {{ color: var(--muted); font-size: 14px; }}
     .toolbar {{ display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }}
     .toolbar a {{ color: inherit; border: 1px solid var(--border); border-radius: 999px; padding: 8px 12px; text-decoration: none; background: var(--card); }}
     .grid {{ display: grid; gap: 14px; }}
@@ -114,10 +160,11 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
     .summary {{ margin: 10px 0 12px; }}
     .metrics {{ display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }}
     .metrics span {{ border: 1px solid var(--border); border-radius: 999px; padding: 6px 9px; font-size: 13px; }}
-    details {{ color: var(--muted); }} summary {{ cursor: pointer; font-weight: 650; }}
+    details {{ color: var(--muted); margin-top: 8px; }} summary {{ cursor: pointer; font-weight: 650; color: var(--text); }}
+    .breakdown-list {{ columns: 2; }}
     a {{ color: #0969da; }} li {{ margin: 4px 0; }}
     .empty {{ border: 1px dashed var(--border); padding: 20px; border-radius: 12px; color: var(--muted); }}
-    @media (max-width: 640px) {{ .card {{ grid-template-columns: 1fr; }} .rank {{ padding: 0; }} }}
+    @media (max-width: 640px) {{ .card {{ grid-template-columns: 1fr; }} .rank {{ padding: 0; }} .breakdown-list {{ columns: 1; }} }}
   </style>
 </head>
 <body>
@@ -129,7 +176,7 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
         <a href="daily_results.json">Raw JSON</a>
         <a href="history/">History folder</a>
       </div>
-      <p class="disclaimer">Research/watchlist tool only. Not financial advice. No auto-trading.</p>
+      <p class="disclaimer">Research/watchlist tool only. Not financial advice. Mentions are filtered to the last 7 days and weighted by recency.</p>
     </header>
     <section class="grid">{cards}</section>
   </main>
