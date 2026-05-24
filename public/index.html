@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Reddit Alpha Scanner</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: Arial, sans-serif;
+      }
+      body {
+        margin: 0;
+        padding: 16px;
+        background: Canvas;
+        color: CanvasText;
+      }
+      .header {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0;
+      }
+      button {
+        border: 1px solid #777;
+        border-radius: 999px;
+        padding: 8px 12px;
+        background: transparent;
+        color: inherit;
+        cursor: pointer;
+      }
+      .meta,
+      .empty,
+      .disclaimer {
+        color: #777;
+        font-size: 13px;
+      }
+      .list {
+        display: grid;
+        gap: 10px;
+      }
+      .card {
+        border: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
+        border-radius: 12px;
+        padding: 12px;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: baseline;
+      }
+      .ticker {
+        font-weight: 700;
+        font-size: 18px;
+      }
+      .score {
+        font-weight: 700;
+      }
+      .metrics {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+        font-size: 12px;
+      }
+      .pill {
+        border-radius: 999px;
+        background: color-mix(in srgb, CanvasText 10%, transparent);
+        padding: 4px 8px;
+      }
+      a {
+        color: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div>
+        <h1>Reddit Alpha Scanner</h1>
+        <div id="meta" class="meta">Loading latest scan...</div>
+      </div>
+      <button id="refresh" type="button">Refresh</button>
+    </div>
+    <div id="content" class="list"></div>
+    <p class="disclaimer">Research/watchlist tool only. Not financial advice. No auto-trading.</p>
+    <script>
+      const content = document.getElementById("content");
+      const meta = document.getElementById("meta");
+      const refresh = document.getElementById("refresh");
+
+      function money(value) {
+        if (value == null) return "n/a";
+        return `$${Number(value).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+      }
+
+      function compact(value) {
+        if (value == null) return "n/a";
+        return Number(value).toLocaleString(undefined, { notation: "compact", maximumFractionDigits: 1 });
+      }
+
+      function render(payload) {
+        const results = payload.results || [];
+        meta.textContent = payload.generated_at
+          ? `Generated ${new Date(payload.generated_at).toLocaleString()}`
+          : "No scan has been stored yet. Ask a moderator to run the scan from the subreddit menu.";
+
+        if (results.length === 0) {
+          content.innerHTML = '<div class="empty">No ranked tickers yet.</div>';
+          return;
+        }
+
+        content.innerHTML = results.map((row) => `
+          <article class="card">
+            <div class="row">
+              <div><span class="ticker">#${row.rank} ${row.ticker}</span></div>
+              <div class="score">${row.final_score.toFixed(1)}</div>
+            </div>
+            <div class="metrics">
+              <span class="pill">mentions ${row.mention_count}</span>
+              <span class="pill">posts ${row.unique_posts}</span>
+              <span class="pill">sentiment ${row.avg_sentiment.toFixed(2)}</span>
+              <span class="pill">risk ${row.risk_flag}</span>
+              <span class="pill">price ${money(row.latest_price)}</span>
+              <span class="pill">cap ${compact(row.market_cap)}</span>
+              <span class="pill">vol ${compact(row.avg_volume)}</span>
+            </div>
+            <p>${row.summary}</p>
+            ${row.top_sources?.[0] ? `<a target="_blank" rel="noreferrer" href="${row.top_sources[0].permalink}">Top source: r/${row.top_sources[0].subreddit}</a>` : ""}
+          </article>
+        `).join("");
+      }
+
+      async function load() {
+        refresh.disabled = true;
+        try {
+          const response = await fetch("/api/results");
+          render(await response.json());
+        } catch (error) {
+          content.innerHTML = `<div class="empty">Failed to load results: ${error}</div>`;
+        } finally {
+          refresh.disabled = false;
+        }
+      }
+
+      refresh.addEventListener("click", load);
+      load();
+    </script>
+  </body>
+</html>
