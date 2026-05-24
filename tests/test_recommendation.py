@@ -2,9 +2,15 @@ from scanner.scoring import recommendation_type, signal_confidence_label, signal
 
 
 def test_recommendation_type_risk_and_noise_buckets():
-    assert recommendation_type(50, 0.7, 3.0, "Meme", 0.2, 0.2) == "High-risk pump"
+    assert (
+        recommendation_type(50, 0.75, 3.0, "Meme", 0.2, 0.2, discussion_quality=0.2)
+        == "Low-quality pump"
+    )
     assert recommendation_type(20, 0.2, 0.5, "Question", 0.1, 0.0) == "Avoid / too noisy"
-    assert recommendation_type(30, 0.5, 1.0, "Other", 0.2, 0.2) == "Avoid / too noisy"
+    assert (
+        recommendation_type(30, 0.55, 1.0, "Other", 0.2, 0.2, discussion_quality=0.2)
+        == "Avoid / too noisy"
+    )
 
 
 def test_recommendation_type_new_strategy_labels():
@@ -31,7 +37,7 @@ def test_recommendation_type_new_strategy_labels():
             0.2,
             catalyst_confidence=0.7,
         )
-        == "Earnings momentum"
+        == "High-upside catalyst trade"
     )
     assert (
         recommendation_type(
@@ -44,9 +50,12 @@ def test_recommendation_type_new_strategy_labels():
             acceleration_score=0.8,
             has_ai=True,
         )
-        == "AI sympathy trade"
+        == "High-upside catalyst trade"
     )
-    assert recommendation_type(70, 0.55, 3.0, "Meme", 0.4, 0.5) == "Meme squeeze"
+    assert (
+        recommendation_type(70, 0.25, 3.0, "News", 0.65, 0.5, discussion_quality=0.5)
+        == "Strong retail acceleration"
+    )
     assert (
         recommendation_type(
             55,
@@ -73,7 +82,7 @@ def test_recommendation_type_new_strategy_labels():
         )
         == "Institutional-style accumulation"
     )
-    assert recommendation_type(70, 0.2, 2.0, "DD", 0.7, 0.5) == "Retail breakout"
+    assert recommendation_type(70, 0.2, 2.0, "DD", 0.7, 0.5) == "Volatile momentum setup"
     assert (
         recommendation_type(
             45,

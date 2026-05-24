@@ -64,6 +64,9 @@ CATALYST_TYPE_WEIGHTS = {
 }
 CONFIDENCE_LABEL_HIGH = 0.65
 CONFIDENCE_LABEL_MEDIUM = 0.40
+PENNY_STOCK_PRICE_LT = 2.0
+EXTREME_LOW_AVG_VOLUME_LT = 150_000
+MICROCAP_MARKET_CAP_LT = 100_000_000
 
 
 @dataclass
@@ -268,14 +271,17 @@ def aggregate_posts(
 
 
 def risk_details(market_data: MarketData) -> dict[str, Any]:
-    """Return risk flag, reasons, and thresholds used for classification."""
+    """Return investability risk flag based on liquidity and penny-stock profile only.
+
+    Volatility and market cap alone do not increase risk. High flags are reserved for
+    clearly uninvestable micro-liquidity or sub-$2 penny profiles.
+    """
 
     thresholds = {
-        "penny_stock_price_lt": 5,
-        "low_avg_volume_lt": 500_000,
-        "small_market_cap_lt": 300_000_000,
-        "low_risk_avg_volume_gte": 2_000_000,
-        "low_risk_market_cap_gte": 10_000_000_000,
+        "penny_stock_price_lt": PENNY_STOCK_PRICE_LT,
+        "extreme_low_avg_volume_lt": EXTREME_LOW_AVG_VOLUME_LT,
+        "liquid_avg_volume_gte": 2_000_000,
+        "liquid_market_cap_gte": 10_000_000_000,
     }
     reasons: list[str] = []
 
@@ -290,28 +296,26 @@ def risk_details(market_data: MarketData) -> dict[str, Any]:
     avg_volume = market_data.avg_volume
     market_cap = market_data.market_cap
 
-    if latest_price is not None and latest_price < thresholds["penny_stock_price_lt"]:
-        reasons.append("Penny stock: latest price is below $5.")
-    if avg_volume is not None and avg_volume < thresholds["low_avg_volume_lt"]:
-        reasons.append("Low liquidity: average volume is below 500,000 shares.")
-    if market_cap is not None and market_cap < thresholds["small_market_cap_lt"]:
-        reasons.append("Small market cap: market cap is below $300M.")
+    if latest_price is not None and latest_price < PENNY_STOCK_PRICE_LT:
+        reasons.append("Sub-$2 share price: treated as a low-quality penny profile.")
+    if avg_volume is not None and avg_volume < EXTREME_LOW_AVG_VOLUME_LT:
+        reasons.append("Extremely low liquidity: average volume is below 150,000 shares.")
 
     if reasons:
         return {"risk_flag": "high", "risk_reasons": reasons, "risk_thresholds": thresholds}
 
     if (
         latest_price is not None
-        and latest_price >= thresholds["penny_stock_price_lt"]
+        and latest_price >= 5
         and avg_volume is not None
-        and avg_volume >= thresholds["low_risk_avg_volume_gte"]
+        and avg_volume >= thresholds["liquid_avg_volume_gte"]
         and market_cap is not None
-        and market_cap >= thresholds["low_risk_market_cap_gte"]
+        and market_cap >= thresholds["liquid_market_cap_gte"]
     ):
         return {
             "risk_flag": "low",
             "risk_reasons": [
-                "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
+                "Large, liquid profile suitable for size: strong average volume and market cap."
             ],
             "risk_thresholds": thresholds,
         }
@@ -319,7 +323,7 @@ def risk_details(market_data: MarketData) -> dict[str, Any]:
     return {
         "risk_flag": "medium",
         "risk_reasons": [
-            "Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds."
+            "Investable profile: volatile or smaller-cap names are allowed when liquidity is reasonable."
         ],
         "risk_thresholds": thresholds,
     }
@@ -448,25 +452,48 @@ def normalized_sentiment_score(avg_sentiment: float) -> float:
 
 
 def market_confirmation_score(market_data: MarketData) -> float:
-    """Score market confirmation from 0 to 1."""
+    """Score market confirmation from 0 to 1, rewarding momentum and participation."""
 
     if not market_data.valid:
         return 0.0
 
-    score = 0.15
-    if market_data.one_day_return is not None:
-        score += 0.15 if market_data.one_day_return > 0 else -0.08
-    if market_data.five_day_return is not None:
-        score += 0.20 if market_data.five_day_return > 0 else -0.10
-    if market_data.relative_volume is not None:
-        if market_data.relative_volume >= 1.5:
-            score += 0.25
-        elif market_data.relative_volume >= 1.0:
-            score += 0.10
+    score = 0.25
+    five_day = market_data.five_day_return
+    if five_day is not None:
+        if five_day >= 0.10:
+            score += 0.30
+        elif five_day >= 0.04:
+            score += 0.22
+        elif five_day > 0:
+            score += 0.14
+        elif five_day > -0.06:
+            score += 0.06
+        else:
+            score -= 0.04
+
+    one_day = market_data.one_day_return
+    if one_day is not None:
+        if one_day >= 0.04:
+            score += 0.12
+        elif one_day > 0:
+            score += 0.06
+        elif one_day > -0.04:
+            score += 0.02
+
+    relative_volume = market_data.relative_volume
+    if relative_volume is not None:
+        if relative_volume >= 2.0:
+            score += 0.28
+        elif relative_volume >= 1.3:
+            score += 0.18
+        elif relative_volume >= 1.0:
+            score += 0.08
+
     if market_data.above_20_day_high:
-        score += 0.25
-    if market_data.avg_volume is not None and market_data.avg_volume < 500_000:
-        score -= 0.20
+        score += 0.22
+
+    if market_data.avg_volume is not None and market_data.avg_volume < EXTREME_LOW_AVG_VOLUME_LT:
+        score -= 0.12
 
     return round(max(0.0, min(1.0, score)), 4)
 
@@ -477,15 +504,20 @@ def subreddit_spread_score(unique_subreddits: int) -> float:
     return round(min(1.0, unique_subreddits * 0.25), 4)
 
 
-def pump_risk_details(aggregate: TickerAggregate, market_data: MarketData, market_score: float) -> dict[str, Any]:
-    """Calculate pump/noise risk and explanation."""
+def pump_risk_details(
+    aggregate: TickerAggregate,
+    market_data: MarketData,
+    market_score: float,
+    discussion_quality: float = 0.0,
+) -> dict[str, Any]:
+    """Score low-quality speculative activity, not volatility or size alone."""
 
     components: list[float] = []
     reasons: list[str] = []
 
     hype_component = min(1.0, aggregate.hype_count / 8)
     if hype_component >= 0.25:
-        reasons.append("Heavy rocket/moon/hype language detected.")
+        reasons.append("Heavy rocket/moon spam language detected.")
     components.append(hype_component)
 
     repeated_component = min(1.0, max(0, aggregate.max_repeated_mentions - 3) / 7)
@@ -493,26 +525,34 @@ def pump_risk_details(aggregate: TickerAggregate, market_data: MarketData, marke
         reasons.append("Ticker is repeated many times within the same post/comment context.")
     components.append(repeated_component)
 
-    if market_data.latest_price is not None and market_data.latest_price < 5:
-        components.append(0.8)
-        reasons.append("Penny stock price increases pump risk.")
-    if market_data.avg_volume is not None and market_data.avg_volume < 500_000:
-        components.append(0.7)
-        reasons.append("Low average volume increases manipulation/noise risk.")
-    if market_data.market_cap is not None and market_data.market_cap < 300_000_000:
-        components.append(0.7)
-        reasons.append("Very small market cap increases pump risk.")
-
     meme_yolo_share = 0.0
     if aggregate.post_types:
-        meme_yolo_share = sum(1 for item in aggregate.post_types if item in {"Meme", "YOLO"}) / len(aggregate.post_types)
+        meme_yolo_share = sum(1 for item in aggregate.post_types if item in {"Meme", "YOLO"}) / len(
+            aggregate.post_types
+        )
     components.append(meme_yolo_share)
     if meme_yolo_share >= 0.5:
         reasons.append("Most discussion is meme/YOLO driven.")
 
-    if aggregate.avg_sentiment >= 0.45 and market_score < 0.35:
-        components.append(0.6)
-        reasons.append("Sentiment is high but market confirmation is weak.")
+    if market_data.latest_price is not None and market_data.latest_price < PENNY_STOCK_PRICE_LT:
+        components.append(0.85)
+        reasons.append("Sub-$2 penny profile with elevated low-quality speculation risk.")
+    if market_data.avg_volume is not None and market_data.avg_volume < EXTREME_LOW_AVG_VOLUME_LT:
+        components.append(0.8)
+        reasons.append("Extremely low liquidity increases pump/manipulation risk.")
+
+    microcap = market_data.market_cap is not None and market_data.market_cap < MICROCAP_MARKET_CAP_LT
+    if microcap and discussion_quality < 0.4 and meme_yolo_share >= 0.4:
+        components.append(0.75)
+        reasons.append("Microcap with weak discussion quality and meme-heavy hype.")
+
+    if meme_yolo_share >= 0.65 and discussion_quality < 0.35:
+        components.append(0.7)
+        reasons.append("Low-quality meme-only hype with little substantive discussion.")
+
+    if aggregate.avg_sentiment >= 0.45 and market_score < 0.30 and meme_yolo_share >= 0.35:
+        components.append(0.45)
+        reasons.append("Bullish Reddit hype is running ahead of market confirmation.")
 
     if aggregate.low_quality_mentions and aggregate.mention_count <= 2:
         components.append(0.4)
@@ -521,7 +561,7 @@ def pump_risk_details(aggregate: TickerAggregate, market_data: MarketData, marke
     score = sum(components) / len(components) if components else 0.0
     return {
         "pump_risk_score": round(max(0.0, min(1.0, score)), 4),
-        "risk_explanation": " ".join(reasons) if reasons else "No major pump/noise signals detected.",
+        "risk_explanation": " ".join(reasons) if reasons else "No major low-quality pump signals detected.",
     }
 
 
@@ -545,7 +585,8 @@ def score_breakdown(
     net_conviction = aggregate.net_conviction_score
     market_score = market_confirmation_score(market_data)
     spread_score = subreddit_spread_score(aggregate.unique_subreddits)
-    pump = pump_risk_details(aggregate, market_data, market_score)
+    discussion_quality = discussion_quality_score(aggregate)
+    pump = pump_risk_details(aggregate, market_data, market_score, discussion_quality)
     pump_penalty = pump["pump_risk_score"] * 0.20
 
     raw_score = (
@@ -600,27 +641,44 @@ def recommendation_type(
     acceleration_score: float = 0.0,
     has_ai: bool = False,
     hype_count: int = 0,
+    latest_price: float | None = None,
+    avg_volume: int | None = None,
 ) -> str:
     """Classify the ticker recommendation bucket."""
 
-    if pump_risk_score >= 0.65:
-        return "High-risk pump"
-    if final_score < 25 or (pump_risk_score >= 0.45 and market_score < 0.3):
+    illiquid_penny = (
+        latest_price is not None
+        and latest_price < PENNY_STOCK_PRICE_LT
+        and avg_volume is not None
+        and avg_volume < EXTREME_LOW_AVG_VOLUME_LT
+    )
+    if pump_risk_score >= 0.68 and (discussion_quality < 0.35 or illiquid_penny):
+        return "Low-quality pump"
+    if final_score < 25 or (pump_risk_score >= 0.55 and discussion_quality < 0.3):
         return "Avoid / too noisy"
     if analyst_target >= 0.5 and discussion_quality >= 0.6:
         return "Analyst upside watch"
     if dominant_type == "Earnings" and market_score >= 0.5 and catalyst_confidence >= 0.55:
-        return "Earnings momentum"
+        return "High-upside catalyst trade"
     if has_ai and attention_acceleration >= 2.0 and acceleration_score >= 0.6:
-        return "AI sympathy trade"
-    if attention_acceleration >= 2.5 and pump_risk_score >= 0.5:
-        return "Meme squeeze"
+        return "High-upside catalyst trade"
     if bearish_score >= 0.35 and (avg_sentiment <= -0.15 or bearish_score > bullish_score):
         return "Panic selloff"
     if discussion_quality >= 0.6 and pump_risk_score <= 0.35 and hype_count <= 2:
         return "Institutional-style accumulation"
-    if final_score >= 55 and market_score >= 0.5 and attention_acceleration >= 1.5:
-        return "Retail breakout"
+    if attention_acceleration >= 2.5 and pump_risk_score < 0.5 and discussion_quality >= 0.4:
+        return "Strong retail acceleration"
+    if final_score >= 55 and market_score >= 0.55 and attention_acceleration >= 1.5:
+        return "Volatile momentum setup"
+    if (
+        final_score >= 45
+        and attention_acceleration >= 1.2
+        and discussion_quality >= 0.4
+        and pump_risk_score < 0.5
+    ):
+        return "Aggressive growth watch"
+    if attention_acceleration >= 2.5 and pump_risk_score >= 0.5 and discussion_quality < 0.4:
+        return "Low-quality pump"
     if avg_sentiment <= -0.1 and discussion_quality >= 0.4 and pump_risk_score <= 0.45:
         return "Contrarian watchlist"
     return "Watchlist"
@@ -701,20 +759,21 @@ def build_summary(
     else:
         driver = f"{catalyst.lower()} discussion"
 
-    quality = (
-        "while the tone still looks speculative"
-        if pump_risk_score >= 0.55
-        else "with relatively substantive thread quality"
-        if discussion_quality >= 0.6
-        else "though the conversation remains mixed in quality"
-    )
+    if pump_risk_score >= 0.55 and discussion_quality < 0.4:
+        quality = "while low-quality hype and spammy tone dominate the thread"
+    elif pump_risk_score >= 0.45:
+        quality = "with some speculative hype mixed into the discussion"
+    elif discussion_quality >= 0.6:
+        quality = "with relatively substantive discussion quality"
+    else:
+        quality = "with a mixed but still investable conversation"
 
     market_phrase = (
-        "Price action is confirming the narrative."
+        "Momentum and volume are confirming the narrative."
         if market_score >= 0.6
-        else "The market has not fully confirmed the Reddit narrative yet."
+        else "Attention is building, but market confirmation is only partial."
         if market_score >= 0.35
-        else "Market confirmation remains weak."
+        else "Retail attention is rising faster than market confirmation."
     )
 
     if analyst_target_upside_pct is not None:
@@ -797,9 +856,9 @@ def rank_tickers(
             or (aggregate.mention_count / max(seven_day_avg_mentions, 1))
         )
         market_score = float(breakdown["market_confirmation_score"])
-        pump = pump_risk_details(aggregate, market_data, market_score)
         spread_score = float(breakdown["subreddit_spread_score"])
         discussion_quality = discussion_quality_score(aggregate)
+        pump = pump_risk_details(aggregate, market_data, market_score, discussion_quality)
         analyst_target = analyst_target_score(aggregate)
         catalyst_confidence = catalyst_confidence_score(aggregate)
         unique_users = unique_users_score(aggregate)
@@ -828,6 +887,8 @@ def rank_tickers(
             acceleration_score=float(breakdown["attention_acceleration_score"]),
             has_ai=aggregate_has_ai_catalyst(aggregate),
             hype_count=aggregate.hype_count,
+            latest_price=market_data.latest_price,
+            avg_volume=market_data.avg_volume,
         )
         top_sources = sorted(
             aggregate.sources,
