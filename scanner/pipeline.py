@@ -8,7 +8,7 @@ from pathlib import Path
 
 from scanner.apify_client import fetch_apify_posts
 from scanner.config import ScannerConfig
-from scanner.history import calculate_historical_baselines, load_recent_history
+from scanner.history import calculate_historical_baselines, load_history_snapshots, load_recent_history
 from scanner.market_data import get_market_data_for_tickers
 from scanner.reddit_client import fetch_reddit_posts
 from scanner.report import write_html_reports
@@ -53,6 +53,7 @@ def run_pipeline(config: ScannerConfig | None = None) -> list[dict]:
     aggregates = aggregate_posts(posts, excluded=config.excluded_tickers, reference_time=generated_at)
     market_data = get_market_data_for_tickers(set(aggregates.keys()))
     history_rows = load_recent_history(config.history_dir, run_date, days=7)
+    history_snapshots = load_history_snapshots(config.history_dir, run_date, days=7)
     baselines = calculate_historical_baselines(history_rows, days=7)
     results = rank_tickers(
         aggregates,
@@ -60,6 +61,7 @@ def run_pipeline(config: ScannerConfig | None = None) -> list[dict]:
         limit=15,
         generated_at=generated_at,
         baselines=baselines,
+        history_snapshots=history_snapshots,
     )
     write_results(results, config.output_path, config.history_dir, run_date)
     return results

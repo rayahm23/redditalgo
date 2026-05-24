@@ -57,7 +57,7 @@ The top 15 ranked tickers are written to:
 - `data/history/YYYY-MM-DD.json`
 - `data/history/YYYY-MM-DD.html`
 
-Each result includes rank, ticker, final score, raw and recency-weighted mention counts, unique posts, sentiment, engagement, market fields, risk flag, risk explanation, score breakdown, summary, top sources, and generation timestamp.
+Each result includes rank, ticker, final score, signal confidence, recommendation type, historical 7-day trends, sparkline-ready series, raw and recency-weighted mention counts, unique posts, sentiment, engagement, market fields, risk flag, risk explanation, score breakdown, summary, top sources, and generation timestamp.
 
 ## Local setup
 
@@ -139,6 +139,25 @@ attention_acceleration = today_mentions / max(seven_day_avg_mentions, 1)
 
 `attention_acceleration_score` is normalized from 0 to 1, where roughly 4x baseline or higher reaches 1.0.
 
+When prior daily history exists, mention acceleration uses an exponentially smoothed 7-day mention series (`smooth_series`) so single-day spikes do not dominate the score. The smoothed recent level is compared against the trailing baseline from the same series.
+
+### Historical trends and sparklines
+
+Each ranked ticker stores trailing 7-day arrays under `historical_trends`:
+
+```json
+{
+  "mentions_7d": [],
+  "sentiment_7d": [],
+  "score_7d": [],
+  "analyst_target_upside_7d": []
+}
+```
+
+Arrays are oldest-to-newest and include the current scan as the final point. The companion `sparklines` object mirrors these arrays for chart widgets (`mentions`, `sentiment`, `score`, `analyst_target_upside`, `length`). `trend_dates` provides the ISO dates aligned to each index.
+
+The HTML report renders compact inline sparklines plus chips for analyst upside, confidence level, and catalyst type.
+
 ### Post quality and conviction
 
 Posts are classified with keyword rules as `DD`, `News`, `Earnings`, `Options`, `YOLO`, `Meme`, `Question`, or `Other`. Higher-quality post types receive higher weight:
@@ -148,6 +167,12 @@ DD 1.5, News 1.3, Earnings 1.25, Options 1.2, Other 1.0, YOLO 0.8, Meme 0.4, Que
 ```
 
 Conviction scoring detects bullish phrases like `buying calls`, `loaded`, `all in`, `adding`, `holding`, `shares`, `leaps`, `squeeze`, `short interest`, `earnings`, `guidance`, `price target`, `PT`, `breakout`, and `unusual volume`, plus bearish phrases like `puts`, `shorting`, `rug pull`, `overvalued`, `dilution`, `bankruptcy`, `selloff`, and `downside`.
+
+### Analyst target logic
+
+`analyst_target_score` (also tracked in `analyst_target_upside_7d`) measures upside-oriented sell-side language in post titles, bodies, and comments. Keyword hits include `price target`, `analyst`, `upgrade`, `downgrade`, `outperform`, `overweight`, `consensus`, and similar phrases. The per-post score caps at 1.0 after three hits; the ticker-level score uses the maximum post-level score in the window.
+
+Strong analyst language plus high `discussion_quality_score` routes to the `Analyst upside watch` recommendation bucket.
 
 ### Market confirmation
 
@@ -184,11 +209,25 @@ final_score =
 
 Every result includes a `score_breakdown` object explaining these components.
 
+## Signal confidence
+
+Each ranked ticker includes:
+
+- `signal_confidence_score`: 0-1 composite from subreddit spread, discussion quality, analyst target language, market confirmation, low pump risk, unique users, and catalyst confidence.
+- `signal_confidence_label`: `LOW`, `MEDIUM`, or `HIGH`.
+
+Supporting component fields are also exported (`discussion_quality_score`, `analyst_target_score`, `catalyst_confidence_score`, `unique_users_score`, `unique_users`).
+
 ## Recommendation types
 
-- `Momentum setup`: stronger score with market confirmation.
-- `Possible squeeze`: strong attention acceleration and bullish conviction.
-- `Earnings chatter`: discussion dominated by earnings/guidance language.
+- `Analyst upside watch`: strong analyst/upside language with high discussion quality.
+- `Earnings momentum`: earnings-led catalyst with market confirmation.
+- `AI sympathy trade`: AI catalyst language with strong attention acceleration.
+- `Meme squeeze`: high acceleration with elevated pump risk.
+- `Panic selloff`: elevated bearish attention and negative sentiment.
+- `Institutional-style accumulation`: strong discussion quality with low hype/pump risk.
+- `Retail breakout`: stronger score with market confirmation and rising attention.
+- `Contrarian watchlist`: negative sentiment with moderate quality and manageable noise.
 - `Watchlist`: worth monitoring but not enough confirmation for a stronger label.
 - `High-risk pump`: high pump/noise risk.
 - `Avoid / too noisy`: low score or weak market confirmation with elevated noise.
@@ -215,20 +254,25 @@ It reads `data/history/*.json`, fetches forward prices with yfinance, and writes
 
 - This is rule-based and heuristic-driven, not predictive ML.
 - Reddit posts can be noisy, promotional, sarcastic, or incomplete.
+- Historical trends require prior `data/history/YYYY-MM-DD.json` snapshots; early runs pad missing days with zeros.
+- Mention acceleration smoothing depends on consistent daily scans; skipped days reduce trend fidelity.
+- Author-based unique-user scoring is only available when the Reddit/Apify payload includes author fields.
 - Apify actor schemas may vary; use `APIFY_INPUT_JSON` if your actor requires custom input.
 - yfinance data can be delayed, missing, or rate-limited.
 - Backtests are simplistic and do not account for slippage, liquidity, position sizing, or execution.
+- Catalyst and recommendation labels are heuristic tags, not verified event classifications.
 - No output is financial advice.
 
-## Future Vercel dashboard
+## Dashboard / GitHub Pages
 
-A Vercel dashboard can read `data/daily_results.json` directly from the repository or from a lightweight API route that fetches the raw GitHub file. Suggested first dashboard views:
+The static HTML report at `data/daily_results.html` (also deployed via GitHub Pages) includes:
 
-- ranked ticker table
-- risk flag filters
-- sentiment and attention columns
-- links to top Reddit sources
-- history chart sourced from `data/history/*.json`
+- ranked cards with score, recommendation, and risk
+- chips for analyst upside, confidence level (`LOW` / `MEDIUM` / `HIGH`), and catalyst type
+- inline 7-day sparklines for mentions, sentiment, score, and analyst upside
+- expandable score breakdown, risk notes, and Reddit source links
+
+A separate Vercel dashboard can still read `data/daily_results.json` directly and bind the `sparklines` arrays to chart components.
 
 ## Compliance note
 

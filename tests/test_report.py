@@ -10,7 +10,23 @@ def test_render_results_html_includes_ticker_metrics_and_disclaimer():
                 "rank": 1,
                 "ticker": "TSLA",
                 "final_score": 87.4,
-                "recommendation_type": "Momentum setup",
+                "recommendation_type": "Retail breakout",
+                "signal_confidence_label": "HIGH",
+                "analyst_target_score": 0.67,
+                "catalyst_type": "DD",
+                "historical_trends": {
+                    "mentions_7d": [1, 2, 3, 4, 5, 6, 7],
+                    "sentiment_7d": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7],
+                    "score_7d": [40, 45, 50, 55, 60, 65, 70],
+                    "analyst_target_upside_7d": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.67],
+                },
+                "sparklines": {
+                    "mentions": [1, 2, 3, 4, 5, 6, 7],
+                    "sentiment": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7],
+                    "score": [40, 45, 50, 55, 60, 65, 70],
+                    "analyst_target_upside": [0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.67],
+                    "length": 7,
+                },
                 "risk_flag": "medium",
                 "risk_explanation": "No major pump/noise signals detected.",
                 "mention_count": 42,
@@ -64,7 +80,11 @@ def test_render_results_html_includes_ticker_metrics_and_disclaimer():
     assert "Score breakdown" in html
     assert "Risk explanation" in html
     assert "Formula:" in html
-    assert "Momentum setup" in html
+    assert "Retail breakout" in html
+    assert "HIGH confidence" in html
+    assert "Analyst upside" in html
+    assert "DD catalyst" in html
+    assert 'class="sparkline"' in html
     assert "medium risk" in html
     assert "Not financial advice" in html
     assert "https://reddit.com/r/wallstreetbets/example" in html

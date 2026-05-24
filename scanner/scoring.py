@@ -9,7 +9,13 @@ from datetime import datetime, timezone
 from typing import Any
 
 from scanner.conviction import conviction_scores
-from scanner.history import attention_acceleration_score
+from scanner.history import (
+    attention_acceleration_score,
+    build_historical_trends,
+    build_sparkline_payload,
+    catalyst_type_label,
+    smoothed_attention_acceleration,
+)
 from scanner.market_data import MarketData
 from scanner.post_classifier import dominant_post_type as choose_dominant_post_type
 from scanner.post_classifier import classify_post, post_type_weight
@@ -19,6 +25,45 @@ from scanner.ticker_extractor import extract_tickers_from_post
 RECENCY_WINDOW_DAYS = 7
 RECENCY_WEIGHTS = (1.0, 0.85, 0.70, 0.55, 0.40, 0.25, 0.10)
 ROCKET_TERMS = ("🚀", "🌕", "moon", "mooning", "lambo", "tendies")
+ANALYST_TARGET_TERMS = (
+    "price target",
+    " pt ",
+    "analyst",
+    "upgrade",
+    "downgrade",
+    "outperform",
+    "overweight",
+    "underweight",
+    "raised target",
+    "lowered target",
+    "consensus",
+    "street target",
+)
+AI_CATALYST_TERMS = (
+    " ai ",
+    "artificial intelligence",
+    "openai",
+    "chatgpt",
+    "llm",
+    "large language model",
+    "machine learning",
+    "data center",
+    "gpu demand",
+    "inference",
+    "generative ai",
+)
+CATALYST_TYPE_WEIGHTS = {
+    "Earnings": 1.0,
+    "News": 0.85,
+    "DD": 0.8,
+    "Options": 0.55,
+    "Other": 0.45,
+    "YOLO": 0.25,
+    "Meme": 0.15,
+    "Question": 0.2,
+}
+CONFIDENCE_LABEL_HIGH = 0.65
+CONFIDENCE_LABEL_MEDIUM = 0.40
 
 
 @dataclass
@@ -41,6 +86,8 @@ class TickerAggregate:
     hype_count: int = 0
     max_repeated_mentions: int = 0
     low_quality_mentions: int = 0
+    authors: set[str] = field(default_factory=set)
+    analyst_target_scores: list[float] = field(default_factory=list)
     sources: list[dict[str, Any]] = field(default_factory=list)
 
     @property
@@ -50,6 +97,10 @@ class TickerAggregate:
     @property
     def unique_subreddits(self) -> int:
         return len(self.subreddits)
+
+    @property
+    def unique_users(self) -> int:
+        return len(self.authors)
 
     @property
     def avg_sentiment(self) -> float:
@@ -124,6 +175,24 @@ def _hype_count(*parts: Any) -> int:
     return sum(text.count(term.lower()) for term in ROCKET_TERMS)
 
 
+def _term_hits(text: str, terms: tuple[str, ...]) -> int:
+    lowered = f" {text.lower()} "
+    return sum(1 for term in terms if term in lowered)
+
+
+def analyst_target_score_from_text(*parts: Any) -> float:
+    """Score analyst/upside language from 0 to 1."""
+
+    hits = _term_hits(" ".join(str(part or "") for part in parts), ANALYST_TARGET_TERMS)
+    return round(min(1.0, hits / 3), 4)
+
+
+def has_ai_catalyst(*parts: Any) -> bool:
+    """Return whether discussion references AI-related catalyst language."""
+
+    return _term_hits(" ".join(str(part or "") for part in parts), AI_CATALYST_TERMS) > 0
+
+
 def aggregate_posts(
     posts: list[dict[str, Any]],
     excluded: set[str] | None = None,
@@ -148,7 +217,11 @@ def aggregate_posts(
 
         mention_counts = Counter(mentions)
         post_id = str(post.get("id") or post.get("permalink") or index)
+        author = str(post.get("author") or "").strip()
         sentiment = score_post_sentiment(post.get("title"), post.get("selftext"), comments)
+        post_analyst_score = analyst_target_score_from_text(
+            post.get("title"), post.get("selftext"), " ".join(comments)
+        )
         score = int(post.get("score") or 0)
         num_comments = int(post.get("num_comments") or 0)
         subreddit = str(post.get("subreddit") or "")
@@ -164,6 +237,9 @@ def aggregate_posts(
             aggregate.weighted_mention_count += count * weight
             aggregate.weighted_unique_posts += weight
             aggregate.post_ids.add(post_id)
+            if author:
+                aggregate.authors.add(author)
+            aggregate.analyst_target_scores.append(post_analyst_score)
             if subreddit:
                 aggregate.subreddits.add(subreddit)
             aggregate.total_upvotes += score
@@ -265,6 +341,108 @@ def engagement_quality_score(aggregate: TickerAggregate) -> float:
     return round(max(0.0, min(1.0, score)), 4)
 
 
+def discussion_quality_score(aggregate: TickerAggregate) -> float:
+    """Score discussion quality from 0 to 1 using engagement and substantive post mix."""
+
+    if not aggregate.post_types:
+        return 0.0
+
+    engagement = engagement_quality_score(aggregate)
+    total = len(aggregate.post_types)
+    substantive_share = sum(1 for item in aggregate.post_types if item in {"DD", "News", "Earnings"}) / total
+    noise_share = sum(1 for item in aggregate.post_types if item in {"Meme", "YOLO", "Question"}) / total
+    score = 0.50 * engagement + 0.35 * substantive_share + 0.15 * (1.0 - noise_share)
+    return round(max(0.0, min(1.0, score)), 4)
+
+
+def analyst_target_score(aggregate: TickerAggregate) -> float:
+    """Aggregate analyst/upside language strength from 0 to 1."""
+
+    if not aggregate.analyst_target_scores:
+        return 0.0
+    return round(max(aggregate.analyst_target_scores), 4)
+
+
+def catalyst_confidence_score(aggregate: TickerAggregate) -> float:
+    """Score catalyst strength from dominant and weighted post-type mix."""
+
+    if not aggregate.post_types:
+        return 0.0
+
+    weighted = [
+        CATALYST_TYPE_WEIGHTS.get(post_type, CATALYST_TYPE_WEIGHTS["Other"])
+        for post_type in aggregate.post_types
+    ]
+    dominant_weight = CATALYST_TYPE_WEIGHTS.get(
+        aggregate.dominant_post_type, CATALYST_TYPE_WEIGHTS["Other"]
+    )
+    average_weight = sum(weighted) / len(weighted)
+    return round(max(0.0, min(1.0, 0.55 * dominant_weight + 0.45 * average_weight)), 4)
+
+
+def unique_users_score(aggregate: TickerAggregate) -> float:
+    """Score author breadth from 0 to 1."""
+
+    unique_users = aggregate.unique_users
+    unique_posts = aggregate.unique_posts
+    if unique_users <= 0:
+        return 0.0
+
+    diversity = unique_users / max(unique_posts, 1)
+    breadth = min(1.0, unique_users / 5)
+    return round(max(0.0, min(1.0, 0.55 * diversity + 0.45 * breadth)), 4)
+
+
+def aggregate_has_ai_catalyst(aggregate: TickerAggregate) -> bool:
+    """Return whether any source post references AI catalyst language."""
+
+    for source in aggregate.sources:
+        if has_ai_catalyst(source.get("title")):
+            return True
+    return False
+
+
+def low_pump_risk_score(pump_risk_score: float) -> float:
+    """Invert pump risk into a confidence-friendly 0-1 score."""
+
+    return round(max(0.0, min(1.0, 1.0 - pump_risk_score)), 4)
+
+
+def signal_confidence_score(
+    *,
+    subreddit_spread: float,
+    discussion_quality: float,
+    analyst_target: float,
+    market_confirmation: float,
+    pump_risk: float,
+    unique_users: float,
+    catalyst_confidence: float,
+) -> float:
+    """Combine signal quality inputs into a 0-1 confidence score."""
+
+    low_pump = low_pump_risk_score(pump_risk)
+    raw = (
+        0.14 * subreddit_spread
+        + 0.18 * discussion_quality
+        + 0.14 * analyst_target
+        + 0.16 * market_confirmation
+        + 0.14 * low_pump
+        + 0.12 * unique_users
+        + 0.12 * catalyst_confidence
+    )
+    return round(max(0.0, min(1.0, raw)), 4)
+
+
+def signal_confidence_label(confidence_score: float) -> str:
+    """Map a confidence score to LOW, MEDIUM, or HIGH."""
+
+    if confidence_score >= CONFIDENCE_LABEL_HIGH:
+        return "HIGH"
+    if confidence_score >= CONFIDENCE_LABEL_MEDIUM:
+        return "MEDIUM"
+    return "LOW"
+
+
 def normalized_sentiment_score(avg_sentiment: float) -> float:
     return round(max(0.0, min(1.0, (avg_sentiment + 1) / 2)), 4)
 
@@ -351,12 +529,16 @@ def score_breakdown(
     aggregate: TickerAggregate,
     market_data: MarketData,
     baseline: dict[str, float] | None = None,
+    mentions_7d: list[float] | None = None,
 ) -> dict[str, Any]:
     """Calculate component scores used to produce final_score."""
 
     baseline = baseline or {}
     seven_day_avg_mentions = float(baseline.get("seven_day_avg_mentions", 0.0) or 0.0)
-    attention_acceleration = aggregate.mention_count / max(seven_day_avg_mentions, 1)
+    if mentions_7d:
+        attention_acceleration = smoothed_attention_acceleration(mentions_7d)
+    else:
+        attention_acceleration = aggregate.mention_count / max(seven_day_avg_mentions, 1)
     acceleration_score = attention_acceleration_score(attention_acceleration)
     engagement_score = engagement_quality_score(aggregate)
     sentiment_score = normalized_sentiment_score(aggregate.avg_sentiment)
@@ -378,6 +560,7 @@ def score_breakdown(
     normalized = round(max(0.0, min(1.0, raw_score)) * 100, 2)
 
     return {
+        "attention_acceleration": round(attention_acceleration, 4),
         "attention_acceleration_score": acceleration_score,
         "engagement_quality_score": engagement_score,
         "sentiment_score": sentiment_score,
@@ -408,6 +591,15 @@ def recommendation_type(
     dominant_type: str,
     market_score: float,
     bullish_score: float,
+    *,
+    bearish_score: float = 0.0,
+    avg_sentiment: float = 0.0,
+    discussion_quality: float = 0.0,
+    analyst_target: float = 0.0,
+    catalyst_confidence: float = 0.0,
+    acceleration_score: float = 0.0,
+    has_ai: bool = False,
+    hype_count: int = 0,
 ) -> str:
     """Classify the ticker recommendation bucket."""
 
@@ -415,12 +607,22 @@ def recommendation_type(
         return "High-risk pump"
     if final_score < 25 or (pump_risk_score >= 0.45 and market_score < 0.3):
         return "Avoid / too noisy"
-    if dominant_type == "Earnings":
-        return "Earnings chatter"
-    if attention_acceleration >= 2.5 and bullish_score >= 0.35:
-        return "Possible squeeze"
-    if final_score >= 55 and market_score >= 0.5:
-        return "Momentum setup"
+    if analyst_target >= 0.5 and discussion_quality >= 0.6:
+        return "Analyst upside watch"
+    if dominant_type == "Earnings" and market_score >= 0.5 and catalyst_confidence >= 0.55:
+        return "Earnings momentum"
+    if has_ai and attention_acceleration >= 2.0 and acceleration_score >= 0.6:
+        return "AI sympathy trade"
+    if attention_acceleration >= 2.5 and pump_risk_score >= 0.5:
+        return "Meme squeeze"
+    if bearish_score >= 0.35 and (avg_sentiment <= -0.15 or bearish_score > bullish_score):
+        return "Panic selloff"
+    if discussion_quality >= 0.6 and pump_risk_score <= 0.35 and hype_count <= 2:
+        return "Institutional-style accumulation"
+    if final_score >= 55 and market_score >= 0.5 and attention_acceleration >= 1.5:
+        return "Retail breakout"
+    if avg_sentiment <= -0.1 and discussion_quality >= 0.4 and pump_risk_score <= 0.45:
+        return "Contrarian watchlist"
     return "Watchlist"
 
 
@@ -447,12 +649,37 @@ def build_summary(
     )
 
 
+def _mentions_series_for_ticker(
+    ticker: str,
+    snapshots: list[tuple[str, list[dict[str, Any]]]],
+    current_mentions: float,
+) -> list[float]:
+    """Build a 7-day mention series ending with the current run's mention count."""
+
+    symbol = ticker.upper()
+    series: list[float] = []
+    for index, (_day, rows) in enumerate(snapshots):
+        if index == len(snapshots) - 1:
+            series.append(float(current_mentions))
+            continue
+        row = next(
+            (item for item in rows if str(item.get("ticker") or "").upper() == symbol),
+            None,
+        )
+        try:
+            series.append(float(row.get("mention_count") or 0) if row else 0.0)
+        except (TypeError, ValueError):
+            series.append(0.0)
+    return series
+
+
 def rank_tickers(
     aggregates: dict[str, TickerAggregate],
     market_data_by_ticker: dict[str, MarketData],
     limit: int = 15,
     generated_at: str | None = None,
     baselines: dict[str, dict[str, float]] | None = None,
+    history_snapshots: list[tuple[str, list[dict[str, Any]]]] | None = None,
 ) -> list[dict[str, Any]]:
     """Rank valid tickers and return JSON-serializable result rows."""
 
@@ -467,12 +694,35 @@ def rank_tickers(
 
         baseline = baselines.get(ticker, {})
         seven_day_avg_mentions = float(baseline.get("seven_day_avg_mentions", 0.0) or 0.0)
-        attention_acceleration = aggregate.mention_count / max(seven_day_avg_mentions, 1)
+        mentions_7d = (
+            _mentions_series_for_ticker(ticker, history_snapshots, aggregate.mention_count)
+            if history_snapshots
+            else None
+        )
         details = risk_details(market_data)
         risk_flag = str(details["risk_flag"])
-        breakdown = score_breakdown(aggregate, market_data, baseline)
+        breakdown = score_breakdown(aggregate, market_data, baseline, mentions_7d=mentions_7d)
+        attention_acceleration = float(
+            breakdown.get("attention_acceleration")
+            or (aggregate.mention_count / max(seven_day_avg_mentions, 1))
+        )
         market_score = float(breakdown["market_confirmation_score"])
         pump = pump_risk_details(aggregate, market_data, market_score)
+        spread_score = float(breakdown["subreddit_spread_score"])
+        discussion_quality = discussion_quality_score(aggregate)
+        analyst_target = analyst_target_score(aggregate)
+        catalyst_confidence = catalyst_confidence_score(aggregate)
+        unique_users = unique_users_score(aggregate)
+        confidence_score = signal_confidence_score(
+            subreddit_spread=spread_score,
+            discussion_quality=discussion_quality,
+            analyst_target=analyst_target,
+            market_confirmation=market_score,
+            pump_risk=pump["pump_risk_score"],
+            unique_users=unique_users,
+            catalyst_confidence=catalyst_confidence,
+        )
+        confidence_label = signal_confidence_label(confidence_score)
         recommendation = recommendation_type(
             breakdown["final_score"],
             pump["pump_risk_score"],
@@ -480,6 +730,14 @@ def rank_tickers(
             aggregate.dominant_post_type,
             market_score,
             aggregate.bullish_conviction_score,
+            bearish_score=aggregate.bearish_conviction_score,
+            avg_sentiment=aggregate.avg_sentiment,
+            discussion_quality=discussion_quality,
+            analyst_target=analyst_target,
+            catalyst_confidence=catalyst_confidence,
+            acceleration_score=float(breakdown["attention_acceleration_score"]),
+            has_ai=aggregate_has_ai_catalyst(aggregate),
+            hype_count=aggregate.hype_count,
         )
         top_sources = sorted(
             aggregate.sources,
@@ -498,11 +756,41 @@ def rank_tickers(
             for source in top_sources
         ]
 
+        if history_snapshots:
+            historical_trends = build_historical_trends(
+                ticker,
+                history_snapshots,
+                current_mentions=float(aggregate.mention_count),
+                current_sentiment=float(aggregate.avg_sentiment),
+                current_score=float(breakdown["final_score"]),
+                current_analyst_target=float(analyst_target),
+            )
+        else:
+            historical_trends = {
+                "mentions_7d": [0.0] * 6 + [float(aggregate.mention_count)],
+                "sentiment_7d": [0.0] * 6 + [float(aggregate.avg_sentiment)],
+                "score_7d": [0.0] * 6 + [float(breakdown["final_score"])],
+                "analyst_target_upside_7d": [0.0] * 6 + [float(analyst_target)],
+            }
+        sparklines = build_sparkline_payload(historical_trends)
+        catalyst_type = catalyst_type_label(aggregate.dominant_post_type, catalyst_confidence)
+
         rows.append(
             {
                 "ticker": ticker,
                 "final_score": breakdown["final_score"],
+                "signal_confidence_score": confidence_score,
+                "signal_confidence_label": confidence_label,
                 "recommendation_type": recommendation,
+                "discussion_quality_score": discussion_quality,
+                "analyst_target_score": analyst_target,
+                "catalyst_confidence_score": catalyst_confidence,
+                "unique_users_score": unique_users,
+                "unique_users": aggregate.unique_users,
+                "catalyst_type": catalyst_type,
+                "historical_trends": historical_trends,
+                "sparklines": sparklines,
+                "trend_dates": [day for day, _rows in history_snapshots] if history_snapshots else [],
                 "risk_flag": risk_flag,
                 "risk_explanation": pump["risk_explanation"],
                 "mention_count": aggregate.mention_count,
