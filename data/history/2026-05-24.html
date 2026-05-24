@@ -110,10 +110,43 @@
     .analyst-downside { color: var(--down); }
     .analyst-neutral { color: var(--neutral); }
     .summary {
-      margin: 0 0 20px;
+      margin: 0 0 16px;
       font-size: 16px;
       line-height: 1.65;
       max-width: 72ch;
+    }
+    .narrative-panel {
+      margin: 0 0 20px;
+      padding: 14px 0 6px;
+      border-top: 1px solid var(--line);
+    }
+    .narrative-panel h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 650;
+    }
+    .primary-narrative {
+      margin: 0 0 12px;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 72ch;
+    }
+    .theme-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      font-size: 14px;
+    }
+    .theme-columns h4 {
+      margin: 0 0 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+    .theme-columns ul {
+      margin: 0;
+      padding-left: 18px;
     }
     .signal-panel {
       display: grid;
@@ -223,7 +256,7 @@
   <main class="wrap">
     <header>
       <h1>Reddit Alpha Scanner</h1>
-      <div class="meta">Generated at: 2026-05-24T22:54:48.942919+00:00</div>
+      <div class="meta">Generated at: 2026-05-24T23:36:51.804674+00:00</div>
       <div class="toolbar">
         <a href="daily_results.json">Raw JSON</a>
         <a href="history/">History folder</a>
@@ -239,44 +272,64 @@
           </div>
           <div class="score-block">
             <span class="score-label">Signal Score</span>
-            <span class="score">69</span>
+            <span class="score">75</span>
           </div>
         </div>
 
         <div class="headline-row">
-          <span class="recommendation">AI sympathy trade</span>
-          <span class="confidence-pill">Medium Confidence</span>
+          <span class="recommendation">High-upside catalyst trade</span>
+          <span class="confidence-pill">High Confidence</span>
         </div>
 
-        <p class="meta-line">Medium Confidence • Other Catalyst • Low Risk</p>
+        <p class="meta-line">High Confidence • Other Catalyst • Liquid profile</p>
         <div class="analyst-row"><span class="analyst-target analyst-neutral">$472.17 avg target (+1%)</span></div>
-        <p class="summary">AMD discussion picked up sharply as users focused on AI-related catalysts, with relatively substantive thread quality. The market has not fully confirmed the Reddit narrative yet. The stock is trading near the average analyst target.</p>
+        <p class="summary">AMD discussion picked up sharply as users focused on AI datacenter demand, earnings optimism, revenue growth, and the conversation looked relatively substantive. Momentum and volume are confirming the narrative. Bearish pushback included valuation concerns, regulatory / legal issue.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on AMD&#x27;s AI datacenter demand, earnings optimism, revenue growth; concerns around valuation concerns, regulatory / legal issue.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>AI datacenter demand</li><li>earnings optimism</li><li>revenue growth</li><li>margin expansion</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>valuation concerns</li><li>regulatory / legal issue</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">this, that, with, growth, like, they</p>
+        </details>
+      </section>
+    
 
         <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-moderate">Moderate</span></div></div>
         
       <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">3.6x mention acceleration</span></div>
+        <div><span class="metric-label">Attention</span><span class="metric-value">4x mention acceleration</span></div>
         <div><span class="metric-label">5D Performance</span><span class="metric-value">+10% 5d</span></div>
         <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+1% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Low Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">3 subreddits</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">4 subreddits</span></div>
       </div>
     
         <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
 
         <details>
           <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 9</span><span><b>Posts:</b> 3</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Bullish lean</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.9</span><span><b>Price:</b> $467.51</span></div>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 10</span><span><b>Posts:</b> 4</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Confirmed</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.9</span><span><b>Price:</b> $467.51</span></div>
         </details>
         <details>
           <summary>Score breakdown</summary>
           
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Strong</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Strong</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Strong</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Strong</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Strong</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
       <details class="nested-details">
         <summary>Algorithm details</summary>
         <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.687</li>
-          <li><b>Normalized score:</b> 68.7</li>
+          <li><b>Raw model score:</b> 0.753</li>
+          <li><b>Normalized score:</b> 75.3</li>
           <li><b>Pump penalty:</b> 0.038</li>
         </ul>
         <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
@@ -291,21 +344,21 @@
         <li><span>Catalyst label</span><strong>Other</strong></li>
         <li><span>Catalyst clarity</span><strong>Emerging</strong></li>
       </ul>
-      <p class="muted">Discussion is leaning into AI-linked narratives.</p>
+      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
     
         </details>
         <details>
           <summary>Risk explanation</summary>
           <p>Ticker is repeated many times within the same post/comment context.</p>
-          <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
         </details>
         <details>
           <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>9</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>68.69</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.39</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>10</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>75.34</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.28</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
         </details>
         <details>
           <summary>Reddit sources</summary>
-          <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News)</span></li><li>r/stocks: Why $AMD will easily surpass $1T and could come knocking at $NVDA door. <span class="muted">(Other)</span></li><li>r/investing: I feel like it’s very difficult to get a read on the AI trade… (chips, smh, intc, bubble) <span class="muted">(Earnings)</span></li></ul>
+          <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News)</span></li><li>r/stocks: Why $AMD will easily surpass $1T and could come knocking at $NVDA door. <span class="muted">(Other)</span></li><li>r/thetagang: CSPs Optimal Time to Expiration? <span class="muted">(Options)</span></li></ul>
         </details>
       </article>
     
@@ -313,49 +366,461 @@
         <div class="card-header">
           <div class="identity">
             <span class="rank">#2</span>
-            <h2>ASTS</h2>
+            <h2>NVDA</h2>
           </div>
           <div class="score-block">
             <span class="score-label">Signal Score</span>
-            <span class="score">53</span>
+            <span class="score">72</span>
           </div>
         </div>
 
         <div class="headline-row">
-          <span class="recommendation">Watchlist</span>
-          <span class="confidence-pill">Medium Confidence</span>
+          <span class="recommendation">High-upside catalyst trade</span>
+          <span class="confidence-pill">High Confidence</span>
         </div>
 
-        <p class="meta-line">Medium Confidence • Mixed Catalyst • Low Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-downside">$83.47 avg target (-21%)</span></div>
-        <p class="summary">ASTS discussion accelerated as users focused on mixed discussion, though the conversation remains mixed in quality. Price action is confirming the narrative. Consensus targets sit roughly 21% below the current price.</p>
+        <p class="meta-line">High Confidence • Other Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-upside">$294.22 avg target (+37%)</span></div>
+        <p class="summary">NVDA discussion picked up sharply as users focused on AI datacenter demand, free cash flow, short squeeze, and the conversation looked relatively substantive. Retail attention is rising faster than market confirmation. Street targets still imply about 37% upside, which supports the Reddit narrative. Bearish pushback included NVDA competition, valuation concerns.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on NVDA&#x27;s AI datacenter demand, free cash flow, short squeeze; concerns around NVDA competition, valuation concerns.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>AI datacenter demand</li><li>free cash flow</li><li>short squeeze</li><li>earnings optimism</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>NVDA competition</li><li>valuation concerns</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">that, this, they, will, market, capex</p>
+        </details>
+      </section>
+    
 
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
         
       <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">2x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">+27% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">-21% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Low Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
+        <div><span class="metric-label">Attention</span><span class="metric-value">5.6x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">-4% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+37% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">4 subreddits</span></div>
       </div>
     
         <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
 
         <details>
           <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 5</span><span><b>Posts:</b> 3</span><span><b>Sentiment tone:</b> Mixed</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Confirmed</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 1.8</span><span><b>Price:</b> $105.86</span></div>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 14</span><span><b>Posts:</b> 5</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Weak</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 1.0</span><span><b>Price:</b> $215.33</span></div>
         </details>
         <details>
           <summary>Score breakdown</summary>
           
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Moderate</strong></li><li><span>Discussion quality</span><strong>Moderate</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Strong</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Strong</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Weak</strong></li><li><span>Subreddit breadth</span><strong>Strong</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
       <details class="nested-details">
         <summary>Algorithm details</summary>
         <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.527</li>
-          <li><b>Normalized score:</b> 52.7</li>
-          <li><b>Pump penalty:</b> 0.022</li>
+          <li><b>Raw model score:</b> 0.719</li>
+          <li><b>Normalized score:</b> 71.9</li>
+          <li><b>Pump penalty:</b> 0.029</li>
+        </ul>
+        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+      </details>
+    
+        </details>
+        <details>
+          <summary>Catalyst details</summary>
+          
+      <ul class="catalyst-details">
+        <li><span>Primary post theme</span><strong>Other</strong></li>
+        <li><span>Catalyst label</span><strong>Other</strong></li>
+        <li><span>Catalyst clarity</span><strong>Emerging</strong></li>
+      </ul>
+      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
+    
+        </details>
+        <details>
+          <summary>Risk explanation</summary>
+          <p>Ticker is repeated many times within the same post/comment context.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
+        </details>
+        <details>
+          <summary>Historical trends</summary>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>14</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>71.94</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.43</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
+        </details>
+        <details>
+          <summary>Reddit sources</summary>
+          <ul><li>r/stocks: Why $AMD will easily surpass $1T and could come knocking at $NVDA door. <span class="muted">(Other)</span></li><li>r/ValueInvesting: Ran a screen on Claude for stocks that hit Peter Lynch criteria for a properly valued stock and Congress Long Positions <span class="muted">(Other)</span></li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD)</span></li></ul>
+        </details>
+      </article>
+    
+      <article class="card">
+        <div class="card-header">
+          <div class="identity">
+            <span class="rank">#3</span>
+            <h2>MU</h2>
+          </div>
+          <div class="score-block">
+            <span class="score-label">Signal Score</span>
+            <span class="score">65</span>
+          </div>
+        </div>
+
+        <div class="headline-row">
+          <span class="recommendation">Analyst upside watch</span>
+          <span class="confidence-pill">High Confidence</span>
+        </div>
+
+        <p class="meta-line">High Confidence • DD Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-downside">$613.23 avg target (-18%)</span></div>
+        <p class="summary">MU discussion accelerated as users focused on AI datacenter demand, free cash flow, short squeeze, and the conversation looked relatively substantive. Attention is building, but market confirmation is only partial. Consensus targets sit roughly 18% below the current price, which contrasts with the bullish Reddit tone. Bearish pushback included NVDA competition.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on MU&#x27;s AI datacenter demand, free cash flow, short squeeze; concerns around NVDA competition.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>AI datacenter demand</li><li>free cash flow</li><li>short squeeze</li><li>earnings optimism</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>NVDA competition</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">this, will, capex, that, have, they</p>
+        </details>
+      </section>
+    
+
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
+        
+      <div class="key-metrics">
+        <div><span class="metric-label">Attention</span><span class="metric-value">2.4x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">+4% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">-18% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">4 subreddits</span></div>
+      </div>
+    
+        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
+
+        <details>
+          <summary>More metrics & telemetry</summary>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 6</span><span><b>Posts:</b> 5</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.8</span><span><b>Price:</b> $751.00</span></div>
+        </details>
+        <details>
+          <summary>Score breakdown</summary>
+          
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Moderate</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Strong</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <details class="nested-details">
+        <summary>Algorithm details</summary>
+        <ul class="telemetry">
+          <li><b>Raw model score:</b> 0.652</li>
+          <li><b>Normalized score:</b> 65.2</li>
+          <li><b>Pump penalty:</b> 0</li>
+        </ul>
+        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+      </details>
+    
+        </details>
+        <details>
+          <summary>Catalyst details</summary>
+          
+      <ul class="catalyst-details">
+        <li><span>Primary post theme</span><strong>DD</strong></li>
+        <li><span>Catalyst label</span><strong>DD</strong></li>
+        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
+      </ul>
+      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
+    
+        </details>
+        <details>
+          <summary>Risk explanation</summary>
+          <p>No major low-quality pump signals detected.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
+        </details>
+        <details>
+          <summary>Historical trends</summary>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>6</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>65.21</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.28</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.67</span></li></ul></div>
+        </details>
+        <details>
+          <summary>Reddit sources</summary>
+          <ul><li>r/stocks: The bull market is raging: what to buy? <span class="muted">(Question)</span></li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD)</span></li><li>r/StockMarket: 5 Nasdaq stocks I think the market is sleeping on. What am I missing? <span class="muted">(DD)</span></li></ul>
+        </details>
+      </article>
+    
+      <article class="card">
+        <div class="card-header">
+          <div class="identity">
+            <span class="rank">#4</span>
+            <h2>SPY</h2>
+          </div>
+          <div class="score-block">
+            <span class="score-label">Signal Score</span>
+            <span class="score">64</span>
+          </div>
+        </div>
+
+        <div class="headline-row">
+          <span class="recommendation">Strong retail acceleration</span>
+          <span class="confidence-pill">Medium Confidence</span>
+        </div>
+
+        <p class="meta-line">Medium Confidence • Other Catalyst • Investable</p>
+        <div class="analyst-row"><span class="analyst-target analyst-neutral">Street target unavailable</span></div>
+        <p class="summary">SPY discussion picked up sharply as users focused on technical breakout, AI datacenter demand, earnings optimism, with a mixed but still investable conversation. Attention is building, but market confirmation is only partial.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on SPY&#x27;s technical breakout, AI datacenter demand, earnings optimism.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>technical breakout</li><li>AI datacenter demand</li><li>earnings optimism</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>No major bearish themes</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">that, they, market, when, realized, this</p>
+        </details>
+      </section>
+    
+
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
+        
+      <div class="key-metrics">
+        <div><span class="metric-label">Attention</span><span class="metric-value">4.4x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">+1% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">Target data n/a</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Investable</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">3 subreddits</span></div>
+      </div>
+    
+        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
+
+        <details>
+          <summary>More metrics & telemetry</summary>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 11</span><span><b>Posts:</b> 3</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.6</span><span><b>Price:</b> $745.64</span></div>
+        </details>
+        <details>
+          <summary>Score breakdown</summary>
+          
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Strong</strong></li><li><span>Discussion quality</span><strong>Moderate</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Strong</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <details class="nested-details">
+        <summary>Algorithm details</summary>
+        <ul class="telemetry">
+          <li><b>Raw model score:</b> 0.644</li>
+          <li><b>Normalized score:</b> 64.4</li>
+          <li><b>Pump penalty:</b> 0.038</li>
+        </ul>
+        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+      </details>
+    
+        </details>
+        <details>
+          <summary>Catalyst details</summary>
+          
+      <ul class="catalyst-details">
+        <li><span>Primary post theme</span><strong>Other</strong></li>
+        <li><span>Catalyst label</span><strong>Other</strong></li>
+        <li><span>Catalyst clarity</span><strong>Emerging</strong></li>
+      </ul>
+      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
+    
+        </details>
+        <details>
+          <summary>Risk explanation</summary>
+          <p>Ticker is repeated many times within the same post/comment context.</p>
+          <ul><li>Investable profile: volatile or smaller-cap names are allowed when liquidity is reasonable.</li></ul>
+        </details>
+        <details>
+          <summary>Historical trends</summary>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>11</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>64.39</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.42</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
+        </details>
+        <details>
+          <summary>Reddit sources</summary>
+          <ul><li>r/swingtrading: The S&amp;P is at all time highs. The median stock has an RSI of 51 <span class="muted">(Other)</span></li><li>r/smallstreetbets: What Market makers do for a living and how it affects your options trading <span class="muted">(Earnings)</span></li><li>r/Trading: The S&amp;P is at all time highs. The median stock has an RSI of 51 <span class="muted">(Other)</span></li></ul>
+        </details>
+      </article>
+    
+      <article class="card">
+        <div class="card-header">
+          <div class="identity">
+            <span class="rank">#5</span>
+            <h2>MSFT</h2>
+          </div>
+          <div class="score-block">
+            <span class="score-label">Signal Score</span>
+            <span class="score">64</span>
+          </div>
+        </div>
+
+        <div class="headline-row">
+          <span class="recommendation">Institutional-style accumulation</span>
+          <span class="confidence-pill">High Confidence</span>
+        </div>
+
+        <p class="meta-line">High Confidence • DD Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-upside">$560.63 avg target (+34%)</span></div>
+        <p class="summary">MSFT discussion accelerated as users focused on AI datacenter demand, free cash flow, short squeeze, and the conversation looked relatively substantive. Retail attention is rising faster than market confirmation. Street targets still imply about 34% upside, which supports the Reddit narrative. Bearish pushback included NVDA competition, regulatory / legal issue.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on MSFT&#x27;s AI datacenter demand, free cash flow, short squeeze; concerns around NVDA competition, regulatory / legal issue.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>AI datacenter demand</li><li>free cash flow</li><li>short squeeze</li><li>earnings optimism</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>NVDA competition</li><li>regulatory / legal issue</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">this, will, that, they, with, growth</p>
+        </details>
+      </section>
+    
+
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
+        
+      <div class="key-metrics">
+        <div><span class="metric-label">Attention</span><span class="metric-value">2.4x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">-1% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+34% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">3 subreddits</span></div>
+      </div>
+    
+        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
+
+        <details>
+          <summary>More metrics & telemetry</summary>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 6</span><span><b>Posts:</b> 4</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Weak</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.7</span><span><b>Price:</b> $418.57</span></div>
+        </details>
+        <details>
+          <summary>Score breakdown</summary>
+          
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Moderate</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Weak</strong></li><li><span>Subreddit breadth</span><strong>Strong</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <details class="nested-details">
+        <summary>Algorithm details</summary>
+        <ul class="telemetry">
+          <li><b>Raw model score:</b> 0.636</li>
+          <li><b>Normalized score:</b> 63.6</li>
+          <li><b>Pump penalty:</b> 0</li>
+        </ul>
+        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+      </details>
+    
+        </details>
+        <details>
+          <summary>Catalyst details</summary>
+          
+      <ul class="catalyst-details">
+        <li><span>Primary post theme</span><strong>DD</strong></li>
+        <li><span>Catalyst label</span><strong>DD</strong></li>
+        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
+      </ul>
+      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
+    
+        </details>
+        <details>
+          <summary>Risk explanation</summary>
+          <p>No major low-quality pump signals detected.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
+        </details>
+        <details>
+          <summary>Historical trends</summary>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>6</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>63.56</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.34</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
+        </details>
+        <details>
+          <summary>Reddit sources</summary>
+          <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News)</span></li><li>r/ValueInvesting: Ran a screen on Claude for stocks that hit Peter Lynch criteria for a properly valued stock and Congress Long Positions <span class="muted">(Other)</span></li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD)</span></li></ul>
+        </details>
+      </article>
+    
+      <article class="card">
+        <div class="card-header">
+          <div class="identity">
+            <span class="rank">#6</span>
+            <h2>ASTS</h2>
+          </div>
+          <div class="score-block">
+            <span class="score-label">Signal Score</span>
+            <span class="score">61</span>
+          </div>
+        </div>
+
+        <div class="headline-row">
+          <span class="recommendation">Volatile momentum setup</span>
+          <span class="confidence-pill">Medium Confidence</span>
+        </div>
+
+        <p class="meta-line">Medium Confidence • Mixed Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-downside">$83.47 avg target (-21%)</span></div>
+        <p class="summary">ASTS discussion accelerated as users focused on analyst upgrade, with a mixed but still investable conversation. Momentum and volume are confirming the narrative. Consensus targets sit roughly 21% below the current price, which contrasts with the bullish Reddit tone.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on ASTS&#x27;s analyst upgrade.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>analyst upgrade</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>No major bearish themes</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">have, this, total, also, what, that</p>
+        </details>
+      </section>
+    
+
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
+        
+      <div class="key-metrics">
+        <div><span class="metric-label">Attention</span><span class="metric-value">2.4x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">+27% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">-21% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">2 subreddits</span></div>
+      </div>
+    
+        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
+
+        <details>
+          <summary>More metrics & telemetry</summary>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 6</span><span><b>Posts:</b> 4</span><span><b>Sentiment tone:</b> Mixed</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Confirmed</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 1.8</span><span><b>Price:</b> $105.86</span></div>
+        </details>
+        <details>
+          <summary>Score breakdown</summary>
+          
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Moderate</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Strong</strong></li><li><span>Subreddit breadth</span><strong>Moderate</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <details class="nested-details">
+        <summary>Algorithm details</summary>
+        <ul class="telemetry">
+          <li><b>Raw model score:</b> 0.614</li>
+          <li><b>Normalized score:</b> 61.4</li>
+          <li><b>Pump penalty:</b> 0.017</li>
         </ul>
         <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
       </details>
@@ -374,12 +839,12 @@
         </details>
         <details>
           <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+          <p>No major low-quality pump signals detected.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
         </details>
         <details>
           <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>5</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>52.71</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.17</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>6</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>61.41</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.14</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
         </details>
         <details>
           <summary>Reddit sources</summary>
@@ -390,12 +855,12 @@
       <article class="card">
         <div class="card-header">
           <div class="identity">
-            <span class="rank">#3</span>
-            <h2>NVDA</h2>
+            <span class="rank">#7</span>
+            <h2>SOFI</h2>
           </div>
           <div class="score-block">
             <span class="score-label">Signal Score</span>
-            <span class="score">53</span>
+            <span class="score">57</span>
           </div>
         </div>
 
@@ -404,17 +869,37 @@
           <span class="confidence-pill">Medium Confidence</span>
         </div>
 
-        <p class="meta-line">Medium Confidence • Other Catalyst • Low Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-upside">$294.22 avg target (+37%)</span></div>
-        <p class="summary">NVDA discussion picked up sharply as users focused on other discussion, with relatively substantive thread quality. Market confirmation remains weak. The stock still trades below the average analyst target with about 37% upside to consensus.</p>
+        <p class="meta-line">Medium Confidence • DD Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-upside">$21.10 avg target (+35%)</span></div>
+        <p class="summary">SOFI discussion picked up sharply as users focused on AI datacenter demand, earnings optimism, acquisition / M&amp;A, and the conversation looked relatively substantive. Attention is building, but market confirmation is only partial. Street targets still imply about 35% upside, which supports the Reddit narrative. Bearish pushback included valuation concerns, NVDA competition.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on SOFI&#x27;s AI datacenter demand, earnings optimism, acquisition / M&amp;A; concerns around valuation concerns, NVDA competition.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>AI datacenter demand</li><li>earnings optimism</li><li>acquisition / M&amp;A</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>valuation concerns</li><li>NVDA competition</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">both, growth, user, base, while, more</p>
+        </details>
+      </section>
+    
 
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
         
       <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">3.6x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">-4% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+37% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Low Risk</span></div>
+        <div><span class="metric-label">Attention</span><span class="metric-value">3.2x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">+0% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+35% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
         <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
       </div>
     
@@ -422,18 +907,18 @@
 
         <details>
           <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 9</span><span><b>Posts:</b> 2</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Weak</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 1.0</span><span><b>Price:</b> $215.33</span></div>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 8</span><span><b>Posts:</b> 1</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.9</span><span><b>Price:</b> $15.62</span></div>
         </details>
         <details>
           <summary>Score breakdown</summary>
           
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Strong</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Weak</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Strong</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
       <details class="nested-details">
         <summary>Algorithm details</summary>
         <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.525</li>
-          <li><b>Normalized score:</b> 52.5</li>
-          <li><b>Pump penalty:</b> 0.051</li>
+          <li><b>Raw model score:</b> 0.574</li>
+          <li><b>Normalized score:</b> 57.4</li>
+          <li><b>Pump penalty:</b> 0.048</li>
         </ul>
         <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
       </details>
@@ -443,37 +928,37 @@
           <summary>Catalyst details</summary>
           
       <ul class="catalyst-details">
-        <li><span>Primary post theme</span><strong>Other</strong></li>
-        <li><span>Catalyst label</span><strong>Other</strong></li>
-        <li><span>Catalyst clarity</span><strong>Emerging</strong></li>
+        <li><span>Primary post theme</span><strong>DD</strong></li>
+        <li><span>Catalyst label</span><strong>DD</strong></li>
+        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
       </ul>
       <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
     
         </details>
         <details>
           <summary>Risk explanation</summary>
-          <p>Ticker is repeated many times within the same post/comment context. Sentiment is high but market confirmation is weak.</p>
-          <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+          <p>Ticker is repeated many times within the same post/comment context.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
         </details>
         <details>
           <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>9</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>52.54</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.48</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>8</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>57.43</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.41</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
         </details>
         <details>
           <summary>Reddit sources</summary>
-          <ul><li>r/stocks: Why $AMD will easily surpass $1T and could come knocking at $NVDA door. <span class="muted">(Other)</span></li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD)</span></li></ul>
+          <ul><li>r/ValueInvesting: Does Sofi or RDDT has higher upside from here? <span class="muted">(DD)</span></li></ul>
         </details>
       </article>
     
       <article class="card">
         <div class="card-header">
           <div class="identity">
-            <span class="rank">#4</span>
-            <h2>TSLA</h2>
+            <span class="rank">#8</span>
+            <h2>RDDT</h2>
           </div>
           <div class="score-block">
             <span class="score-label">Signal Score</span>
-            <span class="score">51</span>
+            <span class="score">57</span>
           </div>
         </div>
 
@@ -482,17 +967,37 @@
           <span class="confidence-pill">Medium Confidence</span>
         </div>
 
-        <p class="meta-line">Medium Confidence • Other Catalyst • Low Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-downside">$411.89 avg target (-3%)</span></div>
-        <p class="summary">TSLA discussion inched higher as users focused on other discussion, with relatively substantive thread quality. The market has not fully confirmed the Reddit narrative yet. The stock is trading near the average analyst target.</p>
+        <p class="meta-line">Medium Confidence • News Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-upside">$224.92 avg target (+59%)</span></div>
+        <p class="summary">RDDT discussion accelerated as users focused on AI datacenter demand, earnings optimism, revenue growth, and the conversation looked relatively substantive. Attention is building, but market confirmation is only partial. Street targets still imply about 59% upside, which supports the Reddit narrative. Bearish pushback included regulatory / legal issue, valuation concerns.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on RDDT&#x27;s AI datacenter demand, earnings optimism, revenue growth; concerns around regulatory / legal issue, valuation concerns.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>AI datacenter demand</li><li>earnings optimism</li><li>revenue growth</li><li>margin expansion</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>regulatory / legal issue</li><li>valuation concerns</li><li>NVDA competition</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">this, growth, that, with, will, they</p>
+        </details>
+      </section>
+    
 
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
         
       <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">0.8x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">+1% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">-3% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Low Risk</span></div>
+        <div><span class="metric-label">Attention</span><span class="metric-value">1.6x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">-10% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+59% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
         <div><span class="metric-label">Spread</span><span class="metric-value">2 subreddits</span></div>
       </div>
     
@@ -500,17 +1005,115 @@
 
         <details>
           <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 2</span><span><b>Posts:</b> 2</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.7</span><span><b>Price:</b> $426.01</span></div>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 4</span><span><b>Posts:</b> 3</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 1.6</span><span><b>Price:</b> $141.67</span></div>
         </details>
         <details>
           <summary>Score breakdown</summary>
           
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Moderate</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Moderate</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Weak</strong></li><li><span>Subreddit breadth</span><strong>Moderate</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
       <details class="nested-details">
         <summary>Algorithm details</summary>
         <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.515</li>
-          <li><b>Normalized score:</b> 51.5</li>
+          <li><b>Raw model score:</b> 0.567</li>
+          <li><b>Normalized score:</b> 56.7</li>
+          <li><b>Pump penalty:</b> 0</li>
+        </ul>
+        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+      </details>
+    
+        </details>
+        <details>
+          <summary>Catalyst details</summary>
+          
+      <ul class="catalyst-details">
+        <li><span>Primary post theme</span><strong>News</strong></li>
+        <li><span>Catalyst label</span><strong>News</strong></li>
+        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
+      </ul>
+      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
+    
+        </details>
+        <details>
+          <summary>Risk explanation</summary>
+          <p>No major low-quality pump signals detected.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
+        </details>
+        <details>
+          <summary>Historical trends</summary>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>4</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>56.66</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.32</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
+        </details>
+        <details>
+          <summary>Reddit sources</summary>
+          <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News)</span></li><li>r/ValueInvesting: Does Sofi or RDDT has higher upside from here? <span class="muted">(DD)</span></li><li>r/ValueInvesting: On Reddit RDDT, important difference: <span class="muted">(Other)</span></li></ul>
+        </details>
+      </article>
+    
+      <article class="card">
+        <div class="card-header">
+          <div class="identity">
+            <span class="rank">#9</span>
+            <h2>ES</h2>
+          </div>
+          <div class="score-block">
+            <span class="score-label">Signal Score</span>
+            <span class="score">55</span>
+          </div>
+        </div>
+
+        <div class="headline-row">
+          <span class="recommendation">Aggressive growth watch</span>
+          <span class="confidence-pill">Medium Confidence</span>
+        </div>
+
+        <p class="meta-line">Medium Confidence • Other Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-upside">$72.00 avg target (+3%)</span></div>
+        <p class="summary">ES discussion accelerated as users focused on other discussion, with a mixed but still investable conversation. Momentum and volume are confirming the narrative.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion was too limited or scattered to identify a clear narrative.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>None identified</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>No major bearish themes</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">backtest, what, with, strategy, ninjatrader, wanted</p>
+        </details>
+      </section>
+    
+
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-moderate">Moderate</span></div></div>
+        
+      <div class="key-metrics">
+        <div><span class="metric-label">Attention</span><span class="metric-value">2x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">+4% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+3% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">2 subreddits</span></div>
+      </div>
+    
+        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
+
+        <details>
+          <summary>More metrics & telemetry</summary>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 5</span><span><b>Posts:</b> 2</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Confirmed</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 1.1</span><span><b>Price:</b> $70.00</span></div>
+        </details>
+        <details>
+          <summary>Score breakdown</summary>
+          
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Moderate</strong></li><li><span>Discussion quality</span><strong>Moderate</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Moderate</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <details class="nested-details">
+        <summary>Algorithm details</summary>
+        <ul class="telemetry">
+          <li><b>Raw model score:</b> 0.547</li>
+          <li><b>Normalized score:</b> 54.7</li>
           <li><b>Pump penalty:</b> 0</li>
         </ul>
         <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
@@ -530,12 +1133,110 @@
         </details>
         <details>
           <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+          <p>No major low-quality pump signals detected.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
         </details>
         <details>
           <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>2</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>51.47</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.26</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>5</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>54.68</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.61</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
+        </details>
+        <details>
+          <summary>Reddit sources</summary>
+          <ul><li>r/Trading: Built a recursive normalization strategy for NinjaTrader 8 — 5yr backtest on NQ and ES <span class="muted">(Other)</span></li><li>r/thetagang: good account size for safely playing /ES? <span class="muted">(Options)</span></li></ul>
+        </details>
+      </article>
+    
+      <article class="card">
+        <div class="card-header">
+          <div class="identity">
+            <span class="rank">#10</span>
+            <h2>TSLA</h2>
+          </div>
+          <div class="score-block">
+            <span class="score-label">Signal Score</span>
+            <span class="score">52</span>
+          </div>
+        </div>
+
+        <div class="headline-row">
+          <span class="recommendation">Institutional-style accumulation</span>
+          <span class="confidence-pill">Medium Confidence</span>
+        </div>
+
+        <p class="meta-line">Medium Confidence • Other Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-downside">$411.89 avg target (-3%)</span></div>
+        <p class="summary">TSLA discussion inched higher as users focused on AI datacenter demand, earnings optimism, revenue growth, and the conversation looked relatively substantive. Attention is building, but market confirmation is only partial. Bearish pushback included regulatory / legal issue.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on TSLA&#x27;s AI datacenter demand, earnings optimism, revenue growth; concerns around regulatory / legal issue.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>AI datacenter demand</li><li>earnings optimism</li><li>revenue growth</li><li>margin expansion</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>regulatory / legal issue</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">this, growth, that, with, they, will</p>
+        </details>
+      </section>
+    
+
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
+        
+      <div class="key-metrics">
+        <div><span class="metric-label">Attention</span><span class="metric-value">0.8x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">+1% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">-3% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">2 subreddits</span></div>
+      </div>
+    
+        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
+
+        <details>
+          <summary>More metrics & telemetry</summary>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 2</span><span><b>Posts:</b> 2</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.7</span><span><b>Price:</b> $426.01</span></div>
+        </details>
+        <details>
+          <summary>Score breakdown</summary>
+          
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Moderate</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <details class="nested-details">
+        <summary>Algorithm details</summary>
+        <ul class="telemetry">
+          <li><b>Raw model score:</b> 0.523</li>
+          <li><b>Normalized score:</b> 52.3</li>
+          <li><b>Pump penalty:</b> 0</li>
+        </ul>
+        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+      </details>
+    
+        </details>
+        <details>
+          <summary>Catalyst details</summary>
+          
+      <ul class="catalyst-details">
+        <li><span>Primary post theme</span><strong>Other</strong></li>
+        <li><span>Catalyst label</span><strong>Other</strong></li>
+        <li><span>Catalyst clarity</span><strong>Emerging</strong></li>
+      </ul>
+      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
+    
+        </details>
+        <details>
+          <summary>Risk explanation</summary>
+          <p>No major low-quality pump signals detected.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
+        </details>
+        <details>
+          <summary>Historical trends</summary>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>2</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>52.30</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.26</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
         </details>
         <details>
           <summary>Reddit sources</summary>
@@ -546,23 +1247,141 @@
       <article class="card">
         <div class="card-header">
           <div class="identity">
-            <span class="rank">#5</span>
-            <h2>SMH</h2>
+            <span class="rank">#11</span>
+            <h2>RKLB</h2>
           </div>
           <div class="score-block">
             <span class="score-label">Signal Score</span>
-            <span class="score">51</span>
+            <span class="score">52</span>
           </div>
         </div>
 
         <div class="headline-row">
-          <span class="recommendation">Earnings momentum</span>
+          <span class="recommendation">Aggressive growth watch</span>
           <span class="confidence-pill">Medium Confidence</span>
         </div>
 
-        <p class="meta-line">Medium Confidence • Earnings Catalyst • Medium Risk</p>
+        <p class="meta-line">Medium Confidence • Mixed Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-downside">$100.84 avg target (-26%)</span></div>
+        <p class="summary">RKLB discussion accelerated as users focused on analyst upgrade, with a mixed but still investable conversation. Momentum and volume are confirming the narrative. Consensus targets sit roughly 26% below the current price, which contrasts with the bullish Reddit tone.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on RKLB&#x27;s analyst upgrade.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>analyst upgrade</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>No major bearish themes</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">have, total, this, also, what, that</p>
+        </details>
+      </section>
+    
+
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
+        
+      <div class="key-metrics">
+        <div><span class="metric-label">Attention</span><span class="metric-value">1.6x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">+9% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">-26% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
+      </div>
+    
+        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
+
+        <details>
+          <summary>More metrics & telemetry</summary>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 4</span><span><b>Posts:</b> 3</span><span><b>Sentiment tone:</b> Mixed</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Confirmed</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 1.4</span><span><b>Price:</b> $135.76</span></div>
+        </details>
+        <details>
+          <summary>Score breakdown</summary>
+          
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Moderate</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Strong</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <details class="nested-details">
+        <summary>Algorithm details</summary>
+        <ul class="telemetry">
+          <li><b>Raw model score:</b> 0.520</li>
+          <li><b>Normalized score:</b> 52.0</li>
+          <li><b>Pump penalty:</b> 0.022</li>
+        </ul>
+        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+      </details>
+    
+        </details>
+        <details>
+          <summary>Catalyst details</summary>
+          
+      <ul class="catalyst-details">
+        <li><span>Primary post theme</span><strong>Question</strong></li>
+        <li><span>Catalyst label</span><strong>Mixed</strong></li>
+        <li><span>Catalyst clarity</span><strong>Diffuse</strong></li>
+      </ul>
+      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
+    
+        </details>
+        <details>
+          <summary>Risk explanation</summary>
+          <p>No major low-quality pump signals detected.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
+        </details>
+        <details>
+          <summary>Historical trends</summary>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>4</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>51.98</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.17</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
+        </details>
+        <details>
+          <summary>Reddit sources</summary>
+          <ul><li>r/stocks: The bull market is raging: what to buy? <span class="muted">(Question)</span></li><li>r/stocks: 4 month update on r/Stocks favourite stock picks - up 43.62%! <span class="muted">(Meme)</span></li><li>r/stocks: consolidating big winners for an unproved Winner? <span class="muted">(Question)</span></li></ul>
+        </details>
+      </article>
+    
+      <article class="card">
+        <div class="card-header">
+          <div class="identity">
+            <span class="rank">#12</span>
+            <h2>SMH</h2>
+          </div>
+          <div class="score-block">
+            <span class="score-label">Signal Score</span>
+            <span class="score">52</span>
+          </div>
+        </div>
+
+        <div class="headline-row">
+          <span class="recommendation">High-upside catalyst trade</span>
+          <span class="confidence-pill">Medium Confidence</span>
+        </div>
+
+        <p class="meta-line">Medium Confidence • Earnings Catalyst • Investable</p>
         <div class="analyst-row"><span class="analyst-target analyst-neutral">Street target unavailable</span></div>
-        <p class="summary">SMH discussion accelerated as users focused on earnings and guidance, with relatively substantive thread quality. The market has not fully confirmed the Reddit narrative yet.</p>
+        <p class="summary">SMH discussion accelerated as users focused on AI datacenter demand, earnings optimism, revenue growth, and the conversation looked relatively substantive. Attention is building, but market confirmation is only partial. Bearish pushback included valuation concerns.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on SMH&#x27;s AI datacenter demand, earnings optimism, revenue growth; concerns around valuation concerns.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>AI datacenter demand</li><li>earnings optimism</li><li>revenue growth</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>valuation concerns</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">like, that, this, with, intel, going</p>
+        </details>
+      </section>
+    
 
         <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
         
@@ -570,7 +1389,7 @@
         <div><span class="metric-label">Attention</span><span class="metric-value">2.4x mention acceleration</span></div>
         <div><span class="metric-label">5D Performance</span><span class="metric-value">+4% 5d</span></div>
         <div><span class="metric-label">Analyst Upside</span><span class="metric-value">Target data n/a</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Medium Risk</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Investable</span></div>
         <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
       </div>
     
@@ -587,8 +1406,8 @@
       <details class="nested-details">
         <summary>Algorithm details</summary>
         <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.515</li>
-          <li><b>Normalized score:</b> 51.5</li>
+          <li><b>Raw model score:</b> 0.516</li>
+          <li><b>Normalized score:</b> 51.6</li>
           <li><b>Pump penalty:</b> 0.029</li>
         </ul>
         <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
@@ -609,11 +1428,11 @@
         <details>
           <summary>Risk explanation</summary>
           <p>Ticker is repeated many times within the same post/comment context.</p>
-          <ul><li>Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds.</li></ul>
+          <ul><li>Investable profile: volatile or smaller-cap names are allowed when liquidity is reasonable.</li></ul>
         </details>
         <details>
           <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>6</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>51.46</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.22</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>6</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>51.58</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.22</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
         </details>
         <details>
           <summary>Reddit sources</summary>
@@ -624,8 +1443,8 @@
       <article class="card">
         <div class="card-header">
           <div class="identity">
-            <span class="rank">#6</span>
-            <h2>CAKE</h2>
+            <span class="rank">#13</span>
+            <h2>PEG</h2>
           </div>
           <div class="score-block">
             <span class="score-label">Signal Score</span>
@@ -638,251 +1457,37 @@
           <span class="confidence-pill">Medium Confidence</span>
         </div>
 
-        <p class="meta-line">Medium Confidence • News Catalyst • Medium Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-upside">$66.76 avg target (+9%)</span></div>
-        <p class="summary">CAKE discussion inched higher as users focused on news flow, with relatively substantive thread quality. The market has not fully confirmed the Reddit narrative yet. The stock still trades below the average analyst target with about 9% upside to consensus.</p>
-
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-moderate">Moderate</span></div></div>
+        <p class="meta-line">Medium Confidence • Other Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-upside">$89.75 avg target (+13%)</span></div>
+        <p class="summary">PEG discussion accelerated as users focused on AI datacenter demand, revenue growth, product launch, and the conversation looked relatively substantive. Attention is building, but market confirmation is only partial. Street targets still imply about 13% upside, which supports the Reddit narrative. Bearish pushback included valuation concerns, regulatory / legal issue.</p>
         
-      <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">0.8x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">+3% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+9% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Medium Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
-      </div>
-    
-        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
-
-        <details>
-          <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 2</span><span><b>Posts:</b> 1</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Bullish lean</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.6</span><span><b>Price:</b> $61.14</span></div>
-        </details>
-        <details>
-          <summary>Score breakdown</summary>
-          
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Strong</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
-      <details class="nested-details">
-        <summary>Algorithm details</summary>
-        <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.514</li>
-          <li><b>Normalized score:</b> 51.4</li>
-          <li><b>Pump penalty:</b> 0</li>
-        </ul>
-        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-      </details>
-    
-        </details>
-        <details>
-          <summary>Catalyst details</summary>
-          
-      <ul class="catalyst-details">
-        <li><span>Primary post theme</span><strong>News</strong></li>
-        <li><span>Catalyst label</span><strong>News</strong></li>
-        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
-      </ul>
-      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
-    
-        </details>
-        <details>
-          <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds.</li></ul>
-        </details>
-        <details>
-          <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>2</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>51.37</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.44</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
-        </details>
-        <details>
-          <summary>Reddit sources</summary>
-          <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News)</span></li></ul>
-        </details>
-      </article>
-    
-      <article class="card">
-        <div class="card-header">
-          <div class="identity">
-            <span class="rank">#7</span>
-            <h2>ON</h2>
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on PEG&#x27;s AI datacenter demand, revenue growth, product launch; concerns around valuation concerns, regulatory / legal issue.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>AI datacenter demand</li><li>revenue growth</li><li>product launch</li></ul>
           </div>
-          <div class="score-block">
-            <span class="score-label">Signal Score</span>
-            <span class="score">49</span>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>valuation concerns</li><li>regulatory / legal issue</li></ul>
           </div>
         </div>
-
-        <div class="headline-row">
-          <span class="recommendation">Institutional-style accumulation</span>
-          <span class="confidence-pill">Medium Confidence</span>
-        </div>
-
-        <p class="meta-line">Medium Confidence • News Catalyst • Low Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-downside">$103.97 avg target (-11%)</span></div>
-        <p class="summary">ON discussion inched higher as users focused on news flow, with relatively substantive thread quality. The market has not fully confirmed the Reddit narrative yet. Consensus targets sit roughly 11% below the current price.</p>
-
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
-        
-      <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">0.4x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">+3% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">-11% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Low Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
-      </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">criteria, that, lynch, congress, product, growth</p>
+        </details>
+      </section>
     
-        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
 
-        <details>
-          <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 1</span><span><b>Posts:</b> 1</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Bullish lean</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.9</span><span><b>Price:</b> $116.20</span></div>
-        </details>
-        <details>
-          <summary>Score breakdown</summary>
-          
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Strong</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
-      <details class="nested-details">
-        <summary>Algorithm details</summary>
-        <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.489</li>
-          <li><b>Normalized score:</b> 48.9</li>
-          <li><b>Pump penalty:</b> 0</li>
-        </ul>
-        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-      </details>
-    
-        </details>
-        <details>
-          <summary>Catalyst details</summary>
-          
-      <ul class="catalyst-details">
-        <li><span>Primary post theme</span><strong>News</strong></li>
-        <li><span>Catalyst label</span><strong>News</strong></li>
-        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
-      </ul>
-      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
-    
-        </details>
-        <details>
-          <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
-        </details>
-        <details>
-          <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>1</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>48.87</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.44</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
-        </details>
-        <details>
-          <summary>Reddit sources</summary>
-          <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News)</span></li></ul>
-        </details>
-      </article>
-    
-      <article class="card">
-        <div class="card-header">
-          <div class="identity">
-            <span class="rank">#8</span>
-            <h2>SO</h2>
-          </div>
-          <div class="score-block">
-            <span class="score-label">Signal Score</span>
-            <span class="score">49</span>
-          </div>
-        </div>
-
-        <div class="headline-row">
-          <span class="recommendation">Institutional-style accumulation</span>
-          <span class="confidence-pill">Medium Confidence</span>
-        </div>
-
-        <p class="meta-line">Medium Confidence • News Catalyst • Low Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-upside">$101.50 avg target (+7%)</span></div>
-        <p class="summary">SO discussion inched higher as users focused on news flow, with relatively substantive thread quality. The market has not fully confirmed the Reddit narrative yet. The stock is trading near the average analyst target.</p>
-
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-moderate">Moderate</span></div></div>
-        
-      <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">0.4x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">+2% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+7% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Low Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
-      </div>
-    
-        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
-
-        <details>
-          <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 1</span><span><b>Posts:</b> 1</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Bullish lean</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.6</span><span><b>Price:</b> $94.55</span></div>
-        </details>
-        <details>
-          <summary>Score breakdown</summary>
-          
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Strong</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
-      <details class="nested-details">
-        <summary>Algorithm details</summary>
-        <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.489</li>
-          <li><b>Normalized score:</b> 48.9</li>
-          <li><b>Pump penalty:</b> 0</li>
-        </ul>
-        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-      </details>
-    
-        </details>
-        <details>
-          <summary>Catalyst details</summary>
-          
-      <ul class="catalyst-details">
-        <li><span>Primary post theme</span><strong>News</strong></li>
-        <li><span>Catalyst label</span><strong>News</strong></li>
-        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
-      </ul>
-      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
-    
-        </details>
-        <details>
-          <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
-        </details>
-        <details>
-          <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>1</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>48.87</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.44</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
-        </details>
-        <details>
-          <summary>Reddit sources</summary>
-          <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News)</span></li></ul>
-        </details>
-      </article>
-    
-      <article class="card">
-        <div class="card-header">
-          <div class="identity">
-            <span class="rank">#9</span>
-            <h2>RKLB</h2>
-          </div>
-          <div class="score-block">
-            <span class="score-label">Signal Score</span>
-            <span class="score">48</span>
-          </div>
-        </div>
-
-        <div class="headline-row">
-          <span class="recommendation">Watchlist</span>
-          <span class="confidence-pill">Medium Confidence</span>
-        </div>
-
-        <p class="meta-line">Medium Confidence • Mixed Catalyst • Low Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-downside">$100.84 avg target (-26%)</span></div>
-        <p class="summary">RKLB discussion accelerated as users focused on mixed discussion, though the conversation remains mixed in quality. Price action is confirming the narrative. Consensus targets sit roughly 26% below the current price.</p>
-
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
         
       <div class="key-metrics">
         <div><span class="metric-label">Attention</span><span class="metric-value">1.6x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">+9% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">-26% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Low Risk</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">+4% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+13% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
         <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
       </div>
     
@@ -890,330 +1495,18 @@
 
         <details>
           <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 4</span><span><b>Posts:</b> 3</span><span><b>Sentiment tone:</b> Mixed</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Confirmed</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 1.4</span><span><b>Price:</b> $135.76</span></div>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 4</span><span><b>Posts:</b> 2</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.7</span><span><b>Price:</b> $79.51</span></div>
         </details>
         <details>
           <summary>Score breakdown</summary>
           
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Moderate</strong></li><li><span>Discussion quality</span><strong>Moderate</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Moderate</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
       <details class="nested-details">
         <summary>Algorithm details</summary>
         <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.480</li>
-          <li><b>Normalized score:</b> 48.0</li>
-          <li><b>Pump penalty:</b> 0.022</li>
-        </ul>
-        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-      </details>
-    
-        </details>
-        <details>
-          <summary>Catalyst details</summary>
-          
-      <ul class="catalyst-details">
-        <li><span>Primary post theme</span><strong>Question</strong></li>
-        <li><span>Catalyst label</span><strong>Mixed</strong></li>
-        <li><span>Catalyst clarity</span><strong>Diffuse</strong></li>
-      </ul>
-      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
-    
-        </details>
-        <details>
-          <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
-        </details>
-        <details>
-          <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>4</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>47.96</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.17</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
-        </details>
-        <details>
-          <summary>Reddit sources</summary>
-          <ul><li>r/stocks: The bull market is raging: what to buy? <span class="muted">(Question)</span></li><li>r/stocks: 4 month update on r/Stocks favourite stock picks - up 43.62%! <span class="muted">(Meme)</span></li><li>r/stocks: consolidating big winners for an unproved Winner? <span class="muted">(Question)</span></li></ul>
-        </details>
-      </article>
-    
-      <article class="card">
-        <div class="card-header">
-          <div class="identity">
-            <span class="rank">#10</span>
-            <h2>MSFT</h2>
-          </div>
-          <div class="score-block">
-            <span class="score-label">Signal Score</span>
-            <span class="score">48</span>
-          </div>
-        </div>
-
-        <div class="headline-row">
-          <span class="recommendation">Institutional-style accumulation</span>
-          <span class="confidence-pill">Medium Confidence</span>
-        </div>
-
-        <p class="meta-line">Medium Confidence • DD Catalyst • Low Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-upside">$560.63 avg target (+34%)</span></div>
-        <p class="summary">MSFT discussion inched higher as users focused on fundamental debate, with relatively substantive thread quality. Market confirmation remains weak. The stock still trades below the average analyst target with about 34% upside to consensus.</p>
-
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
-        
-      <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">1.2x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">-1% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+34% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Low Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">2 subreddits</span></div>
-      </div>
-    
-        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
-
-        <details>
-          <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 3</span><span><b>Posts:</b> 3</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Weak</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.7</span><span><b>Price:</b> $418.57</span></div>
-        </details>
-        <details>
-          <summary>Score breakdown</summary>
-          
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Weak</strong></li><li><span>Subreddit breadth</span><strong>Moderate</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
-      <details class="nested-details">
-        <summary>Algorithm details</summary>
-        <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.476</li>
-          <li><b>Normalized score:</b> 47.6</li>
+          <li><b>Raw model score:</b> 0.511</li>
+          <li><b>Normalized score:</b> 51.1</li>
           <li><b>Pump penalty:</b> 0</li>
-        </ul>
-        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-      </details>
-    
-        </details>
-        <details>
-          <summary>Catalyst details</summary>
-          
-      <ul class="catalyst-details">
-        <li><span>Primary post theme</span><strong>DD</strong></li>
-        <li><span>Catalyst label</span><strong>DD</strong></li>
-        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
-      </ul>
-      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
-    
-        </details>
-        <details>
-          <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
-        </details>
-        <details>
-          <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>3</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>47.64</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.41</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
-        </details>
-        <details>
-          <summary>Reddit sources</summary>
-          <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News)</span></li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD)</span></li><li>r/stocks: TOST my personal recommendation <span class="muted">(DD)</span></li></ul>
-        </details>
-      </article>
-    
-      <article class="card">
-        <div class="card-header">
-          <div class="identity">
-            <span class="rank">#11</span>
-            <h2>RDDT</h2>
-          </div>
-          <div class="score-block">
-            <span class="score-label">Signal Score</span>
-            <span class="score">47</span>
-          </div>
-        </div>
-
-        <div class="headline-row">
-          <span class="recommendation">Institutional-style accumulation</span>
-          <span class="confidence-pill">Medium Confidence</span>
-        </div>
-
-        <p class="meta-line">Medium Confidence • News Catalyst • Low Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-upside">$224.92 avg target (+59%)</span></div>
-        <p class="summary">RDDT discussion inched higher as users focused on news flow, with relatively substantive thread quality. Market confirmation remains weak. The stock still trades below the average analyst target with about 59% upside to consensus.</p>
-
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
-        
-      <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">0.8x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">-10% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+59% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Low Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
-      </div>
-    
-        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
-
-        <details>
-          <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 2</span><span><b>Posts:</b> 1</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Bullish lean</span><span><b>Market confirm:</b> Weak</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 1.6</span><span><b>Price:</b> $141.67</span></div>
-        </details>
-        <details>
-          <summary>Score breakdown</summary>
-          
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Strong</strong></li><li><span>Market confirmation</span><strong>Weak</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
-      <details class="nested-details">
-        <summary>Algorithm details</summary>
-        <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.472</li>
-          <li><b>Normalized score:</b> 47.2</li>
-          <li><b>Pump penalty:</b> 0</li>
-        </ul>
-        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-      </details>
-    
-        </details>
-        <details>
-          <summary>Catalyst details</summary>
-          
-      <ul class="catalyst-details">
-        <li><span>Primary post theme</span><strong>News</strong></li>
-        <li><span>Catalyst label</span><strong>News</strong></li>
-        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
-      </ul>
-      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
-    
-        </details>
-        <details>
-          <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
-        </details>
-        <details>
-          <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>2</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>47.17</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.44</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
-        </details>
-        <details>
-          <summary>Reddit sources</summary>
-          <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News)</span></li></ul>
-        </details>
-      </article>
-    
-      <article class="card">
-        <div class="card-header">
-          <div class="identity">
-            <span class="rank">#12</span>
-            <h2>CAPEX</h2>
-          </div>
-          <div class="score-block">
-            <span class="score-label">Signal Score</span>
-            <span class="score">47</span>
-          </div>
-        </div>
-
-        <div class="headline-row">
-          <span class="recommendation">Earnings momentum</span>
-          <span class="confidence-pill">Medium Confidence</span>
-        </div>
-
-        <p class="meta-line">Medium Confidence • Earnings Catalyst • Medium Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-neutral">Street target unavailable</span></div>
-        <p class="summary">CAPEX discussion inched higher as users focused on earnings and guidance, with relatively substantive thread quality. The market has not fully confirmed the Reddit narrative yet.</p>
-
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
-        
-      <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">1.2x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">+0% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">Target data n/a</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Medium Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
-      </div>
-    
-        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
-
-        <details>
-          <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 3</span><span><b>Posts:</b> 1</span><span><b>Sentiment tone:</b> Mixed</span><span><b>Conviction:</b> Bullish lean</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> n/a</span><span><b>Price:</b> $3K</span></div>
-        </details>
-        <details>
-          <summary>Score breakdown</summary>
-          
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Moderate</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Strong</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
-      <details class="nested-details">
-        <summary>Algorithm details</summary>
-        <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.468</li>
-          <li><b>Normalized score:</b> 46.8</li>
-          <li><b>Pump penalty:</b> 0</li>
-        </ul>
-        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-      </details>
-    
-        </details>
-        <details>
-          <summary>Catalyst details</summary>
-          
-      <ul class="catalyst-details">
-        <li><span>Primary post theme</span><strong>Earnings</strong></li>
-        <li><span>Catalyst label</span><strong>Earnings</strong></li>
-        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
-      </ul>
-      <p class="muted">Earnings/guidance language is shaping the conversation.</p>
-    
-        </details>
-        <details>
-          <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds.</li></ul>
-        </details>
-        <details>
-          <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>3</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>46.82</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.22</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
-        </details>
-        <details>
-          <summary>Reddit sources</summary>
-          <ul><li>r/investing: I feel like it’s very difficult to get a read on the AI trade… (chips, smh, intc, bubble) <span class="muted">(Earnings)</span></li></ul>
-        </details>
-      </article>
-    
-      <article class="card">
-        <div class="card-header">
-          <div class="identity">
-            <span class="rank">#13</span>
-            <h2>NXXT</h2>
-          </div>
-          <div class="score-block">
-            <span class="score-label">Signal Score</span>
-            <span class="score">45</span>
-          </div>
-        </div>
-
-        <div class="headline-row">
-          <span class="recommendation">Watchlist</span>
-          <span class="confidence-pill">Medium Confidence</span>
-        </div>
-
-        <p class="meta-line">Medium Confidence • Other Catalyst • High Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-upside">$5.00 avg target (+481%)</span></div>
-        <p class="summary">NXXT discussion inched higher as users focused on other discussion, though the conversation remains mixed in quality. Price action is confirming the narrative. The stock still trades below the average analyst target with about 481% upside to consensus.</p>
-
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
-        
-      <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">0.8x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">+208% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+481% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">High Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
-      </div>
-    
-        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
-
-        <details>
-          <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 2</span><span><b>Posts:</b> 1</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Bullish lean</span><span><b>Market confirm:</b> Confirmed</span><span><b>Speculation:</b> Moderate</span><span><b>Rel volume:</b> 3.1</span><span><b>Price:</b> $0.86</span></div>
-        </details>
-        <details>
-          <summary>Score breakdown</summary>
-          
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Weak</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Strong</strong></li><li><span>Market confirmation</span><strong>Strong</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
-      <details class="nested-details">
-        <summary>Algorithm details</summary>
-        <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.446</li>
-          <li><b>Normalized score:</b> 44.5</li>
-          <li><b>Pump penalty:</b> 0.060</li>
         </ul>
         <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
       </details>
@@ -1232,16 +1525,16 @@
         </details>
         <details>
           <summary>Risk explanation</summary>
-          <p>Penny stock price increases pump risk. Very small market cap increases pump risk.</p>
-          <ul><li>Penny stock: latest price is below $5.</li><li>Small market cap: market cap is below $300M.</li></ul>
+          <p>No major low-quality pump signals detected.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
         </details>
         <details>
           <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>2</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>44.55</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.43</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>4</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>51.06</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.30</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
         </details>
         <details>
           <summary>Reddit sources</summary>
-          <ul><li>r/Shortsqueeze: NXXT setup for a mild squeeze. <span class="muted">(Other)</span></li></ul>
+          <ul><li>r/ValueInvesting: Ran a screen on Claude for stocks that hit Peter Lynch criteria for a properly valued stock and Congress Long Positions <span class="muted">(Other)</span></li><li>r/ValueInvesting: $NU - Outlook <span class="muted">(News)</span></li></ul>
         </details>
       </article>
     
@@ -1249,126 +1542,68 @@
         <div class="card-header">
           <div class="identity">
             <span class="rank">#14</span>
-            <h2>INTC</h2>
+            <h2>NOW</h2>
           </div>
           <div class="score-block">
             <span class="score-label">Signal Score</span>
-            <span class="score">44</span>
+            <span class="score">51</span>
           </div>
         </div>
 
         <div class="headline-row">
-          <span class="recommendation">Earnings momentum</span>
+          <span class="recommendation">Aggressive growth watch</span>
           <span class="confidence-pill">Medium Confidence</span>
         </div>
 
-        <p class="meta-line">Medium Confidence • Earnings Catalyst • Low Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-downside">$87.86 avg target (-27%)</span></div>
-        <p class="summary">INTC discussion inched higher as users focused on earnings and guidance, with relatively substantive thread quality. The market has not fully confirmed the Reddit narrative yet. Consensus targets sit roughly 27% below the current price.</p>
+        <p class="meta-line">Medium Confidence • Mixed Catalyst • Liquid profile</p>
+        <div class="analyst-row"><span class="analyst-target analyst-upside">$142.77 avg target (+40%)</span></div>
+        <p class="summary">NOW discussion inched higher as users focused on AI datacenter demand, with a mixed but still investable conversation. Attention is building, but market confirmation is only partial. Street targets still imply about 40% upside, which supports the Reddit narrative.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on NOW&#x27;s AI datacenter demand.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>AI datacenter demand</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>No major bearish themes</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">criteria, that, have, lynch, most, also</p>
+        </details>
+      </section>
+    
 
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-moderate">Moderate</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
         
       <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">0.8x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">+10% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">-27% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Low Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
+        <div><span class="metric-label">Attention</span><span class="metric-value">1.2x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">+7% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+40% to avg target</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Liquid profile</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">2 subreddits</span></div>
       </div>
     
         <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
 
         <details>
           <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 2</span><span><b>Posts:</b> 1</span><span><b>Sentiment tone:</b> Mixed</span><span><b>Conviction:</b> Bullish lean</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 0.7</span><span><b>Price:</b> $119.84</span></div>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 3</span><span><b>Posts:</b> 2</span><span><b>Sentiment tone:</b> Mixed</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Partial</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 1.0</span><span><b>Price:</b> $102.13</span></div>
         </details>
         <details>
           <summary>Score breakdown</summary>
           
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Moderate</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Strong</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Strong</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Moderate</strong></li><li><span>Subreddit breadth</span><strong>Moderate</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
       <details class="nested-details">
         <summary>Algorithm details</summary>
         <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.443</li>
-          <li><b>Normalized score:</b> 44.3</li>
-          <li><b>Pump penalty:</b> 0</li>
-        </ul>
-        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-      </details>
-    
-        </details>
-        <details>
-          <summary>Catalyst details</summary>
-          
-      <ul class="catalyst-details">
-        <li><span>Primary post theme</span><strong>Earnings</strong></li>
-        <li><span>Catalyst label</span><strong>Earnings</strong></li>
-        <li><span>Catalyst clarity</span><strong>Well-defined</strong></li>
-      </ul>
-      <p class="muted">Earnings/guidance language is shaping the conversation.</p>
-    
-        </details>
-        <details>
-          <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
-        </details>
-        <details>
-          <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>2</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>44.32</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.22</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.33</span></li></ul></div>
-        </details>
-        <details>
-          <summary>Reddit sources</summary>
-          <ul><li>r/investing: I feel like it’s very difficult to get a read on the AI trade… (chips, smh, intc, bubble) <span class="muted">(Earnings)</span></li></ul>
-        </details>
-      </article>
-    
-      <article class="card">
-        <div class="card-header">
-          <div class="identity">
-            <span class="rank">#15</span>
-            <h2>INFQ</h2>
-          </div>
-          <div class="score-block">
-            <span class="score-label">Signal Score</span>
-            <span class="score">43</span>
-          </div>
-        </div>
-
-        <div class="headline-row">
-          <span class="recommendation">Watchlist</span>
-          <span class="confidence-pill">Medium Confidence</span>
-        </div>
-
-        <p class="meta-line">Medium Confidence • Mixed Catalyst • Medium Risk</p>
-        <div class="analyst-row"><span class="analyst-target analyst-upside">$21.00 avg target (+28%)</span></div>
-        <p class="summary">INFQ discussion inched higher as users focused on mixed discussion, though the conversation remains mixed in quality. Price action is confirming the narrative. The stock still trades below the average analyst target with about 28% upside to consensus.</p>
-
-        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-strong">Strong</span></div></div>
-        
-      <div class="key-metrics">
-        <div><span class="metric-label">Attention</span><span class="metric-value">0.4x mention acceleration</span></div>
-        <div><span class="metric-label">5D Performance</span><span class="metric-value">+31% 5d</span></div>
-        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">+28% to avg target</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">Medium Risk</span></div>
-        <div><span class="metric-label">Spread</span><span class="metric-value">1 subreddit</span></div>
-      </div>
-    
-        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
-
-        <details>
-          <summary>More metrics & telemetry</summary>
-          <div class="secondary-metrics"><span><b>Mentions:</b> 1</span><span><b>Posts:</b> 1</span><span><b>Sentiment tone:</b> Mixed</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Confirmed</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 7.5</span><span><b>Price:</b> $16.35</span></div>
-        </details>
-        <details>
-          <summary>Score breakdown</summary>
-          
-      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Moderate</strong></li><li><span>Sentiment tone</span><strong>Moderate</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Strong</strong></li><li><span>Subreddit breadth</span><strong>Weak</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
-      <details class="nested-details">
-        <summary>Algorithm details</summary>
-        <ul class="telemetry">
-          <li><b>Raw model score:</b> 0.435</li>
-          <li><b>Normalized score:</b> 43.5</li>
+          <li><b>Raw model score:</b> 0.509</li>
+          <li><b>Normalized score:</b> 51.0</li>
           <li><b>Pump penalty:</b> 0</li>
         </ul>
         <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
@@ -1388,16 +1623,114 @@
         </details>
         <details>
           <summary>Risk explanation</summary>
-          <p>No major pump/noise signals detected.</p>
-          <ul><li>Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds.</li></ul>
+          <p>No major low-quality pump signals detected.</p>
+          <ul><li>Large, liquid profile suitable for size: strong average volume and market cap.</li></ul>
         </details>
         <details>
           <summary>Historical trends</summary>
-          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>1</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>43.46</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.12</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>3</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>50.95</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.14</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
         </details>
         <details>
           <summary>Reddit sources</summary>
-          <ul><li>r/stocks: The bull market is raging: what to buy? <span class="muted">(Question)</span></li></ul>
+          <ul><li>r/stocks: The bull market is raging: what to buy? <span class="muted">(Question)</span></li><li>r/ValueInvesting: Ran a screen on Claude for stocks that hit Peter Lynch criteria for a properly valued stock and Congress Long Positions <span class="muted">(Other)</span></li></ul>
+        </details>
+      </article>
+    
+      <article class="card">
+        <div class="card-header">
+          <div class="identity">
+            <span class="rank">#15</span>
+            <h2>OCC</h2>
+          </div>
+          <div class="score-block">
+            <span class="score-label">Signal Score</span>
+            <span class="score">51</span>
+          </div>
+        </div>
+
+        <div class="headline-row">
+          <span class="recommendation">Institutional-style accumulation</span>
+          <span class="confidence-pill">High Confidence</span>
+        </div>
+
+        <p class="meta-line">High Confidence • Options Catalyst • Investable</p>
+        <div class="analyst-row"><span class="analyst-target analyst-neutral">Street target unavailable</span></div>
+        <p class="summary">OCC discussion inched higher as users focused on revenue growth, product launch, and the conversation looked relatively substantive. Momentum and volume are confirming the narrative. Bearish pushback included valuation concerns, regulatory / legal issue.</p>
+        
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">Discussion focused on OCC&#x27;s revenue growth, product launch; concerns around valuation concerns, regulatory / legal issue.</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul><li>revenue growth</li><li>product launch</li></ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul><li>valuation concerns</li><li>regulatory / legal issue</li></ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">adjusted, that, with, options, would, what</p>
+        </details>
+      </section>
+    
+
+        <div class="signal-panel"><div class="signal-row"><span>Retail Attention</span><span class="signal-tier tier-weak">Weak</span></div><div class="signal-row"><span>Discussion Quality</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Market Confirmation</span><span class="signal-tier tier-strong">Strong</span></div><div class="signal-row"><span>Speculation Risk</span><span class="signal-tier tier-risk-low">Weak</span></div><div class="signal-row"><span>Analyst Outlook</span><span class="signal-tier tier-weak">Weak</span></div></div>
+        
+      <div class="key-metrics">
+        <div><span class="metric-label">Attention</span><span class="metric-value">0.8x mention acceleration</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">+7% 5d</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">Target data n/a</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">Investable</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">2 subreddits</span></div>
+      </div>
+    
+        <div class="mini-trends"><div class="mini-trend"><span>Mentions</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div><div class="mini-trend"><span>Score</span><svg class="sparkline" width="88" height="22" viewBox="0 0 88 22" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" points="2.0,20.0 16.0,20.0 30.0,20.0 44.0,20.0 58.0,20.0 72.0,20.0 86.0,2.0"/></svg></div></div>
+
+        <details>
+          <summary>More metrics & telemetry</summary>
+          <div class="secondary-metrics"><span><b>Mentions:</b> 2</span><span><b>Posts:</b> 2</span><span><b>Sentiment tone:</b> Positive</span><span><b>Conviction:</b> Balanced</span><span><b>Market confirm:</b> Confirmed</span><span><b>Speculation:</b> Low</span><span><b>Rel volume:</b> 2.7</span><span><b>Price:</b> $12.63</span></div>
+        </details>
+        <details>
+          <summary>Score breakdown</summary>
+          
+      <ul class="readable-breakdown"><li><span>Retail attention</span><strong>Weak</strong></li><li><span>Discussion quality</span><strong>Moderate</strong></li><li><span>Sentiment tone</span><strong>Strong</strong></li><li><span>Conviction</span><strong>Moderate</strong></li><li><span>Market confirmation</span><strong>Strong</strong></li><li><span>Subreddit breadth</span><strong>Moderate</strong></li><li><span>Speculative activity</span><strong>Low</strong></li></ul>
+      <details class="nested-details">
+        <summary>Algorithm details</summary>
+        <ul class="telemetry">
+          <li><b>Raw model score:</b> 0.509</li>
+          <li><b>Normalized score:</b> 51.0</li>
+          <li><b>Pump penalty:</b> 0</li>
+        </ul>
+        <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+      </details>
+    
+        </details>
+        <details>
+          <summary>Catalyst details</summary>
+          
+      <ul class="catalyst-details">
+        <li><span>Primary post theme</span><strong>Options</strong></li>
+        <li><span>Catalyst label</span><strong>Options</strong></li>
+        <li><span>Catalyst clarity</span><strong>Emerging</strong></li>
+      </ul>
+      <p class="muted">The catalyst is broad and not dominated by a single event type.</p>
+    
+        </details>
+        <details>
+          <summary>Risk explanation</summary>
+          <p>No major low-quality pump signals detected.</p>
+          <ul><li>Investable profile: volatile or smaller-cap names are allowed when liquidity is reasonable.</li></ul>
+        </details>
+        <details>
+          <summary>Historical trends</summary>
+          <div><h4>Mentions</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>2</span></li></ul></div><div><h4>Score</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>50.95</span></li></ul></div><div><h4>Sentiment</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0.32</span></li></ul></div><div><h4>Reddit analyst-language index</h4><ul class='trend-series'><li><span>2026-05-18</span><span>0</span></li><li><span>2026-05-19</span><span>0</span></li><li><span>2026-05-20</span><span>0</span></li><li><span>2026-05-21</span><span>0</span></li><li><span>2026-05-22</span><span>0</span></li><li><span>2026-05-23</span><span>0</span></li><li><span>2026-05-24</span><span>0</span></li></ul></div>
+        </details>
+        <details>
+          <summary>Reddit sources</summary>
+          <ul><li>r/ValueInvesting: $NU - Outlook <span class="muted">(News)</span></li><li>r/options: Adjusted options weirdness <span class="muted">(Options)</span></li></ul>
         </details>
       </article>
     </section>
