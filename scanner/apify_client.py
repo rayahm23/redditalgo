@@ -126,6 +126,7 @@ def normalize_apify_item(item: dict[str, Any], top_comments_limit: int) -> dict[
         "subreddit": subreddit,
         "title": str(_first_value(item, "title", "heading", default="") or ""),
         "selftext": str(_first_value(item, "selftext", "body", "text", "description", default="") or ""),
+        "author": str(_first_value(item, "author", "username", "userName", "user", "authorName", default="") or ""),
         "score": _to_int(_first_value(item, "score", "upvotes", "upVotes", "ups", default=0)),
         "upvote_ratio": _to_float(_first_value(item, "upvote_ratio", "upvoteRatio", default=0.0)),
         "num_comments": _to_int(

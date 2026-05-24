@@ -57,7 +57,7 @@ The top 15 ranked tickers are written to:
 - `data/history/YYYY-MM-DD.json`
 - `data/history/YYYY-MM-DD.html`
 
-Each result includes rank, ticker, final score, raw and recency-weighted mention counts, unique posts, sentiment, engagement, market fields, risk flag, risk explanation, score breakdown, summary, top sources, and generation timestamp.
+Each result includes rank, ticker, final score, raw and recency-weighted mention counts, unique posts/users, sentiment, engagement, discussion quality, bullish/bearish attention, market fields, risk flag, risk explanation, score breakdown, summary, top sources, and generation timestamp.
 
 ## Local setup
 
@@ -134,10 +134,11 @@ The scanner loads the previous 7 daily history files and calculates:
 
 ```text
 seven_day_avg_mentions
-attention_acceleration = today_mentions / max(seven_day_avg_mentions, 1)
+attention_acceleration = (today_mentions + 3) / (seven_day_avg_mentions + 3)
+log_attention_acceleration = log1p(attention_acceleration)
 ```
 
-`attention_acceleration_score` is normalized from 0 to 1, where roughly 4x baseline or higher reaches 1.0.
+`attention_acceleration_score` is log-normalized from 0 to 1, where roughly 4x baseline or higher reaches 1.0.
 
 ### Post quality and conviction
 
@@ -148,6 +149,16 @@ DD 1.5, News 1.3, Earnings 1.25, Options 1.2, Other 1.0, YOLO 0.8, Meme 0.4, Que
 ```
 
 Conviction scoring detects bullish phrases like `buying calls`, `loaded`, `all in`, `adding`, `holding`, `shares`, `leaps`, `squeeze`, `short interest`, `earnings`, `guidance`, `price target`, `PT`, `breakout`, and `unusual volume`, plus bearish phrases like `puts`, `shorting`, `rug pull`, `overvalued`, `dilution`, `bankruptcy`, `selloff`, and `downside`.
+
+Engagement quality favors breadth over raw virality. It uses unique users, comments per post, average upvote ratio, and sustained discussion across multiple posts, with a concentration adjustment so one viral meme post cannot dominate the score by itself.
+
+Discussion quality scores research-oriented language from 0 to 1. Higher-quality terms include `guidance`, `valuation`, `DCF`, `free cash flow`, `FCF`, `margin expansion`, `capex`, `EPS`, `institutional`, and `EBITDA`; lower-quality hype terms include `moon`, `lambo`, `yolo`, `diamond hands`, `ape`, `rocket`, and `trust me bro`. Each result includes `discussion_quality_score`, `high_quality_terms_found`, and `low_quality_terms_found`.
+
+Bullish/bearish attention tracks directional positioning separately from VADER sentiment, including bullish/bearish phrases, puts/calls, accumulation language, and selloff language. Results include `bullish_attention_score`, `bearish_attention_score`, and `net_positioning_score`.
+
+Catalyst detection labels the leading discussion driver when keywords appear for `Earnings`, `AI`, `FDA / biotech`, `Acquisition / M&A`, `Short squeeze`, `Analyst upgrade/downgrade`, `Macro / Fed`, `Options activity`, `Product launch`, and `Legal/regulatory`. Results include `primary_catalyst`, `secondary_catalyst`, and `catalyst_confidence`.
+
+Analyst target scoring uses yfinance `targetMeanPrice`, `targetHighPrice`, `targetLowPrice`, and `recommendationMean` when available. The scanner calculates `analyst_target_upside_pct = (target_mean_price - latest_price) / latest_price` and assigns conservative buckets from major downside through extreme upside; missing target data defaults to a neutral `0.50` score.
 
 ### Market confirmation
 
@@ -177,12 +188,13 @@ final_score =
 + 0.20 * engagement_quality_score
 + 0.15 * sentiment_score
 + 0.15 * net_conviction_score
-+ 0.15 * market_confirmation_score
-+ 0.10 * subreddit_spread_score
++ 0.10 * market_confirmation_score
++ 0.05 * analyst_target_score
++ 0.10 * discussion_quality_score
 - pump_risk_penalty
 ```
 
-Every result includes a `score_breakdown` object explaining these components.
+Every result includes a `score_breakdown` object explaining these components, including `analyst_target_score`.
 
 ## Recommendation types
 

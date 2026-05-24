@@ -1,9 +1,13 @@
+import math
+
 from scanner.market_data import MarketData
 from scanner.scoring import (
     TickerAggregate,
     aggregate_posts,
     calculate_final_score,
+    detect_catalysts,
     determine_risk_flag,
+    engagement_quality_score,
     rank_tickers,
     recency_weight,
     risk_details,
@@ -108,6 +112,124 @@ def test_score_rewards_attention_and_penalizes_high_risk():
     assert "attention_acceleration" in breakdown["formula"]
     assert breakdown["attention_acceleration_score"] >= 0
     assert breakdown["engagement_quality_score"] > 0
+    assert "discussion_quality_score" in breakdown["formula"]
+
+
+def test_attention_acceleration_uses_smoothed_log_normalized_math():
+    aggregate = TickerAggregate(ticker="TSLA", mention_count=9)
+    breakdown = score_breakdown(
+        aggregate,
+        MarketData(valid=True, latest_price=200, avg_volume=50_000_000, market_cap=500_000_000_000),
+        {"seven_day_avg_mentions": 3},
+    )
+
+    assert breakdown["attention_acceleration"] == 2.0
+    assert breakdown["log_attention_acceleration"] == round(math.log1p(2.0), 4)
+    assert breakdown["attention_acceleration_score"] == round(math.log1p(2.0) / math.log1p(4.0), 4)
+
+
+def test_discussion_quality_and_positioning_terms_are_tracked():
+    posts = [
+        {
+            "id": "hq",
+            "author": "alpha",
+            "subreddit": "stocks",
+            "title": "TSLA guidance valuation DCF update",
+            "selftext": "Free cash flow, FCF, EBITDA, margin expansion, capex, and calls.",
+            "score": 120,
+            "upvote_ratio": 0.9,
+            "num_comments": 30,
+            "created_utc": TODAY,
+            "permalink": "https://reddit.com/hq",
+            "top_comments": ["Institutional accumulation and EPS upside."],
+        },
+        {
+            "id": "hype",
+            "author": "beta",
+            "subreddit": "wallstreetbets",
+            "title": "TSLA moon rocket yolo",
+            "selftext": "Diamond hands, ape, trust me bro.",
+            "score": 8_000,
+            "upvote_ratio": 0.7,
+            "num_comments": 900,
+            "created_utc": TODAY,
+            "permalink": "https://reddit.com/hype",
+            "top_comments": [],
+        },
+    ]
+
+    aggregate = aggregate_posts(posts, reference_time=REFERENCE_TIME)["TSLA"]
+    breakdown = score_breakdown(
+        aggregate,
+        MarketData(valid=True, latest_price=200, avg_volume=50_000_000, market_cap=500_000_000_000),
+    )
+
+    assert aggregate.unique_user_count == 2
+    assert aggregate.avg_upvote_ratio == 0.8
+    assert aggregate.comments_per_post == 465
+    assert "guidance" in aggregate.high_quality_terms_found
+    assert "free cash flow" in aggregate.high_quality_terms_found
+    assert "trust me bro" in aggregate.low_quality_terms_found
+    assert breakdown["discussion_quality_score"] > 0
+    assert breakdown["bullish_attention_score"] > breakdown["bearish_attention_score"]
+    assert breakdown["net_positioning_score"] > 0.5
+
+
+def test_catalyst_detection_tracks_primary_secondary_and_confidence():
+    posts = [
+        {
+            "id": "earnings",
+            "author": "alpha",
+            "subreddit": "stocks",
+            "title": "AMD earnings guidance and analyst price target",
+            "selftext": "Revenue and EPS chatter with calls into the earnings call.",
+            "score": 120,
+            "upvote_ratio": 0.9,
+            "num_comments": 30,
+            "created_utc": TODAY,
+            "permalink": "https://reddit.com/earnings",
+            "top_comments": [],
+        },
+        {
+            "id": "macro",
+            "author": "beta",
+            "subreddit": "investing",
+            "title": "AMD FOMC and Fed rate cut setup",
+            "selftext": "Macro liquidity could help semis.",
+            "score": 80,
+            "upvote_ratio": 0.85,
+            "num_comments": 20,
+            "created_utc": TODAY,
+            "permalink": "https://reddit.com/macro",
+            "top_comments": [],
+        },
+    ]
+
+    aggregate = aggregate_posts(posts, reference_time=REFERENCE_TIME)["AMD"]
+
+    assert "Earnings" in detect_catalysts(" earnings eps guidance ")
+    assert aggregate.primary_catalyst == "Earnings"
+    assert aggregate.secondary_catalyst in {"Analyst upgrade/downgrade", "Options activity", "Macro / Fed"}
+    assert aggregate.catalyst_confidence == 0.5
+    assert "Earnings" in aggregate.sources[0]["catalysts"]
+
+
+def test_engagement_quality_rewards_sustained_discussion_over_one_viral_post():
+    viral = TickerAggregate(ticker="TSLA", mention_count=1, total_upvotes=10_000, comment_volume=2_000)
+    viral.post_ids.add("viral")
+    viral.unique_users.add("one_user")
+    viral.upvote_ratios.append(0.95)
+    viral.max_post_upvotes = 10_000
+    viral.max_post_comments = 2_000
+
+    sustained = TickerAggregate(ticker="NVDA", mention_count=5, total_upvotes=1_000, comment_volume=250)
+    sustained.post_ids.update({f"post-{index}" for index in range(5)})
+    sustained.unique_users.update({f"user-{index}" for index in range(5)})
+    sustained.upvote_ratios.extend([0.86, 0.88, 0.84, 0.87, 0.85])
+    sustained.max_post_upvotes = 250
+    sustained.max_post_comments = 60
+
+    assert engagement_quality_score(sustained) > engagement_quality_score(viral)
 
 
 def test_rank_tickers_excludes_invalid_market_data_and_adds_breakdowns():
@@ -138,7 +260,19 @@ def test_rank_tickers_excludes_invalid_market_data_and_adds_breakdowns():
     results = rank_tickers(
         {"TSLA": aggregate, "FAKE": invalid},
         {
-            "TSLA": MarketData(valid=True, latest_price=200, avg_volume=10_000_000, market_cap=700_000_000_000),
+            "TSLA": MarketData(
+                valid=True,
+                latest_price=200,
+                current_price=200,
+                avg_volume=10_000_000,
+                market_cap=700_000_000_000,
+                analyst_target_mean=250,
+                analyst_target_high=300,
+                analyst_target_low=150,
+                analyst_target_upside_pct=0.25,
+                analyst_target_score=0.70,
+                analyst_target_label="moderate upside",
+            ),
             "FAKE": MarketData(valid=False),
         },
         generated_at="2026-05-24T00:00:00+00:00",
@@ -149,5 +283,8 @@ def test_rank_tickers_excludes_invalid_market_data_and_adds_breakdowns():
     assert results[0]["generated_at"] == "2026-05-24T00:00:00+00:00"
     assert results[0]["weighted_mention_count"] == 2.55
     assert "score_breakdown" in results[0]
+    assert results[0]["score_breakdown"]["analyst_target_score"] == 0.70
+    assert results[0]["analyst_target_label"] == "moderate upside"
+    assert "primary_catalyst" in results[0]
     assert "risk_reasons" in results[0]
     assert results[0]["top_sources"][0]["recency_weight"] == 0.85

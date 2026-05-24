@@ -71,12 +71,18 @@ def _breakdown_html(breakdown: dict[str, Any]) -> str:
     if not breakdown:
         return "<p>No score breakdown available for this run.</p>"
     parts = [
-        ("Attention acceleration", breakdown.get("attention_acceleration_score")),
+        ("Attention acceleration ratio", breakdown.get("attention_acceleration")),
+        ("Log attention acceleration", breakdown.get("log_attention_acceleration")),
+        ("Attention acceleration score", breakdown.get("attention_acceleration_score")),
         ("Engagement quality", breakdown.get("engagement_quality_score")),
         ("Sentiment", breakdown.get("sentiment_score")),
         ("Net conviction", breakdown.get("net_conviction_score")),
         ("Market confirmation", breakdown.get("market_confirmation_score")),
-        ("Subreddit spread", breakdown.get("subreddit_spread_score")),
+        ("Analyst target", breakdown.get("analyst_target_score")),
+        ("Discussion quality", breakdown.get("discussion_quality_score")),
+        ("Bullish attention", breakdown.get("bullish_attention_score")),
+        ("Bearish attention", breakdown.get("bearish_attention_score")),
+        ("Net positioning", breakdown.get("net_positioning_score")),
         ("Pump risk penalty", breakdown.get("pump_risk_penalty")),
         ("Raw score 0-1", breakdown.get("raw_score_0_to_1")),
     ]
@@ -120,12 +126,23 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
                   <span><b>{_format_number(row.get("attention_acceleration"), 2)}x</b> acceleration</span>
                   <span><b>{_format_number(row.get("seven_day_avg_mentions"), 2)}</b> 7d avg mentions</span>
                   <span><b>{row.get("unique_posts", 0)}</b> posts</span>
+                  <span><b>{row.get("unique_users", 0)}</b> users</span>
                   <span><b>{row.get("unique_subreddits", 0)}</b> subreddits</span>
+                  <span><b>{_format_number(row.get("comments_per_post"), 1)}</b> comments/post</span>
+                  <span><b>{_format_percent(row.get("avg_upvote_ratio"))}</b> upvote ratio</span>
                   <span><b>{escape(str(row.get("dominant_post_type") or "Other"))}</b> type</span>
+                  <span><b>{escape(str(row.get("primary_catalyst") or "No clear catalyst"))}</b> catalyst</span>
+                  <span><b>{_format_percent(row.get("catalyst_confidence"))}</b> catalyst confidence</span>
                   <span><b>{float(row.get("avg_sentiment", 0)):.2f}</b> sentiment</span>
                   <span><b>{_format_number(row.get("net_conviction_score"), 2)}</b> conviction</span>
+                  <span><b>{_format_number(row.get("discussion_quality_score"), 2)}</b> discussion quality</span>
+                  <span><b>{_format_number(row.get("net_positioning_score"), 2)}</b> positioning</span>
                   <span><b>{_format_number(row.get("market_confirmation_score"), 2)}</b> market confirm</span>
                   <span><b>{_format_number(row.get("pump_risk_score"), 2)}</b> pump risk</span>
+                  <span><b>{_format_number(row.get("analyst_target_score"), 2)}</b> target score</span>
+                  <span><b>{_format_percent(row.get("analyst_target_upside_pct"))}</b> target upside</span>
+                  <span><b>{_format_price(row.get("analyst_target_mean"))}</b> target mean</span>
+                  <span><b>{escape(str(row.get("analyst_target_label") or "n/a"))}</b> target label</span>
                   <span><b>{_format_price(row.get("latest_price"))}</b> price</span>
                   <span><b>{_format_percent(row.get("one_day_return"))}</b> 1d</span>
                   <span><b>{_format_percent(row.get("five_day_return"))}</b> 5d</span>
