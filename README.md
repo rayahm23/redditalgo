@@ -188,9 +188,11 @@ yfinance is used to add:
 
 `market_confirmation_score` increases with positive 1-day/5-day returns, relative volume above 1.5, and 20-day highs. Low liquidity reduces confirmation.
 
-### Pump/noise risk
+### Speculative activity vs volatility
 
-`pump_risk_score` is based on hype language, repeated ticker spam, penny-stock/low-volume/small-cap conditions, meme/YOLO-heavy discussion, and cases where sentiment is high but market confirmation is weak.
+`pump_risk_score` measures **low-quality speculation** (spam hype, meme-only threads, sub-$2 penny profiles, extreme illiquidity, microcap + weak discussion). It does **not** penalize volatility, momentum, or smaller high-growth names by themselves.
+
+`market_confirmation_score` rewards strong 5-day performance, elevated relative volume, breakouts above the 20-day high, and sustained participation. Pullbacks are lightly penalized, not treated like pump risk.
 
 ### Final score
 
@@ -221,22 +223,22 @@ Supporting component fields are also exported (`discussion_quality_score`, `anal
 ## Recommendation types
 
 - `Analyst upside watch`: strong analyst/upside language with high discussion quality.
-- `Earnings momentum`: earnings-led catalyst with market confirmation.
-- `AI sympathy trade`: AI catalyst language with strong attention acceleration.
-- `Meme squeeze`: high acceleration with elevated pump risk.
+- `Volatile momentum setup`: strong score with market confirmation and rising attention.
+- `Strong retail acceleration`: sharp mention acceleration with acceptable discussion quality.
+- `High-upside catalyst trade`: earnings or AI-led catalyst with market support.
+- `Aggressive growth watch`: momentum-driven growth name worth tracking.
 - `Panic selloff`: elevated bearish attention and negative sentiment.
-- `Institutional-style accumulation`: strong discussion quality with low hype/pump risk.
-- `Retail breakout`: stronger score with market confirmation and rising attention.
+- `Institutional-style accumulation`: strong discussion quality with limited low-quality hype.
 - `Contrarian watchlist`: negative sentiment with moderate quality and manageable noise.
 - `Watchlist`: worth monitoring but not enough confirmation for a stronger label.
-- `High-risk pump`: high pump/noise risk.
-- `Avoid / too noisy`: low score or weak market confirmation with elevated noise.
+- `Low-quality pump`: illiquid penny-style pump or meme-only spam profile.
+- `Avoid / too noisy`: low score or very weak discussion quality with elevated noise.
 
-Risk flags remain separate from recommendation type:
+Investability flags (`risk_flag`) are separate from recommendation type:
 
-- `high`: penny stock, low average volume, small market cap, or invalid market data.
-- `medium`: valid market data without low-risk liquidity/size signals.
-- `low`: larger, liquid tickers with stronger market cap and volume signals.
+- `high`: sub-$2 price or extremely low liquidity (<150k average volume), or invalid market data.
+- `medium`: investable profile, including volatile momentum names.
+- `low`: large, liquid large-cap profile.
 
 Each result includes `risk_explanation`, `risk_reasons`, and `risk_thresholds`.
 

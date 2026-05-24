@@ -75,11 +75,12 @@ def test_recency_weight_descends_and_filters_old_posts():
 def test_risk_flags_and_reasons_from_market_data():
     assert determine_risk_flag(MarketData(valid=False)) == "high"
     assert "No valid market data" in risk_details(MarketData(valid=False))["risk_reasons"][0]
-    high = risk_details(MarketData(valid=True, latest_price=2.5, avg_volume=5_000_000, market_cap=2_000_000_000))
-    assert high["risk_flag"] == "high"
-    assert high["risk_reasons"] == ["Penny stock: latest price is below $5."]
+    penny = risk_details(MarketData(valid=True, latest_price=1.5, avg_volume=5_000_000, market_cap=2_000_000_000))
+    assert penny["risk_flag"] == "high"
+    assert "Sub-$2" in penny["risk_reasons"][0]
     assert determine_risk_flag(MarketData(valid=True, latest_price=50, avg_volume=3_000_000, market_cap=15_000_000_000)) == "low"
     assert determine_risk_flag(MarketData(valid=True, latest_price=20, avg_volume=800_000, market_cap=2_000_000_000)) == "medium"
+    assert determine_risk_flag(MarketData(valid=True, latest_price=25, avg_volume=8_000_000, market_cap=5_000_000_000)) == "medium"
 
 
 def test_score_rewards_attention_and_penalizes_high_risk():

@@ -8,10 +8,10 @@ def _sample_row() -> dict:
         "rank": 1,
         "ticker": "AMD",
         "final_score": 68.7,
-        "recommendation_type": "Earnings momentum",
+                "recommendation_type": "Volatile momentum setup",
         "signal_confidence_label": "HIGH",
         "catalyst_type": "Earnings",
-        "risk_flag": "low",
+                "risk_flag": "medium",
         "analyst_target_mean": 550.0,
         "analyst_target_upside_pct": 0.18,
         "latest_price": 467.51,
@@ -75,10 +75,10 @@ def test_render_results_html_polished_dashboard_layout():
 
     assert "AMD" in html
     assert "68" in html
-    assert "Earnings momentum" in html
+    assert "Volatile momentum setup" in html
     assert "High Confidence" in html
     assert "Earnings Catalyst" in html
-    assert "Low Risk" in html
+    assert "Investable" in html
     assert "$550" in html and "+18%" in html
     assert "Analyst mention" not in html
     assert "Retail Attention" in html

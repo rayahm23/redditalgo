@@ -112,7 +112,10 @@ def test_build_signal_summaries_tiers():
 
 
 def test_recommendation_logic_priority_order():
-    assert recommendation_type(70, 0.7, 3.0, "Meme", 0.2, 0.2) == "High-risk pump"
+    assert (
+        recommendation_type(70, 0.75, 3.0, "Meme", 0.2, 0.2, discussion_quality=0.2)
+        == "Low-quality pump"
+    )
     assert (
         recommendation_type(
             70,
@@ -136,5 +139,5 @@ def test_recommendation_logic_priority_order():
             0.2,
             catalyst_confidence=0.7,
         )
-        == "Earnings momentum"
+        == "High-upside catalyst trade"
     )

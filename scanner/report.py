@@ -52,9 +52,11 @@ def _format_percent(value: Any, *, signed: bool = False) -> str:
 
 
 def _risk_label(risk_flag: str) -> str:
-    return {"low": "Low Risk", "medium": "Medium Risk", "high": "High Risk"}.get(
-        str(risk_flag).lower(), "Medium Risk"
-    )
+    return {
+        "low": "Liquid profile",
+        "medium": "Investable",
+        "high": "Illiquid / low-quality",
+    }.get(str(risk_flag).lower(), "Investable")
 
 
 def _strength_class(tier: str) -> str:
@@ -171,7 +173,7 @@ def _key_metrics_html(row: dict[str, Any]) -> str:
         <div><span class="metric-label">Attention</span><span class="metric-value">{escape(accel_text)}</span></div>
         <div><span class="metric-label">5D Performance</span><span class="metric-value">{escape(five_day_text)}</span></div>
         <div><span class="metric-label">Analyst Upside</span><span class="metric-value">{escape(upside_text)}</span></div>
-        <div><span class="metric-label">Risk</span><span class="metric-value">{escape(risk)}</span></div>
+        <div><span class="metric-label">Investability</span><span class="metric-value">{escape(risk)}</span></div>
         <div><span class="metric-label">Spread</span><span class="metric-value">{escape(spread_text)}</span></div>
       </div>
     """
