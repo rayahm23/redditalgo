@@ -5,6 +5,7 @@ from scanner.scoring import (
     TickerAggregate,
     aggregate_posts,
     calculate_final_score,
+    detect_catalysts,
     determine_risk_flag,
     engagement_quality_score,
     rank_tickers,
@@ -174,6 +175,45 @@ def test_discussion_quality_and_positioning_terms_are_tracked():
     assert breakdown["net_positioning_score"] > 0.5
 
 
+def test_catalyst_detection_tracks_primary_secondary_and_confidence():
+    posts = [
+        {
+            "id": "earnings",
+            "author": "alpha",
+            "subreddit": "stocks",
+            "title": "AMD earnings guidance and analyst price target",
+            "selftext": "Revenue and EPS chatter with calls into the earnings call.",
+            "score": 120,
+            "upvote_ratio": 0.9,
+            "num_comments": 30,
+            "created_utc": TODAY,
+            "permalink": "https://reddit.com/earnings",
+            "top_comments": [],
+        },
+        {
+            "id": "macro",
+            "author": "beta",
+            "subreddit": "investing",
+            "title": "AMD FOMC and Fed rate cut setup",
+            "selftext": "Macro liquidity could help semis.",
+            "score": 80,
+            "upvote_ratio": 0.85,
+            "num_comments": 20,
+            "created_utc": TODAY,
+            "permalink": "https://reddit.com/macro",
+            "top_comments": [],
+        },
+    ]
+
+    aggregate = aggregate_posts(posts, reference_time=REFERENCE_TIME)["AMD"]
+
+    assert "Earnings" in detect_catalysts(" earnings eps guidance ")
+    assert aggregate.primary_catalyst == "Earnings"
+    assert aggregate.secondary_catalyst in {"Analyst upgrade/downgrade", "Options activity", "Macro / Fed"}
+    assert aggregate.catalyst_confidence == 0.5
+    assert "Earnings" in aggregate.sources[0]["catalysts"]
+
+
 def test_engagement_quality_rewards_sustained_discussion_over_one_viral_post():
     viral = TickerAggregate(ticker="TSLA", mention_count=1, total_upvotes=10_000, comment_volume=2_000)
     viral.post_ids.add("viral")
@@ -220,7 +260,19 @@ def test_rank_tickers_excludes_invalid_market_data_and_adds_breakdowns():
     results = rank_tickers(
         {"TSLA": aggregate, "FAKE": invalid},
         {
-            "TSLA": MarketData(valid=True, latest_price=200, avg_volume=10_000_000, market_cap=700_000_000_000),
+            "TSLA": MarketData(
+                valid=True,
+                latest_price=200,
+                current_price=200,
+                avg_volume=10_000_000,
+                market_cap=700_000_000_000,
+                analyst_target_mean=250,
+                analyst_target_high=300,
+                analyst_target_low=150,
+                analyst_target_upside_pct=0.25,
+                analyst_target_score=0.70,
+                analyst_target_label="moderate upside",
+            ),
             "FAKE": MarketData(valid=False),
         },
         generated_at="2026-05-24T00:00:00+00:00",
@@ -231,5 +283,8 @@ def test_rank_tickers_excludes_invalid_market_data_and_adds_breakdowns():
     assert results[0]["generated_at"] == "2026-05-24T00:00:00+00:00"
     assert results[0]["weighted_mention_count"] == 2.55
     assert "score_breakdown" in results[0]
+    assert results[0]["score_breakdown"]["analyst_target_score"] == 0.70
+    assert results[0]["analyst_target_label"] == "moderate upside"
+    assert "primary_catalyst" in results[0]
     assert "risk_reasons" in results[0]
     assert results[0]["top_sources"][0]["recency_weight"] == 0.85

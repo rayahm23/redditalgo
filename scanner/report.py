@@ -78,6 +78,7 @@ def _breakdown_html(breakdown: dict[str, Any]) -> str:
         ("Sentiment", breakdown.get("sentiment_score")),
         ("Net conviction", breakdown.get("net_conviction_score")),
         ("Market confirmation", breakdown.get("market_confirmation_score")),
+        ("Analyst target", breakdown.get("analyst_target_score")),
         ("Discussion quality", breakdown.get("discussion_quality_score")),
         ("Bullish attention", breakdown.get("bullish_attention_score")),
         ("Bearish attention", breakdown.get("bearish_attention_score")),
@@ -130,12 +131,18 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
                   <span><b>{_format_number(row.get("comments_per_post"), 1)}</b> comments/post</span>
                   <span><b>{_format_percent(row.get("avg_upvote_ratio"))}</b> upvote ratio</span>
                   <span><b>{escape(str(row.get("dominant_post_type") or "Other"))}</b> type</span>
+                  <span><b>{escape(str(row.get("primary_catalyst") or "No clear catalyst"))}</b> catalyst</span>
+                  <span><b>{_format_percent(row.get("catalyst_confidence"))}</b> catalyst confidence</span>
                   <span><b>{float(row.get("avg_sentiment", 0)):.2f}</b> sentiment</span>
                   <span><b>{_format_number(row.get("net_conviction_score"), 2)}</b> conviction</span>
                   <span><b>{_format_number(row.get("discussion_quality_score"), 2)}</b> discussion quality</span>
                   <span><b>{_format_number(row.get("net_positioning_score"), 2)}</b> positioning</span>
                   <span><b>{_format_number(row.get("market_confirmation_score"), 2)}</b> market confirm</span>
                   <span><b>{_format_number(row.get("pump_risk_score"), 2)}</b> pump risk</span>
+                  <span><b>{_format_number(row.get("analyst_target_score"), 2)}</b> target score</span>
+                  <span><b>{_format_percent(row.get("analyst_target_upside_pct"))}</b> target upside</span>
+                  <span><b>{_format_price(row.get("analyst_target_mean"))}</b> target mean</span>
+                  <span><b>{escape(str(row.get("analyst_target_label") or "n/a"))}</b> target label</span>
                   <span><b>{_format_price(row.get("latest_price"))}</b> price</span>
                   <span><b>{_format_percent(row.get("one_day_return"))}</b> 1d</span>
                   <span><b>{_format_percent(row.get("five_day_return"))}</b> 5d</span>

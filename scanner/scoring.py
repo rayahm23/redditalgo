@@ -78,6 +78,30 @@ BEARISH_ATTENTION_PHRASES = (
     "missed earnings",
     "rug pull",
 )
+CATALYST_KEYWORDS = {
+    "Earnings": ("earnings", "guidance", "eps", "revenue", "quarter", "q1", "q2", "q3", "q4", "earnings call"),
+    "AI": (" ai ", "artificial intelligence", "llm", "gpu", "data center", "datacenter", "machine learning"),
+    "FDA / biotech": ("fda", "pdufa", "clinical trial", "phase 1", "phase 2", "phase 3", "biotech", "drug approval", "therapy"),
+    "Acquisition / M&A": ("acquisition", "acquired", "merger", " m&a ", "buyout", "takeover", "strategic review"),
+    "Short squeeze": ("short squeeze", "gamma squeeze", "short interest", "borrow fee", "days to cover", "squeeze"),
+    "Analyst upgrade/downgrade": ("upgrade", "downgrade", "price target", "analyst", "initiated", "overweight", "underweight"),
+    "Macro / Fed": ("fed", "fomc", "rate cut", "rate hike", "interest rates", "inflation", "cpi", "jobs report", "treasury"),
+    "Options activity": ("calls", "puts", "options", "0dte", "leaps", "unusual options", "option flow", "sweep"),
+    "Product launch": ("product launch", "launch", "unveils", "unveiled", "release", "preorder", "rollout"),
+    "Legal/regulatory": ("lawsuit", "sec", "doj", "ftc", "antitrust", "investigation", "regulatory", "court", "settlement"),
+}
+CATALYST_DESCRIPTORS = {
+    "Earnings": "earnings-related",
+    "AI": "AI-related",
+    "FDA / biotech": "FDA/biotech",
+    "Acquisition / M&A": "acquisition/M&A",
+    "Short squeeze": "short-squeeze",
+    "Analyst upgrade/downgrade": "analyst-rating",
+    "Macro / Fed": "macro/Fed",
+    "Options activity": "options-activity",
+    "Product launch": "product-launch",
+    "Legal/regulatory": "legal/regulatory",
+}
 
 
 @dataclass
@@ -108,6 +132,7 @@ class TickerAggregate:
     max_post_comments: int = 0
     high_quality_terms: set[str] = field(default_factory=set)
     low_quality_terms: set[str] = field(default_factory=set)
+    catalyst_counts: Counter[str] = field(default_factory=Counter)
     sources: list[dict[str, Any]] = field(default_factory=list)
 
     @property
@@ -190,6 +215,25 @@ class TickerAggregate:
     def low_quality_terms_found(self) -> list[str]:
         return _ordered_terms(self.low_quality_terms, LOW_QUALITY_HYPE_TERMS)
 
+    @property
+    def primary_catalyst(self) -> str | None:
+        if not self.catalyst_counts:
+            return None
+        return self.catalyst_counts.most_common(1)[0][0]
+
+    @property
+    def secondary_catalyst(self) -> str | None:
+        if len(self.catalyst_counts) < 2:
+            return None
+        return self.catalyst_counts.most_common(2)[1][0]
+
+    @property
+    def catalyst_confidence(self) -> float:
+        if not self.catalyst_counts or self.unique_posts <= 0:
+            return 0.0
+        primary_count = self.catalyst_counts.most_common(1)[0][1]
+        return round(max(0.0, min(1.0, primary_count / self.unique_posts)), 4)
+
 
 def _parse_created_utc(value: Any) -> float | None:
     if value in (None, ""):
@@ -252,6 +296,18 @@ def _ordered_terms(found: set[str], vocabulary: tuple[str, ...]) -> list[str]:
     return [term for term in vocabulary if term in found]
 
 
+def detect_catalysts(text: str) -> list[str]:
+    """Return catalyst labels detected in a normalized post/comment text blob."""
+
+    return [label for label, terms in CATALYST_KEYWORDS.items() if _terms_found(text, terms)]
+
+
+def _catalyst_descriptor(catalyst: str | None) -> str | None:
+    if catalyst is None:
+        return None
+    return CATALYST_DESCRIPTORS.get(catalyst, catalyst.lower())
+
+
 def _attention_phrase_score(text: str, phrases: tuple[str, ...]) -> float:
     matches = _terms_found(text, phrases)
     return round(min(1.0, len(matches) / 5), 4)
@@ -307,6 +363,7 @@ def aggregate_posts(
         low_quality_terms = _terms_found(text, LOW_QUALITY_HYPE_TERMS)
         bullish_attention = _attention_phrase_score(text, BULLISH_ATTENTION_PHRASES)
         bearish_attention = _attention_phrase_score(text, BEARISH_ATTENTION_PHRASES)
+        catalysts = detect_catalysts(text)
         upvote_ratio = _safe_float(post.get("upvote_ratio"))
         author = str(post.get("author") or post.get("author_name") or post.get("username") or "").strip()
         is_low_quality_context = post_type in {"Meme", "Question", "YOLO"} and score < 25 and num_comments < 15
@@ -338,6 +395,7 @@ def aggregate_posts(
                 aggregate.upvote_ratios.append(upvote_ratio)
             aggregate.high_quality_terms.update(high_quality_terms)
             aggregate.low_quality_terms.update(low_quality_terms)
+            aggregate.catalyst_counts.update(catalysts)
             if count == 1 and is_low_quality_context:
                 aggregate.low_quality_mentions += 1
             aggregate.sources.append(
@@ -349,6 +407,7 @@ def aggregate_posts(
                     "created_utc": post.get("created_utc"),
                     "recency_weight": round(weight, 2),
                     "post_type": post_type,
+                    "catalysts": catalysts,
                     "author": author or None,
                 }
             )
@@ -567,6 +626,7 @@ def score_breakdown(
     sentiment_score = normalized_sentiment_score(aggregate.avg_sentiment)
     net_conviction = aggregate.net_conviction_score
     market_score = market_confirmation_score(market_data)
+    analyst_score = max(0.0, min(1.0, float(market_data.analyst_target_score or 0.50)))
     discussion_score = discussion_quality_score(aggregate)
     pump = pump_risk_details(aggregate, market_data, market_score)
     pump_penalty = pump["pump_risk_score"] * 0.20
@@ -576,7 +636,8 @@ def score_breakdown(
         + 0.20 * engagement_score
         + 0.15 * sentiment_score
         + 0.15 * net_conviction
-        + 0.15 * market_score
+        + 0.10 * market_score
+        + 0.05 * analyst_score
         + 0.10 * discussion_score
         - pump_penalty
     )
@@ -590,6 +651,7 @@ def score_breakdown(
         "sentiment_score": sentiment_score,
         "net_conviction_score": net_conviction,
         "market_confirmation_score": market_score,
+        "analyst_target_score": analyst_score,
         "discussion_quality_score": discussion_score,
         "bullish_attention_score": aggregate.bullish_attention_score,
         "bearish_attention_score": aggregate.bearish_attention_score,
@@ -597,7 +659,7 @@ def score_breakdown(
         "pump_risk_penalty": round(pump_penalty, 4),
         "raw_score_0_to_1": round(raw_score, 4),
         "final_score": normalized,
-        "formula": "0.25*attention_acceleration_score + 0.20*engagement_quality_score + 0.15*sentiment_score + 0.15*net_conviction_score + 0.15*market_confirmation_score + 0.10*discussion_quality_score - pump_risk_penalty",
+        "formula": "0.25*attention_acceleration_score + 0.20*engagement_quality_score + 0.15*sentiment_score + 0.15*net_conviction_score + 0.10*market_confirmation_score + 0.05*analyst_target_score + 0.10*discussion_quality_score - pump_risk_penalty",
     }
 
 
@@ -634,26 +696,50 @@ def recommendation_type(
     return "Watchlist"
 
 
+def _analyst_target_summary(market_data: MarketData) -> str:
+    if market_data.analyst_target_upside_pct is None:
+        return "average analyst target data was unavailable"
+    if market_data.analyst_target_upside_pct > 0.05:
+        return "the stock trades below the average analyst target"
+    if market_data.analyst_target_upside_pct < -0.05:
+        return "the stock trades above the average analyst target"
+    return "the stock trades near the average analyst target"
+
+
 def build_summary(
     aggregate: TickerAggregate,
     recommendation: str,
     attention_acceleration: float,
     pump_risk_score: float,
+    market_data: MarketData,
 ) -> str:
     """Produce a compact human-readable explanation for a ranked ticker."""
 
     sentiment = aggregate.avg_sentiment
     if sentiment >= 0.25:
-        sentiment_label = "positive sentiment"
+        sentiment_label = "positive"
     elif sentiment <= -0.25:
-        sentiment_label = "negative sentiment"
+        sentiment_label = "negative"
     else:
-        sentiment_label = "mixed sentiment"
+        sentiment_label = "mixed"
+
+    if attention_acceleration > 1.05:
+        baseline_phrase = "above its 7-day baseline"
+    elif attention_acceleration < 0.95:
+        baseline_phrase = "below its 7-day baseline"
+    else:
+        baseline_phrase = "near its 7-day baseline"
+
+    catalyst_descriptor = _catalyst_descriptor(aggregate.primary_catalyst)
+    if catalyst_descriptor:
+        catalyst_phrase = f"due to {catalyst_descriptor} chatter"
+    else:
+        catalyst_phrase = "without one clear catalyst"
 
     return (
-        f"{recommendation}: {aggregate.dominant_post_type} led discussion with "
-        f"{sentiment_label}, {attention_acceleration:.2f}x mention acceleration, "
-        f"and pump risk {pump_risk_score:.2f}."
+        f"{aggregate.ticker} discussion accelerated {baseline_phrase} {catalyst_phrase}. "
+        f"Sentiment was {sentiment_label} and {_analyst_target_summary(market_data)}. "
+        f"{recommendation} with pump risk {pump_risk_score:.2f}."
     )
 
 
@@ -677,7 +763,7 @@ def rank_tickers(
 
         baseline = baselines.get(ticker, {})
         seven_day_avg_mentions = float(baseline.get("seven_day_avg_mentions", 0.0) or 0.0)
-        attention_acceleration = aggregate.mention_count / max(seven_day_avg_mentions, 1)
+        acceleration = attention_acceleration(aggregate.mention_count, seven_day_avg_mentions)
         details = risk_details(market_data)
         risk_flag = str(details["risk_flag"])
         breakdown = score_breakdown(aggregate, market_data, baseline)
@@ -686,7 +772,7 @@ def rank_tickers(
         recommendation = recommendation_type(
             breakdown["final_score"],
             pump["pump_risk_score"],
-            attention_acceleration,
+            acceleration,
             aggregate.dominant_post_type,
             market_score,
             aggregate.bullish_conviction_score,
@@ -704,6 +790,7 @@ def rank_tickers(
                 "created_utc": source.get("created_utc"),
                 "recency_weight": source.get("recency_weight"),
                 "post_type": source.get("post_type"),
+                "catalysts": source.get("catalysts") or [],
             }
             for source in top_sources
         ]
@@ -721,14 +808,35 @@ def rank_tickers(
                 "unique_subreddits": aggregate.unique_subreddits,
                 "weighted_unique_posts": round(aggregate.weighted_unique_posts, 2),
                 "seven_day_avg_mentions": round(seven_day_avg_mentions, 4),
-                "attention_acceleration": round(attention_acceleration, 4),
+                "attention_acceleration": round(acceleration, 4),
+                "log_attention_acceleration": breakdown["log_attention_acceleration"],
                 "avg_sentiment": aggregate.avg_sentiment,
+                "unique_users": aggregate.unique_user_count,
+                "comments_per_post": aggregate.comments_per_post,
+                "avg_upvote_ratio": aggregate.avg_upvote_ratio,
                 "bullish_conviction_score": aggregate.bullish_conviction_score,
                 "bearish_conviction_score": aggregate.bearish_conviction_score,
                 "net_conviction_score": aggregate.net_conviction_score,
+                "bullish_attention_score": aggregate.bullish_attention_score,
+                "bearish_attention_score": aggregate.bearish_attention_score,
+                "net_positioning_score": aggregate.net_positioning_score,
+                "discussion_quality_score": breakdown["discussion_quality_score"],
+                "high_quality_terms_found": aggregate.high_quality_terms_found,
+                "low_quality_terms_found": aggregate.low_quality_terms_found,
+                "primary_catalyst": aggregate.primary_catalyst,
+                "secondary_catalyst": aggregate.secondary_catalyst,
+                "catalyst_confidence": aggregate.catalyst_confidence,
                 "market_confirmation_score": market_score,
+                "analyst_target_score": market_data.analyst_target_score,
                 "pump_risk_score": pump["pump_risk_score"],
+                "current_price": market_data.current_price,
                 "latest_price": market_data.latest_price,
+                "analyst_target_mean": market_data.analyst_target_mean,
+                "analyst_target_high": market_data.analyst_target_high,
+                "analyst_target_low": market_data.analyst_target_low,
+                "analyst_target_upside_pct": market_data.analyst_target_upside_pct,
+                "analyst_target_label": market_data.analyst_target_label,
+                "recommendation_mean": market_data.recommendation_mean,
                 "market_cap": market_data.market_cap,
                 "avg_volume": market_data.avg_volume,
                 "one_day_return": market_data.one_day_return,
@@ -743,8 +851,9 @@ def rank_tickers(
                 "summary": build_summary(
                     aggregate,
                     recommendation,
-                    attention_acceleration,
+                    acceleration,
                     pump["pump_risk_score"],
+                    market_data,
                 ),
                 "top_sources": top_sources,
                 "generated_at": generated_at,

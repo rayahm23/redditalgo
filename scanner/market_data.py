@@ -14,12 +14,20 @@ class MarketData:
 
     valid: bool
     latest_price: float | None = None
+    current_price: float | None = None
     avg_volume: int | None = None
     market_cap: int | None = None
     one_day_return: float | None = None
     five_day_return: float | None = None
     relative_volume: float | None = None
     above_20_day_high: bool | None = None
+    analyst_target_mean: float | None = None
+    analyst_target_high: float | None = None
+    analyst_target_low: float | None = None
+    recommendation_mean: float | None = None
+    analyst_target_upside_pct: float | None = None
+    analyst_target_score: float = 0.50
+    analyst_target_label: str = "missing target data"
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -49,6 +57,37 @@ def _fast_info_value(fast_info: Any, *keys: str) -> Any:
         if value not in (None, ""):
             return value
     return None
+
+
+def analyst_target_signal(latest_price: float | None, target_mean_price: float | None) -> dict[str, Any]:
+    """Return analyst target upside, bucket score, and label without overweighting targets."""
+
+    if latest_price is None or target_mean_price is None or latest_price <= 0:
+        return {
+            "analyst_target_upside_pct": None,
+            "analyst_target_score": 0.50,
+            "analyst_target_label": "missing target data",
+        }
+
+    upside = round((target_mean_price - latest_price) / latest_price, 4)
+    if upside <= -0.20:
+        score, label = 0.00, "major downside"
+    elif upside < -0.05:
+        score, label = 0.25, "moderate downside"
+    elif upside <= 0.05:
+        score, label = 0.50, "near target"
+    elif upside <= 0.25:
+        score, label = 0.70, "moderate upside"
+    elif upside <= 0.75:
+        score, label = 0.90, "strong upside"
+    else:
+        score, label = 0.75, "extreme upside"
+
+    return {
+        "analyst_target_upside_pct": upside,
+        "analyst_target_score": score,
+        "analyst_target_label": label,
+    }
 
 
 def _history_metrics(yf_ticker: Any, avg_volume: int | None) -> dict[str, Any]:
@@ -108,12 +147,17 @@ def get_market_data(ticker: str) -> MarketData:
             _fast_info_value(fast_info, "market_cap", "marketCap"), integer=True
         )
 
+        info: dict[str, Any] = {}
+        try:
+            info = yf_ticker.get_info()
+        except Exception:
+            info = {}
+
+        current_price = _safe_number(info.get("currentPrice"))
+        if current_price is not None:
+            latest_price = latest_price or current_price
+
         if latest_price is None or avg_volume is None or market_cap is None:
-            info: dict[str, Any] = {}
-            try:
-                info = yf_ticker.get_info()
-            except Exception:
-                info = {}
             latest_price = latest_price or _safe_number(
                 info.get("regularMarketPrice") or info.get("currentPrice")
             )
@@ -122,17 +166,32 @@ def get_market_data(ticker: str) -> MarketData:
             )
             market_cap = market_cap or _safe_number(info.get("marketCap"), integer=True)
 
+        current_price = current_price or latest_price
+        analyst_target_mean = _safe_number(info.get("targetMeanPrice"))
+        analyst_target_high = _safe_number(info.get("targetHighPrice"))
+        analyst_target_low = _safe_number(info.get("targetLowPrice"))
+        recommendation_mean = _safe_number(info.get("recommendationMean"))
+        analyst_signal = analyst_target_signal(latest_price, analyst_target_mean)
+
         trend = _history_metrics(yf_ticker, avg_volume if isinstance(avg_volume, int) else None)
         valid = latest_price is not None or avg_volume is not None or market_cap is not None
         return MarketData(
             valid=valid,
             latest_price=latest_price,
+            current_price=current_price,
             avg_volume=avg_volume if isinstance(avg_volume, int) else None,
             market_cap=market_cap if isinstance(market_cap, int) else None,
             one_day_return=trend["one_day_return"],
             five_day_return=trend["five_day_return"],
             relative_volume=trend["relative_volume"],
             above_20_day_high=trend["above_20_day_high"],
+            analyst_target_mean=analyst_target_mean,
+            analyst_target_high=analyst_target_high,
+            analyst_target_low=analyst_target_low,
+            recommendation_mean=recommendation_mean,
+            analyst_target_upside_pct=analyst_signal["analyst_target_upside_pct"],
+            analyst_target_score=analyst_signal["analyst_target_score"],
+            analyst_target_label=analyst_signal["analyst_target_label"],
         )
     except Exception:
         return MarketData(valid=False)

@@ -156,6 +156,10 @@ Discussion quality scores research-oriented language from 0 to 1. Higher-quality
 
 Bullish/bearish attention tracks directional positioning separately from VADER sentiment, including bullish/bearish phrases, puts/calls, accumulation language, and selloff language. Results include `bullish_attention_score`, `bearish_attention_score`, and `net_positioning_score`.
 
+Catalyst detection labels the leading discussion driver when keywords appear for `Earnings`, `AI`, `FDA / biotech`, `Acquisition / M&A`, `Short squeeze`, `Analyst upgrade/downgrade`, `Macro / Fed`, `Options activity`, `Product launch`, and `Legal/regulatory`. Results include `primary_catalyst`, `secondary_catalyst`, and `catalyst_confidence`.
+
+Analyst target scoring uses yfinance `targetMeanPrice`, `targetHighPrice`, `targetLowPrice`, and `recommendationMean` when available. The scanner calculates `analyst_target_upside_pct = (target_mean_price - latest_price) / latest_price` and assigns conservative buckets from major downside through extreme upside; missing target data defaults to a neutral `0.50` score.
+
 ### Market confirmation
 
 yfinance is used to add:
@@ -184,12 +188,13 @@ final_score =
 + 0.20 * engagement_quality_score
 + 0.15 * sentiment_score
 + 0.15 * net_conviction_score
-+ 0.15 * market_confirmation_score
++ 0.10 * market_confirmation_score
++ 0.05 * analyst_target_score
 + 0.10 * discussion_quality_score
 - pump_risk_penalty
 ```
 
-Every result includes a `score_breakdown` object explaining these components.
+Every result includes a `score_breakdown` object explaining these components, including `analyst_target_score`.
 
 ## Recommendation types
 
