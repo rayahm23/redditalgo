@@ -10,15 +10,10 @@ from typing import Any
 
 from dotenv import load_dotenv
 
+from scanner.subreddit_weights import all_configured_subreddits
 
-SUBREDDITS = (
-    "wallstreetbets",
-    "stocks",
-    "investing",
-    "pennystocks",
-    "options",
-    "shortsqueeze",
-)
+
+SUBREDDITS = all_configured_subreddits()
 
 EXCLUDED_TICKERS = {
     "DD",
@@ -70,7 +65,7 @@ class ScannerConfig:
     apify_actor_id: str | None = None
     apify_input_json: str | None = None
     subreddits: tuple[str, ...] = SUBREDDITS
-    posts_per_listing: int = 35
+    posts_per_listing: int = 28
     top_comments_per_post: int = 8
     output_path: Path = Path("data/daily_results.json")
     history_dir: Path = Path("data/history")

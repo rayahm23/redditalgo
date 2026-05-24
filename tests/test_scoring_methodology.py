@@ -94,7 +94,7 @@ def test_build_summary_is_natural_language():
     )
     assert "AMD discussion" in text
     assert "0.20" not in text
-    assert "analyst target" in text.lower()
+    assert "street targets" in text.lower() or "targets still imply" in text.lower()
 
 
 def test_build_signal_summaries_tiers():

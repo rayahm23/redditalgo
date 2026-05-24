@@ -17,7 +17,13 @@ from scanner.history import (
     smoothed_attention_acceleration,
 )
 from scanner.market_data import MarketData
+from scanner.narrative_extraction import FALLBACK_NARRATIVE, build_narrative_summary, extract_ticker_narrative
 from scanner.post_classifier import dominant_post_type as choose_dominant_post_type
+from scanner.subreddit_weights import (
+    corroboration_factor,
+    compute_subreddit_metrics,
+    subreddit_weight,
+)
 from scanner.post_classifier import classify_post, post_type_weight
 from scanner.sentiment import score_post_sentiment
 from scanner.ticker_extractor import extract_tickers_from_post
@@ -256,15 +262,19 @@ def aggregate_posts(
             aggregate.max_repeated_mentions = max(aggregate.max_repeated_mentions, count)
             if count == 1 and is_low_quality_context:
                 aggregate.low_quality_mentions += 1
+            comments_excerpt = " ".join(str(c) for c in comments[:4])[:600]
             aggregate.sources.append(
                 {
                     "subreddit": subreddit,
                     "title": post.get("title"),
+                    "selftext": post.get("selftext"),
+                    "comments_excerpt": comments_excerpt,
                     "permalink": post.get("permalink"),
                     "score": score,
                     "created_utc": post.get("created_utc"),
                     "recency_weight": round(weight, 2),
                     "post_type": post_type,
+                    "subreddit_weight": round(subreddit_weight(subreddit), 2),
                 }
             )
     return aggregates
@@ -335,6 +345,17 @@ def determine_risk_flag(market_data: MarketData) -> str:
     return str(risk_details(market_data)["risk_flag"])
 
 
+def _average_subreddit_weight(sources: list[dict[str, Any]]) -> float:
+    weights = [
+        float(source.get("subreddit_weight") or subreddit_weight(source.get("subreddit")))
+        for source in sources
+        if source.get("subreddit")
+    ]
+    if not weights:
+        return 1.0
+    return sum(weights) / len(weights)
+
+
 def engagement_quality_score(aggregate: TickerAggregate) -> float:
     """Score engagement quality from 0 to 1 using upvotes/comments and post quality."""
 
@@ -342,20 +363,34 @@ def engagement_quality_score(aggregate: TickerAggregate) -> float:
     comments = math.log1p(max(aggregate.comment_volume, 0)) / math.log1p(2_000)
     type_quality = min(1.0, aggregate.post_type_weight_avg / 1.5)
     score = 0.45 * engagement + 0.30 * comments + 0.25 * type_quality
-    return round(max(0.0, min(1.0, score)), 4)
+    subreddit_factor = min(1.12, _average_subreddit_weight(aggregate.sources) / 1.0)
+    return round(max(0.0, min(1.0, score * subreddit_factor)), 4)
 
 
-def discussion_quality_score(aggregate: TickerAggregate) -> float:
+def discussion_quality_score(
+    aggregate: TickerAggregate,
+    *,
+    subreddit_metrics: dict[str, Any] | None = None,
+    narrative_confidence_score: float = 0.0,
+) -> float:
     """Score discussion quality from 0 to 1 using engagement and substantive post mix."""
 
     if not aggregate.post_types:
         return 0.0
 
+    metrics = subreddit_metrics or compute_subreddit_metrics(aggregate.sources)
     engagement = engagement_quality_score(aggregate)
     total = len(aggregate.post_types)
     substantive_share = sum(1 for item in aggregate.post_types if item in {"DD", "News", "Earnings"}) / total
     noise_share = sum(1 for item in aggregate.post_types if item in {"Meme", "YOLO", "Question"}) / total
-    score = 0.50 * engagement + 0.35 * substantive_share + 0.15 * (1.0 - noise_share)
+    score = (
+        0.42 * engagement
+        + 0.30 * substantive_share
+        + 0.13 * (1.0 - noise_share)
+        + 0.10 * float(metrics.get("subreddit_weighted_score") or 0.0)
+        + corroboration_factor(metrics)
+        + 0.05 * narrative_confidence_score
+    )
     return round(max(0.0, min(1.0, score)), 4)
 
 
@@ -421,18 +456,20 @@ def signal_confidence_score(
     pump_risk: float,
     unique_users: float,
     catalyst_confidence: float,
+    narrative_confidence_score: float = 0.0,
 ) -> float:
     """Combine signal quality inputs into a 0-1 confidence score."""
 
     low_pump = low_pump_risk_score(pump_risk)
     raw = (
-        0.14 * subreddit_spread
-        + 0.18 * discussion_quality
-        + 0.14 * analyst_target
+        0.12 * subreddit_spread
+        + 0.17 * discussion_quality
+        + 0.13 * analyst_target
         + 0.16 * market_confirmation
-        + 0.14 * low_pump
-        + 0.12 * unique_users
-        + 0.12 * catalyst_confidence
+        + 0.13 * low_pump
+        + 0.11 * unique_users
+        + 0.10 * catalyst_confidence
+        + 0.08 * narrative_confidence_score
     )
     return round(max(0.0, min(1.0, raw)), 4)
 
@@ -738,35 +775,22 @@ def build_summary(
     market_score: float = 0.0,
     analyst_target_upside_pct: float | None = None,
     has_ai: bool = False,
+    narrative: dict[str, Any] | None = None,
 ) -> str:
-    """Produce an insight-driven natural-language summary for a ranked ticker."""
+    """Produce a narrative-aware summary for a ranked ticker."""
 
-    catalyst = catalyst_type or aggregate.dominant_post_type or "Other"
     accel_phrase = "picked up sharply" if attention_acceleration >= 2.5 else (
         "accelerated" if attention_acceleration >= 1.5 else "inched higher"
     )
 
-    if catalyst == "Earnings":
-        driver = "earnings and guidance"
-    elif catalyst == "News":
-        driver = "news flow"
-    elif catalyst == "DD":
-        driver = "fundamental debate"
-    elif has_ai or catalyst == "AI sympathy trade":
-        driver = "AI-related catalysts"
-    elif catalyst in {"Meme", "YOLO"}:
-        driver = "meme-style momentum"
-    else:
-        driver = f"{catalyst.lower()} discussion"
-
     if pump_risk_score >= 0.55 and discussion_quality < 0.4:
-        quality = "while low-quality hype and spammy tone dominate the thread"
+        quality_phrase = "while low-quality hype and spammy tone dominated the thread"
     elif pump_risk_score >= 0.45:
-        quality = "with some speculative hype mixed into the discussion"
+        quality_phrase = "with some speculative hype mixed into the discussion"
     elif discussion_quality >= 0.6:
-        quality = "with relatively substantive discussion quality"
+        quality_phrase = "and the conversation looked relatively substantive"
     else:
-        quality = "with a mixed but still investable conversation"
+        quality_phrase = "with a mixed but still investable conversation"
 
     market_phrase = (
         "Momentum and volume are confirming the narrative."
@@ -776,25 +800,35 @@ def build_summary(
         else "Retail attention is rising faster than market confirmation."
     )
 
+    street_phrase = ""
     if analyst_target_upside_pct is not None:
         if analyst_target_upside_pct >= 0.08:
-            street = (
-                f" The stock still trades below the average analyst target "
-                f"with about {analyst_target_upside_pct * 100:.0f}% upside to consensus."
+            street_phrase = (
+                f" Street targets still imply about {analyst_target_upside_pct * 100:.0f}% upside, "
+                "which supports the Reddit narrative."
             )
         elif analyst_target_upside_pct <= -0.08:
-            street = (
+            street_phrase = (
                 f" Consensus targets sit roughly {abs(analyst_target_upside_pct) * 100:.0f}% "
-                "below the current price."
+                "below the current price, which contrasts with the bullish Reddit tone."
             )
-        else:
-            street = " The stock is trading near the average analyst target."
-    else:
-        street = ""
 
+    narrative = narrative or {}
+    if narrative.get("primary_narrative") and narrative.get("primary_narrative") != FALLBACK_NARRATIVE:
+        return build_narrative_summary(
+            aggregate.ticker,
+            narrative,
+            attention_phrase=accel_phrase,
+            quality_phrase=quality_phrase,
+            market_phrase=market_phrase,
+            street_phrase=street_phrase,
+        )
+
+    catalyst = catalyst_type or aggregate.dominant_post_type or "Other"
+    driver = "earnings and guidance" if catalyst == "Earnings" else f"{catalyst.lower()} discussion"
     return (
-        f"{aggregate.ticker} discussion {accel_phrase} as users focused on {driver}, {quality}. "
-        f"{market_phrase}{street}"
+        f"{aggregate.ticker} discussion {accel_phrase} as users focused on {driver}, {quality_phrase}. "
+        f"{market_phrase}{street_phrase}"
     ).strip()
 
 
@@ -857,7 +891,18 @@ def rank_tickers(
         )
         market_score = float(breakdown["market_confirmation_score"])
         spread_score = float(breakdown["subreddit_spread_score"])
-        discussion_quality = discussion_quality_score(aggregate)
+        subreddit_metrics = compute_subreddit_metrics(aggregate.sources)
+        narrative = extract_ticker_narrative(
+            ticker,
+            aggregate.sources,
+            post_types=aggregate.post_types,
+            unique_subreddits=aggregate.unique_subreddits,
+        )
+        discussion_quality = discussion_quality_score(
+            aggregate,
+            subreddit_metrics=subreddit_metrics,
+            narrative_confidence_score=float(narrative.get("narrative_confidence_score") or 0.0),
+        )
         pump = pump_risk_details(aggregate, market_data, market_score, discussion_quality)
         analyst_target = analyst_target_score(aggregate)
         catalyst_confidence = catalyst_confidence_score(aggregate)
@@ -870,6 +915,7 @@ def rank_tickers(
             pump_risk=pump["pump_risk_score"],
             unique_users=unique_users,
             catalyst_confidence=catalyst_confidence,
+            narrative_confidence_score=float(narrative.get("narrative_confidence_score") or 0.0),
         )
         confidence_label = signal_confidence_label(confidence_score)
         recommendation = recommendation_type(
@@ -939,6 +985,18 @@ def rank_tickers(
                 "unique_users_score": unique_users,
                 "unique_users": aggregate.unique_users,
                 "catalyst_type": catalyst_type,
+                "subreddit_groups_detected": subreddit_metrics.get("subreddit_groups_detected", []),
+                "top_signal_subreddits": subreddit_metrics.get("top_signal_subreddits", []),
+                "noisy_subreddit_exposure": subreddit_metrics.get("noisy_subreddit_exposure", 0.0),
+                "subreddit_weighted_score": subreddit_metrics.get("subreddit_weighted_score", 0.0),
+                "primary_narrative": narrative.get("primary_narrative"),
+                "bullish_themes": narrative.get("bullish_themes", []),
+                "bearish_themes": narrative.get("bearish_themes", []),
+                "neutral_themes": narrative.get("neutral_themes", []),
+                "narrative_confidence": narrative.get("narrative_confidence"),
+                "narrative_confidence_score": narrative.get("narrative_confidence_score"),
+                "narrative_keywords": narrative.get("narrative_keywords", []),
+                "narrative_sources_count": narrative.get("narrative_sources_count", 0),
                 "historical_trends": historical_trends,
                 "sparklines": sparklines,
                 "trend_dates": [day for day, _rows in history_snapshots] if history_snapshots else [],
@@ -992,6 +1050,7 @@ def rank_tickers(
                     market_score=market_score,
                     analyst_target_upside_pct=market_data.analyst_target_upside_pct,
                     has_ai=aggregate_has_ai_catalyst(aggregate),
+                    narrative=narrative,
                 ),
                 "top_sources": top_sources,
                 "generated_at": generated_at,

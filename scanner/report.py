@@ -305,6 +305,40 @@ def _catalyst_strength_label(value: Any) -> str:
     return "Diffuse"
 
 
+def _theme_list_html(themes: list[Any], empty: str = "None identified") -> str:
+    if not themes:
+        return f"<li>{escape(empty)}</li>"
+    return "".join(f"<li>{escape(str(theme))}</li>" for theme in themes[:4])
+
+
+def _narrative_html(row: dict[str, Any]) -> str:
+    primary = escape(str(row.get("primary_narrative") or "No clear narrative identified."))
+    bullish = _theme_list_html(row.get("bullish_themes") or [])
+    bearish = _theme_list_html(row.get("bearish_themes") or [], empty="No major bearish themes")
+    keywords = row.get("narrative_keywords") or []
+    keyword_text = ", ".join(escape(str(word)) for word in keywords[:6])
+    return f"""
+      <section class="narrative-panel">
+        <h3>Discussion Summary</h3>
+        <p class="primary-narrative">{primary}</p>
+        <div class="theme-columns">
+          <div>
+            <h4>Bullish Themes</h4>
+            <ul>{bullish}</ul>
+          </div>
+          <div>
+            <h4>Bearish Themes</h4>
+            <ul>{bearish}</ul>
+          </div>
+        </div>
+        <details class="nested-details">
+          <summary>Narrative keywords</summary>
+          <p class="muted">{keyword_text or "n/a"}</p>
+        </details>
+      </section>
+    """
+
+
 def _catalyst_details_html(row: dict[str, Any]) -> str:
     dominant = escape(str(row.get("dominant_post_type") or "Other"))
     catalyst = escape(str(row.get("catalyst_type") or row.get("dominant_post_type") or "Mixed"))
@@ -407,6 +441,7 @@ def _card_html(row: dict[str, Any]) -> str:
         <p class="meta-line">{_meta_line(row)}</p>
         <div class="analyst-row">{_analyst_target_html(row)}</div>
         <p class="summary">{summary}</p>
+        {_narrative_html(row)}
 
         <div class="signal-panel">{_signal_summary_html(row)}</div>
         {_key_metrics_html(row)}
@@ -559,10 +594,43 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
     .analyst-downside {{ color: var(--down); }}
     .analyst-neutral {{ color: var(--neutral); }}
     .summary {{
-      margin: 0 0 20px;
+      margin: 0 0 16px;
       font-size: 16px;
       line-height: 1.65;
       max-width: 72ch;
+    }}
+    .narrative-panel {{
+      margin: 0 0 20px;
+      padding: 14px 0 6px;
+      border-top: 1px solid var(--line);
+    }}
+    .narrative-panel h3 {{
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 650;
+    }}
+    .primary-narrative {{
+      margin: 0 0 12px;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 72ch;
+    }}
+    .theme-columns {{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      font-size: 14px;
+    }}
+    .theme-columns h4 {{
+      margin: 0 0 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }}
+    .theme-columns ul {{
+      margin: 0;
+      padding-left: 18px;
     }}
     .signal-panel {{
       display: grid;

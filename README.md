@@ -6,16 +6,15 @@ This is a research/watchlist tool only. It does not trade, place orders, post to
 
 ## What it scans
 
-The scanner is configured for:
+The scanner monitors weighted subreddit groups:
 
-- `wallstreetbets`
-- `stocks`
-- `investing`
-- `pennystocks`
-- `options`
-- `shortsqueeze`
+- **High-quality discussion:** `SecurityAnalysis`, `ValueInvesting`, `stocks`, `investing`, `StockMarket`, `options`, `thetagang`, `wallstreetbetsOGs`
+- **High-momentum retail:** `wallstreetbets`, `Daytrading`, `SwingTrading`, `Trading`, `smallstreetbets`, `Shortsqueeze`, `squeezeplays`, `WallstreetbetsELITE`
+- **Growth / speculative but investable:** `GrowthStocks`, `FutureInvesting`, `hypergrowthstocks`, `SPACs`, `biotech_stocks`, `stocksandtrading`
 
-For each normalized post it uses subreddit, title, body/selftext, score, upvote ratio, comment count, creation time, permalink, and top comments when the Apify actor provides them.
+Lower-quality momentum subs (for example `Shortsqueeze`, `WallstreetbetsELITE`) are **not ignored**, but they carry lower weights and need corroboration from higher-quality subs to rank near the top.
+
+For each normalized post it uses subreddit, title, body/selftext, score, comment volume, creation time, permalink, top comments, and author when available.
 
 ## Backend options
 
@@ -210,6 +209,33 @@ final_score =
 ```
 
 Every result includes a `score_breakdown` object explaining these components.
+
+## Subreddit weighting
+
+Each post inherits a subreddit weight (for example `SecurityAnalysis` = 1.4, `wallstreetbets` = 1.0, `Shortsqueeze` = 0.7). Weights influence:
+
+- `engagement_quality_score`
+- `discussion_quality_score`
+- `signal_confidence_score`
+
+Exported fields include `subreddit_groups_detected`, `top_signal_subreddits`, `noisy_subreddit_exposure`, and `subreddit_weighted_score`.
+
+If a subreddit is private, banned, or unavailable, the fetch step skips it and continues.
+
+## Narrative extraction
+
+`scanner/narrative_extraction.py` summarizes **what users are discussing**, not just that mentions rose.
+
+Each ticker exports:
+
+- `primary_narrative`
+- `bullish_themes`, `bearish_themes`, `neutral_themes`
+- `narrative_confidence` / `narrative_confidence_score`
+- `narrative_keywords`
+
+Summaries in JSON/HTML use these themes when confidence is sufficient. Rule-based theme matching has limitations: sarcasm, typos, and sparse samples can produce `LOW` confidence or the fallback message:
+
+`Discussion was too limited or scattered to identify a clear narrative.`
 
 ## Signal confidence
 

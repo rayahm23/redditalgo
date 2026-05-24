@@ -72,18 +72,29 @@ def fetch_reddit_posts(config: ScannerConfig) -> list[dict[str, Any]]:
     seen_ids: set[str] = set()
 
     for subreddit_name in config.subreddits:
-        subreddit = reddit.subreddit(subreddit_name)
-        listings = (
-            subreddit.hot(limit=config.posts_per_listing),
-            subreddit.top(time_filter="day", limit=config.posts_per_listing),
-        )
+        try:
+            subreddit = reddit.subreddit(subreddit_name)
+            listings = (
+                subreddit.hot(limit=config.posts_per_listing),
+                subreddit.top(time_filter="day", limit=config.posts_per_listing),
+            )
+        except Exception:
+            continue
+
         for listing in listings:
-            for submission in listing:
-                post_id = str(getattr(submission, "id", ""))
-                if post_id and post_id in seen_ids:
+            try:
+                submissions = list(listing)
+            except Exception:
+                continue
+            for submission in submissions:
+                try:
+                    post_id = str(getattr(submission, "id", ""))
+                    if post_id and post_id in seen_ids:
+                        continue
+                    if post_id:
+                        seen_ids.add(post_id)
+                    posts.append(_submission_to_dict(submission, config.top_comments_per_post))
+                except Exception:
                     continue
-                if post_id:
-                    seen_ids.add(post_id)
-                posts.append(_submission_to_dict(submission, config.top_comments_per_post))
 
     return posts

@@ -66,6 +66,10 @@ def _sample_row() -> dict:
                 "post_type": "Earnings",
             }
         ],
+        "primary_narrative": "Discussion focused on AMD's AI datacenter demand and earnings optimism.",
+        "bullish_themes": ["AI datacenter demand", "earnings optimism"],
+        "bearish_themes": ["valuation concerns"],
+        "narrative_keywords": ["earnings", "datacenter"],
         "generated_at": "2026-05-24T20:00:00+00:00",
     }
 
