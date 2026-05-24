@@ -291,6 +291,40 @@ def _pump_label(value: Any) -> str:
     return "Low"
 
 
+def _catalyst_strength_label(value: Any) -> str:
+    try:
+        score = float(value)
+    except (TypeError, ValueError):
+        return "Unclear"
+    if score >= 0.7:
+        return "Well-defined"
+    if score >= 0.45:
+        return "Emerging"
+    return "Diffuse"
+
+
+def _catalyst_details_html(row: dict[str, Any]) -> str:
+    dominant = escape(str(row.get("dominant_post_type") or "Other"))
+    catalyst = escape(str(row.get("catalyst_type") or row.get("dominant_post_type") or "Mixed"))
+    strength = escape(_catalyst_strength_label(row.get("catalyst_confidence_score")))
+    recommendation = str(row.get("recommendation_type") or "")
+    narrative = (
+        "Discussion is leaning into AI-linked narratives."
+        if "AI" in recommendation
+        else "Earnings/guidance language is shaping the conversation."
+        if dominant == "Earnings" or catalyst == "Earnings"
+        else "The catalyst is broad and not dominated by a single event type."
+    )
+    return f"""
+      <ul class="catalyst-details">
+        <li><span>Primary post theme</span><strong>{dominant}</strong></li>
+        <li><span>Catalyst label</span><strong>{catalyst}</strong></li>
+        <li><span>Catalyst clarity</span><strong>{strength}</strong></li>
+      </ul>
+      <p class="muted">{escape(narrative)}</p>
+    """
+
+
 def _trends_detail_html(row: dict[str, Any]) -> str:
     trends = row.get("historical_trends") or {}
     dates = row.get("trend_dates") or []
@@ -383,6 +417,10 @@ def _card_html(row: dict[str, Any]) -> str:
         <details>
           <summary>Score breakdown</summary>
           {_human_breakdown_html(row.get("score_breakdown") or {}, row)}
+        </details>
+        <details>
+          <summary>Catalyst details</summary>
+          {_catalyst_details_html(row)}
         </details>
         <details>
           <summary>Risk explanation</summary>
@@ -593,10 +631,17 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
       color: var(--muted);
       font-size: 13px;
     }}
-    .readable-breakdown, .trend-series, .telemetry {{
+    .readable-breakdown, .trend-series, .telemetry, .catalyst-details {{
       list-style: none;
       padding: 0;
       margin: 10px 0;
+    }}
+    .catalyst-details li {{
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
     }}
     .readable-breakdown li, .trend-series li {{
       display: flex;

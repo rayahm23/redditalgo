@@ -92,6 +92,7 @@ def test_render_results_html_polished_dashboard_layout():
     assert "Sentiment" not in html or "Historical trends" in html
     assert "Not financial advice" in html
     assert "0.19" not in html
+    assert "Catalyst details" in html
 
 
 def test_write_html_reports_creates_current_and_history_files(tmp_path: Path):
