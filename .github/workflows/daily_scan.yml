@@ -28,9 +28,10 @@ jobs:
 
       - name: Run scanner
         env:
-          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
-          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
-          REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
+          REDDIT_BACKEND: apify
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          APIFY_ACTOR_ID: ${{ secrets.APIFY_ACTOR_ID }}
+          APIFY_INPUT_JSON: ${{ secrets.APIFY_INPUT_JSON }}
         run: python -m scanner.pipeline
 
       - name: Commit updated JSON results

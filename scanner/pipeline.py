@@ -6,6 +6,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
+from scanner.apify_client import fetch_apify_posts
 from scanner.config import ScannerConfig
 from scanner.market_data import get_market_data_for_tickers
 from scanner.reddit_client import fetch_reddit_posts
@@ -23,6 +24,17 @@ def write_results(results: list[dict], output_path: Path, history_dir: Path, run
     (history_dir / f"{run_date}.json").write_text(payload, encoding="utf-8")
 
 
+def fetch_posts(config: ScannerConfig) -> list[dict]:
+    """Fetch Reddit posts through the configured backend."""
+
+    backend = config.reddit_backend.lower()
+    if backend == "apify":
+        return fetch_apify_posts(config)
+    if backend == "praw":
+        return fetch_reddit_posts(config)
+    raise ValueError("REDDIT_BACKEND must be either 'apify' or 'praw'")
+
+
 def run_pipeline(config: ScannerConfig | None = None) -> list[dict]:
     """Fetch Reddit data, score tickers, validate market data, and write JSON."""
 
@@ -30,7 +42,7 @@ def run_pipeline(config: ScannerConfig | None = None) -> list[dict]:
     generated_at = datetime.now(timezone.utc).isoformat()
     run_date = generated_at[:10]
 
-    posts = fetch_reddit_posts(config)
+    posts = fetch_posts(config)
     aggregates = aggregate_posts(posts, excluded=config.excluded_tickers)
     market_data = get_market_data_for_tickers(set(aggregates.keys()))
     results = rank_tickers(aggregates, market_data, limit=15, generated_at=generated_at)

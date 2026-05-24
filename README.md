@@ -1,12 +1,12 @@
 # reddit-alpha-scanner
 
-A functional MVP for a daily Reddit stock sentiment scanner. It pulls Reddit posts from investing-focused subreddits, extracts stock tickers, scores attention and sentiment, validates symbols with market data, ranks the top tickers, and writes JSON watchlist results.
+A functional MVP for a daily Reddit stock sentiment scanner. It runs as a Python 3.11 data pipeline, pulls Reddit post data through an Apify Reddit scraper actor by default, extracts stock tickers, scores attention and sentiment, validates symbols with market data, ranks the top tickers, and writes JSON watchlist results.
 
-This is a research/watchlist tool only. It does not trade, place orders, or provide financial advice.
+This is a research/watchlist tool only. It does not trade, place orders, post to Reddit, vote, message users, or provide financial advice.
 
 ## What it scans
 
-The scanner pulls hot and daily top posts from:
+The scanner is configured for:
 
 - `wallstreetbets`
 - `stocks`
@@ -15,7 +15,38 @@ The scanner pulls hot and daily top posts from:
 - `options`
 - `shortsqueeze`
 
-For each post it collects subreddit, title, body, score, upvote ratio, comment count, creation time, permalink, and top comments.
+For each normalized post it uses subreddit, title, body/selftext, score, upvote ratio, comment count, creation time, permalink, and top comments when the Apify actor provides them.
+
+## Backend options
+
+### Default: Apify
+
+Set:
+
+```bash
+REDDIT_BACKEND=apify
+APIFY_TOKEN=...
+APIFY_ACTOR_ID=...
+```
+
+`APIFY_ACTOR_ID` should be the actor ID for the Reddit scraper you want to run, such as `username/actor-name` or an actor ID copied from Apify.
+
+Different Apify Reddit scraper actors use different input schemas. The scanner sends a generic input with `startUrls`, `maxItems`, `maxPosts`, `maxComments`, and Apify proxy enabled. If your chosen actor needs a specific schema, set `APIFY_INPUT_JSON` to override the input completely:
+
+```bash
+APIFY_INPUT_JSON={"startUrls":[{"url":"https://www.reddit.com/r/wallstreetbets/hot/"}],"maxItems":100}
+```
+
+### Optional fallback: PRAW
+
+If you receive Reddit API approval, you can still use the original PRAW backend:
+
+```bash
+REDDIT_BACKEND=praw
+REDDIT_CLIENT_ID=...
+REDDIT_CLIENT_SECRET=...
+REDDIT_USER_AGENT=reddit-alpha-scanner/0.1 by your_reddit_username
+```
 
 ## Output
 
@@ -26,34 +57,7 @@ The top 15 ranked tickers are written to:
 
 Each result includes rank, ticker, final score, mention counts, unique posts, sentiment, engagement, market fields, risk flag, summary, top sources, and generation timestamp.
 
-## Setup
-
-### 1. Create Reddit API credentials
-
-1. Sign in to Reddit.
-2. Visit <https://www.reddit.com/prefs/apps>.
-3. Select **create another app**.
-4. Choose **script** as the app type.
-5. Set a name such as `reddit-alpha-scanner`.
-6. Set redirect URI to `http://localhost:8080`.
-7. Save the app.
-8. Copy the client ID shown under the app name and the client secret.
-
-### 2. Configure local environment
-
-```bash
-cp .env.example .env
-```
-
-Fill in:
-
-```bash
-REDDIT_CLIENT_ID=...
-REDDIT_CLIENT_SECRET=...
-REDDIT_USER_AGENT=reddit-alpha-scanner/0.1 by your_reddit_username
-```
-
-### 3. Install dependencies
+## Local setup
 
 Python 3.11 is recommended.
 
@@ -62,9 +66,18 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
 pip install -r requirements.txt
+cp .env.example .env
 ```
 
-### 4. Run locally
+Edit `.env` and add your Apify values:
+
+```bash
+REDDIT_BACKEND=apify
+APIFY_TOKEN=your_apify_api_token
+APIFY_ACTOR_ID=your_apify_reddit_scraper_actor_id
+```
+
+Run the scan:
 
 ```bash
 python -m scanner.pipeline
@@ -82,15 +95,15 @@ The workflow at `.github/workflows/daily_scan.yml` can be run manually with `wor
 
 The cron is set to `15 12 * * *`, which corresponds to about 8:15 AM New York time during daylight saving time. GitHub cron uses UTC; adjust the cron seasonally if you require exact New York local time year-round.
 
-### Add GitHub Secrets
+### Add GitHub Secrets for Apify
 
 In your GitHub repository:
 
 1. Go to **Settings** -> **Secrets and variables** -> **Actions**.
 2. Add these repository secrets:
-   - `REDDIT_CLIENT_ID`
-   - `REDDIT_CLIENT_SECRET`
-   - `REDDIT_USER_AGENT`
+   - `APIFY_TOKEN`
+   - `APIFY_ACTOR_ID`
+   - Optional: `APIFY_INPUT_JSON` if your actor needs custom input.
 3. Go to **Actions** -> **Daily Reddit Alpha Scan** -> **Run workflow** to trigger a manual scan.
 
 The workflow installs dependencies, runs `python -m scanner.pipeline`, and commits updated JSON files back to the repository.
@@ -122,6 +135,10 @@ A Vercel dashboard can read `data/daily_results.json` directly from the reposito
 - sentiment and attention columns
 - links to top Reddit sources
 - history chart sourced from `data/history/*.json`
+
+## Compliance note
+
+Apify actor usage depends on the actor and the data source terms that apply to it. Use a compliant actor, respect Reddit and Apify policies, avoid excessive collection, and keep this project read-only and personal/non-commercial unless you have the required approvals.
 
 ## Disclaimer
 
