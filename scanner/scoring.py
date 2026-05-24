@@ -8,9 +8,17 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any
 
+from scanner.conviction import conviction_scores
+from scanner.history import attention_acceleration_score
 from scanner.market_data import MarketData
+from scanner.post_classifier import dominant_post_type as choose_dominant_post_type
+from scanner.post_classifier import classify_post, post_type_weight
 from scanner.sentiment import score_post_sentiment
 from scanner.ticker_extractor import extract_tickers_from_post
+
+RECENCY_WINDOW_DAYS = 7
+RECENCY_WEIGHTS = (1.0, 0.85, 0.70, 0.55, 0.40, 0.25, 0.10)
+ROCKET_TERMS = ("🚀", "🌕", "moon", "mooning", "lambo", "tendies")
 
 
 @dataclass
@@ -19,10 +27,20 @@ class TickerAggregate:
 
     ticker: str
     mention_count: int = 0
+    weighted_mention_count: float = 0.0
+    weighted_unique_posts: float = 0.0
     post_ids: set[str] = field(default_factory=set)
+    subreddits: set[str] = field(default_factory=set)
     total_upvotes: int = 0
     comment_volume: int = 0
     sentiment_scores: list[float] = field(default_factory=list)
+    post_types: list[str] = field(default_factory=list)
+    post_type_weights: list[float] = field(default_factory=list)
+    bullish_scores: list[float] = field(default_factory=list)
+    bearish_scores: list[float] = field(default_factory=list)
+    hype_count: int = 0
+    max_repeated_mentions: int = 0
+    low_quality_mentions: int = 0
     sources: list[dict[str, Any]] = field(default_factory=list)
 
     @property
@@ -30,17 +48,97 @@ class TickerAggregate:
         return len(self.post_ids)
 
     @property
+    def unique_subreddits(self) -> int:
+        return len(self.subreddits)
+
+    @property
     def avg_sentiment(self) -> float:
         if not self.sentiment_scores:
             return 0.0
         return round(sum(self.sentiment_scores) / len(self.sentiment_scores), 4)
 
+    @property
+    def post_type_weight_avg(self) -> float:
+        if not self.post_type_weights:
+            return 1.0
+        return round(sum(self.post_type_weights) / len(self.post_type_weights), 4)
 
-def aggregate_posts(posts: list[dict[str, Any]], excluded: set[str] | None = None) -> dict[str, TickerAggregate]:
-    """Aggregate Reddit posts into per-ticker metrics."""
+    @property
+    def dominant_post_type(self) -> str:
+        return choose_dominant_post_type(self.post_types)
+
+    @property
+    def bullish_conviction_score(self) -> float:
+        return round(sum(self.bullish_scores) / len(self.bullish_scores), 4) if self.bullish_scores else 0.0
+
+    @property
+    def bearish_conviction_score(self) -> float:
+        return round(sum(self.bearish_scores) / len(self.bearish_scores), 4) if self.bearish_scores else 0.0
+
+    @property
+    def net_conviction_score(self) -> float:
+        bullish = self.bullish_conviction_score
+        bearish = self.bearish_conviction_score
+        return round(max(0.0, min(1.0, 0.5 + (bullish - bearish) / 2)), 4)
+
+
+def _parse_created_utc(value: Any) -> float | None:
+    if value in (None, ""):
+        return None
+    try:
+        timestamp = float(value)
+    except (TypeError, ValueError):
+        return None
+    if timestamp <= 0:
+        return None
+    return timestamp / 1000 if timestamp > 10_000_000_000 else timestamp
+
+
+def _reference_datetime(reference_time: datetime | str | None = None) -> datetime:
+    if reference_time is None:
+        return datetime.now(timezone.utc)
+    if isinstance(reference_time, datetime):
+        return reference_time.astimezone(timezone.utc)
+    return datetime.fromisoformat(reference_time.replace("Z", "+00:00")).astimezone(timezone.utc)
+
+
+def recency_weight(created_utc: Any, reference_time: datetime | str | None = None) -> float:
+    """Return a descending mention weight for posts from today through 6 days ago."""
+
+    timestamp = _parse_created_utc(created_utc)
+    if timestamp is None:
+        return 0.0
+
+    reference = _reference_datetime(reference_time)
+    created_at = datetime.fromtimestamp(timestamp, tz=timezone.utc)
+    age_seconds = (reference - created_at).total_seconds()
+    age_days = 0 if age_seconds < 0 else int(age_seconds // 86_400)
+
+    if age_days < 0 or age_days >= RECENCY_WINDOW_DAYS:
+        return 0.0
+    return RECENCY_WEIGHTS[age_days]
+
+
+def _hype_count(*parts: Any) -> int:
+    text = " ".join(str(part or "") for part in parts).lower()
+    return sum(text.count(term.lower()) for term in ROCKET_TERMS)
+
+
+def aggregate_posts(
+    posts: list[dict[str, Any]],
+    excluded: set[str] | None = None,
+    reference_time: datetime | str | None = None,
+) -> dict[str, TickerAggregate]:
+    """Aggregate Reddit posts from the last 7 days into per-ticker metrics."""
 
     aggregates: dict[str, TickerAggregate] = {}
+    reference = _reference_datetime(reference_time)
+
     for index, post in enumerate(posts):
+        weight = recency_weight(post.get("created_utc"), reference)
+        if weight <= 0:
+            continue
+
         comments = post.get("top_comments") or []
         mentions = extract_tickers_from_post(
             post.get("title"), post.get("selftext"), comments, excluded=excluded
@@ -53,72 +151,285 @@ def aggregate_posts(posts: list[dict[str, Any]], excluded: set[str] | None = Non
         sentiment = score_post_sentiment(post.get("title"), post.get("selftext"), comments)
         score = int(post.get("score") or 0)
         num_comments = int(post.get("num_comments") or 0)
+        subreddit = str(post.get("subreddit") or "")
+        post_type = classify_post(post.get("title"), post.get("selftext"), comments)
+        type_weight = post_type_weight(post_type)
+        conviction = conviction_scores(post.get("title"), post.get("selftext"), comments)
+        hype = _hype_count(post.get("title"), post.get("selftext"), " ".join(comments))
+        is_low_quality_context = post_type in {"Meme", "Question", "YOLO"} and score < 25 and num_comments < 15
 
         for ticker, count in mention_counts.items():
             aggregate = aggregates.setdefault(ticker, TickerAggregate(ticker=ticker))
             aggregate.mention_count += count
+            aggregate.weighted_mention_count += count * weight
+            aggregate.weighted_unique_posts += weight
             aggregate.post_ids.add(post_id)
+            if subreddit:
+                aggregate.subreddits.add(subreddit)
             aggregate.total_upvotes += score
             aggregate.comment_volume += num_comments
             aggregate.sentiment_scores.append(sentiment)
+            aggregate.post_types.append(post_type)
+            aggregate.post_type_weights.append(type_weight)
+            aggregate.bullish_scores.append(conviction["bullish_conviction_score"])
+            aggregate.bearish_scores.append(conviction["bearish_conviction_score"])
+            aggregate.hype_count += hype
+            aggregate.max_repeated_mentions = max(aggregate.max_repeated_mentions, count)
+            if count == 1 and is_low_quality_context:
+                aggregate.low_quality_mentions += 1
             aggregate.sources.append(
                 {
-                    "subreddit": post.get("subreddit"),
+                    "subreddit": subreddit,
                     "title": post.get("title"),
                     "permalink": post.get("permalink"),
                     "score": score,
+                    "created_utc": post.get("created_utc"),
+                    "recency_weight": round(weight, 2),
+                    "post_type": post_type,
                 }
             )
     return aggregates
 
 
-def determine_risk_flag(market_data: MarketData) -> str:
-    """Classify ticker risk from simple market-data heuristics."""
+def risk_details(market_data: MarketData) -> dict[str, Any]:
+    """Return risk flag, reasons, and thresholds used for classification."""
+
+    thresholds = {
+        "penny_stock_price_lt": 5,
+        "low_avg_volume_lt": 500_000,
+        "small_market_cap_lt": 300_000_000,
+        "low_risk_avg_volume_gte": 2_000_000,
+        "low_risk_market_cap_gte": 10_000_000_000,
+    }
+    reasons: list[str] = []
 
     if not market_data.valid:
-        return "high"
+        return {
+            "risk_flag": "high",
+            "risk_reasons": ["No valid market data was available for this ticker."],
+            "risk_thresholds": thresholds,
+        }
 
     latest_price = market_data.latest_price
     avg_volume = market_data.avg_volume
     market_cap = market_data.market_cap
 
-    if (
-        (latest_price is not None and latest_price < 5)
-        or (avg_volume is not None and avg_volume < 500_000)
-        or (market_cap is not None and market_cap < 300_000_000)
-    ):
-        return "high"
+    if latest_price is not None and latest_price < thresholds["penny_stock_price_lt"]:
+        reasons.append("Penny stock: latest price is below $5.")
+    if avg_volume is not None and avg_volume < thresholds["low_avg_volume_lt"]:
+        reasons.append("Low liquidity: average volume is below 500,000 shares.")
+    if market_cap is not None and market_cap < thresholds["small_market_cap_lt"]:
+        reasons.append("Small market cap: market cap is below $300M.")
+
+    if reasons:
+        return {"risk_flag": "high", "risk_reasons": reasons, "risk_thresholds": thresholds}
 
     if (
         latest_price is not None
-        and latest_price >= 5
+        and latest_price >= thresholds["penny_stock_price_lt"]
         and avg_volume is not None
-        and avg_volume >= 2_000_000
+        and avg_volume >= thresholds["low_risk_avg_volume_gte"]
         and market_cap is not None
-        and market_cap >= 10_000_000_000
+        and market_cap >= thresholds["low_risk_market_cap_gte"]
     ):
-        return "low"
+        return {
+            "risk_flag": "low",
+            "risk_reasons": [
+                "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
+            ],
+            "risk_thresholds": thresholds,
+        }
 
-    return "medium"
-
-
-def calculate_final_score(aggregate: TickerAggregate, market_data: MarketData) -> float:
-    """Calculate an explainable 0-100 score from attention, sentiment, and risk."""
-
-    attention_score = math.log1p(aggregate.mention_count) * 12 + aggregate.unique_posts * 4
-    engagement_score = math.log1p(max(aggregate.total_upvotes, 0)) * 6 + math.log1p(
-        max(aggregate.comment_volume, 0)
-    ) * 4
-    sentiment_score = ((aggregate.avg_sentiment + 1) / 2) * 22
-    validity_bonus = 8 if market_data.valid else 0
-    risk_penalty = {"high": 10, "medium": 4, "low": 0}[determine_risk_flag(market_data)]
-
-    raw_score = attention_score + engagement_score + sentiment_score + validity_bonus
-    score = min(100.0, raw_score) - risk_penalty
-    return round(max(0.0, score), 2)
+    return {
+        "risk_flag": "medium",
+        "risk_reasons": [
+            "Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds."
+        ],
+        "risk_thresholds": thresholds,
+    }
 
 
-def build_summary(aggregate: TickerAggregate, risk_flag: str) -> str:
+def determine_risk_flag(market_data: MarketData) -> str:
+    """Classify ticker risk from simple market-data heuristics."""
+
+    return str(risk_details(market_data)["risk_flag"])
+
+
+def engagement_quality_score(aggregate: TickerAggregate) -> float:
+    """Score engagement quality from 0 to 1 using upvotes/comments and post quality."""
+
+    engagement = math.log1p(max(aggregate.total_upvotes, 0)) / math.log1p(10_000)
+    comments = math.log1p(max(aggregate.comment_volume, 0)) / math.log1p(2_000)
+    type_quality = min(1.0, aggregate.post_type_weight_avg / 1.5)
+    score = 0.45 * engagement + 0.30 * comments + 0.25 * type_quality
+    return round(max(0.0, min(1.0, score)), 4)
+
+
+def normalized_sentiment_score(avg_sentiment: float) -> float:
+    return round(max(0.0, min(1.0, (avg_sentiment + 1) / 2)), 4)
+
+
+def market_confirmation_score(market_data: MarketData) -> float:
+    """Score market confirmation from 0 to 1."""
+
+    if not market_data.valid:
+        return 0.0
+
+    score = 0.15
+    if market_data.one_day_return is not None:
+        score += 0.15 if market_data.one_day_return > 0 else -0.08
+    if market_data.five_day_return is not None:
+        score += 0.20 if market_data.five_day_return > 0 else -0.10
+    if market_data.relative_volume is not None:
+        if market_data.relative_volume >= 1.5:
+            score += 0.25
+        elif market_data.relative_volume >= 1.0:
+            score += 0.10
+    if market_data.above_20_day_high:
+        score += 0.25
+    if market_data.avg_volume is not None and market_data.avg_volume < 500_000:
+        score -= 0.20
+
+    return round(max(0.0, min(1.0, score)), 4)
+
+
+def subreddit_spread_score(unique_subreddits: int) -> float:
+    if unique_subreddits <= 0:
+        return 0.0
+    return round(min(1.0, unique_subreddits * 0.25), 4)
+
+
+def pump_risk_details(aggregate: TickerAggregate, market_data: MarketData, market_score: float) -> dict[str, Any]:
+    """Calculate pump/noise risk and explanation."""
+
+    components: list[float] = []
+    reasons: list[str] = []
+
+    hype_component = min(1.0, aggregate.hype_count / 8)
+    if hype_component >= 0.25:
+        reasons.append("Heavy rocket/moon/hype language detected.")
+    components.append(hype_component)
+
+    repeated_component = min(1.0, max(0, aggregate.max_repeated_mentions - 3) / 7)
+    if repeated_component > 0:
+        reasons.append("Ticker is repeated many times within the same post/comment context.")
+    components.append(repeated_component)
+
+    if market_data.latest_price is not None and market_data.latest_price < 5:
+        components.append(0.8)
+        reasons.append("Penny stock price increases pump risk.")
+    if market_data.avg_volume is not None and market_data.avg_volume < 500_000:
+        components.append(0.7)
+        reasons.append("Low average volume increases manipulation/noise risk.")
+    if market_data.market_cap is not None and market_data.market_cap < 300_000_000:
+        components.append(0.7)
+        reasons.append("Very small market cap increases pump risk.")
+
+    meme_yolo_share = 0.0
+    if aggregate.post_types:
+        meme_yolo_share = sum(1 for item in aggregate.post_types if item in {"Meme", "YOLO"}) / len(aggregate.post_types)
+    components.append(meme_yolo_share)
+    if meme_yolo_share >= 0.5:
+        reasons.append("Most discussion is meme/YOLO driven.")
+
+    if aggregate.avg_sentiment >= 0.45 and market_score < 0.35:
+        components.append(0.6)
+        reasons.append("Sentiment is high but market confirmation is weak.")
+
+    if aggregate.low_quality_mentions and aggregate.mention_count <= 2:
+        components.append(0.4)
+        reasons.append("Ticker appears only in low-quality one-off contexts.")
+
+    score = sum(components) / len(components) if components else 0.0
+    return {
+        "pump_risk_score": round(max(0.0, min(1.0, score)), 4),
+        "risk_explanation": " ".join(reasons) if reasons else "No major pump/noise signals detected.",
+    }
+
+
+def score_breakdown(
+    aggregate: TickerAggregate,
+    market_data: MarketData,
+    baseline: dict[str, float] | None = None,
+) -> dict[str, Any]:
+    """Calculate component scores used to produce final_score."""
+
+    baseline = baseline or {}
+    seven_day_avg_mentions = float(baseline.get("seven_day_avg_mentions", 0.0) or 0.0)
+    attention_acceleration = aggregate.mention_count / max(seven_day_avg_mentions, 1)
+    acceleration_score = attention_acceleration_score(attention_acceleration)
+    engagement_score = engagement_quality_score(aggregate)
+    sentiment_score = normalized_sentiment_score(aggregate.avg_sentiment)
+    net_conviction = aggregate.net_conviction_score
+    market_score = market_confirmation_score(market_data)
+    spread_score = subreddit_spread_score(aggregate.unique_subreddits)
+    pump = pump_risk_details(aggregate, market_data, market_score)
+    pump_penalty = pump["pump_risk_score"] * 0.20
+
+    raw_score = (
+        0.25 * acceleration_score
+        + 0.20 * engagement_score
+        + 0.15 * sentiment_score
+        + 0.15 * net_conviction
+        + 0.15 * market_score
+        + 0.10 * spread_score
+        - pump_penalty
+    )
+    normalized = round(max(0.0, min(1.0, raw_score)) * 100, 2)
+
+    return {
+        "attention_acceleration_score": acceleration_score,
+        "engagement_quality_score": engagement_score,
+        "sentiment_score": sentiment_score,
+        "net_conviction_score": net_conviction,
+        "market_confirmation_score": market_score,
+        "subreddit_spread_score": spread_score,
+        "pump_risk_penalty": round(pump_penalty, 4),
+        "raw_score_0_to_1": round(raw_score, 4),
+        "final_score": normalized,
+        "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty",
+    }
+
+
+def calculate_final_score(
+    aggregate: TickerAggregate,
+    market_data: MarketData,
+    baseline: dict[str, float] | None = None,
+) -> float:
+    """Calculate an explainable 0-100 score from quality signals and risk."""
+
+    return float(score_breakdown(aggregate, market_data, baseline)["final_score"])
+
+
+def recommendation_type(
+    final_score: float,
+    pump_risk_score: float,
+    attention_acceleration: float,
+    dominant_type: str,
+    market_score: float,
+    bullish_score: float,
+) -> str:
+    """Classify the ticker recommendation bucket."""
+
+    if pump_risk_score >= 0.65:
+        return "High-risk pump"
+    if final_score < 25 or (pump_risk_score >= 0.45 and market_score < 0.3):
+        return "Avoid / too noisy"
+    if dominant_type == "Earnings":
+        return "Earnings chatter"
+    if attention_acceleration >= 2.5 and bullish_score >= 0.35:
+        return "Possible squeeze"
+    if final_score >= 55 and market_score >= 0.5:
+        return "Momentum setup"
+    return "Watchlist"
+
+
+def build_summary(
+    aggregate: TickerAggregate,
+    recommendation: str,
+    attention_acceleration: float,
+    pump_risk_score: float,
+) -> str:
     """Produce a compact human-readable explanation for a ranked ticker."""
 
     sentiment = aggregate.avg_sentiment
@@ -129,9 +440,11 @@ def build_summary(aggregate: TickerAggregate, risk_flag: str) -> str:
     else:
         sentiment_label = "mixed sentiment"
 
-    attention_label = "high Reddit attention" if aggregate.unique_posts >= 5 or aggregate.mention_count >= 10 else "emerging Reddit attention"
-    risk_note = "high-risk market profile" if risk_flag == "high" else f"{risk_flag}-risk market profile"
-    return f"{attention_label.capitalize()} with {sentiment_label} and a {risk_note}."
+    return (
+        f"{recommendation}: {aggregate.dominant_post_type} led discussion with "
+        f"{sentiment_label}, {attention_acceleration:.2f}x mention acceleration, "
+        f"and pump risk {pump_risk_score:.2f}."
+    )
 
 
 def rank_tickers(
@@ -139,10 +452,12 @@ def rank_tickers(
     market_data_by_ticker: dict[str, MarketData],
     limit: int = 15,
     generated_at: str | None = None,
+    baselines: dict[str, dict[str, float]] | None = None,
 ) -> list[dict[str, Any]]:
     """Rank valid tickers and return JSON-serializable result rows."""
 
     generated_at = generated_at or datetime.now(timezone.utc).isoformat()
+    baselines = baselines or {}
     rows: list[dict[str, Any]] = []
 
     for ticker, aggregate in aggregates.items():
@@ -150,10 +465,25 @@ def rank_tickers(
         if not market_data.valid:
             continue
 
-        risk_flag = determine_risk_flag(market_data)
+        baseline = baselines.get(ticker, {})
+        seven_day_avg_mentions = float(baseline.get("seven_day_avg_mentions", 0.0) or 0.0)
+        attention_acceleration = aggregate.mention_count / max(seven_day_avg_mentions, 1)
+        details = risk_details(market_data)
+        risk_flag = str(details["risk_flag"])
+        breakdown = score_breakdown(aggregate, market_data, baseline)
+        market_score = float(breakdown["market_confirmation_score"])
+        pump = pump_risk_details(aggregate, market_data, market_score)
+        recommendation = recommendation_type(
+            breakdown["final_score"],
+            pump["pump_risk_score"],
+            attention_acceleration,
+            aggregate.dominant_post_type,
+            market_score,
+            aggregate.bullish_conviction_score,
+        )
         top_sources = sorted(
             aggregate.sources,
-            key=lambda source: int(source.get("score") or 0),
+            key=lambda source: (float(source.get("recency_weight") or 0), int(source.get("score") or 0)),
             reverse=True,
         )[:3]
         top_sources = [
@@ -161,6 +491,9 @@ def rank_tickers(
                 "subreddit": source.get("subreddit"),
                 "title": source.get("title"),
                 "permalink": source.get("permalink"),
+                "created_utc": source.get("created_utc"),
+                "recency_weight": source.get("recency_weight"),
+                "post_type": source.get("post_type"),
             }
             for source in top_sources
         ]
@@ -168,17 +501,41 @@ def rank_tickers(
         rows.append(
             {
                 "ticker": ticker,
-                "final_score": calculate_final_score(aggregate, market_data),
+                "final_score": breakdown["final_score"],
+                "recommendation_type": recommendation,
+                "risk_flag": risk_flag,
+                "risk_explanation": pump["risk_explanation"],
                 "mention_count": aggregate.mention_count,
+                "weighted_mention_count": round(aggregate.weighted_mention_count, 2),
                 "unique_posts": aggregate.unique_posts,
+                "unique_subreddits": aggregate.unique_subreddits,
+                "weighted_unique_posts": round(aggregate.weighted_unique_posts, 2),
+                "seven_day_avg_mentions": round(seven_day_avg_mentions, 4),
+                "attention_acceleration": round(attention_acceleration, 4),
                 "avg_sentiment": aggregate.avg_sentiment,
-                "total_upvotes": aggregate.total_upvotes,
-                "comment_volume": aggregate.comment_volume,
+                "bullish_conviction_score": aggregate.bullish_conviction_score,
+                "bearish_conviction_score": aggregate.bearish_conviction_score,
+                "net_conviction_score": aggregate.net_conviction_score,
+                "market_confirmation_score": market_score,
+                "pump_risk_score": pump["pump_risk_score"],
                 "latest_price": market_data.latest_price,
                 "market_cap": market_data.market_cap,
                 "avg_volume": market_data.avg_volume,
-                "risk_flag": risk_flag,
-                "summary": build_summary(aggregate, risk_flag),
+                "one_day_return": market_data.one_day_return,
+                "five_day_return": market_data.five_day_return,
+                "relative_volume": market_data.relative_volume,
+                "above_20_day_high": market_data.above_20_day_high,
+                "dominant_post_type": aggregate.dominant_post_type,
+                "post_type_weight_avg": aggregate.post_type_weight_avg,
+                "risk_reasons": details["risk_reasons"],
+                "risk_thresholds": details["risk_thresholds"],
+                "score_breakdown": breakdown,
+                "summary": build_summary(
+                    aggregate,
+                    recommendation,
+                    attention_acceleration,
+                    pump["pump_risk_score"],
+                ),
                 "top_sources": top_sources,
                 "generated_at": generated_at,
             }

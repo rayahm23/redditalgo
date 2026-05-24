@@ -34,11 +34,14 @@ jobs:
           APIFY_INPUT_JSON: ${{ secrets.APIFY_INPUT_JSON }}
         run: python -m scanner.pipeline
 
+      - name: Run backtest
+        run: python -m scanner.backtest || true
+
       - name: Commit updated JSON results
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/daily_results.json data/daily_results.html data/history/
+          git add data/daily_results.json data/daily_results.html data/history/ data/backtest_results.json
           if git diff --cached --quiet; then
             echo "No scanner output changes to commit."
           else

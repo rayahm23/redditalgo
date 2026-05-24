@@ -8,6 +8,7 @@ from pathlib import Path
 
 from scanner.apify_client import fetch_apify_posts
 from scanner.config import ScannerConfig
+from scanner.history import calculate_historical_baselines, load_recent_history
 from scanner.market_data import get_market_data_for_tickers
 from scanner.reddit_client import fetch_reddit_posts
 from scanner.report import write_html_reports
@@ -44,10 +45,22 @@ def run_pipeline(config: ScannerConfig | None = None) -> list[dict]:
     generated_at = datetime.now(timezone.utc).isoformat()
     run_date = generated_at[:10]
 
-    posts = fetch_posts(config)
-    aggregates = aggregate_posts(posts, excluded=config.excluded_tickers)
+    try:
+        posts = fetch_posts(config)
+    except Exception as error:
+        print(f"Post fetch failed; writing empty result set: {error}")
+        posts = []
+    aggregates = aggregate_posts(posts, excluded=config.excluded_tickers, reference_time=generated_at)
     market_data = get_market_data_for_tickers(set(aggregates.keys()))
-    results = rank_tickers(aggregates, market_data, limit=15, generated_at=generated_at)
+    history_rows = load_recent_history(config.history_dir, run_date, days=7)
+    baselines = calculate_historical_baselines(history_rows, days=7)
+    results = rank_tickers(
+        aggregates,
+        market_data,
+        limit=15,
+        generated_at=generated_at,
+        baselines=baselines,
+    )
     write_results(results, config.output_path, config.history_dir, run_date)
     return results
 

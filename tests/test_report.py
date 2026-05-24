@@ -10,21 +10,46 @@ def test_render_results_html_includes_ticker_metrics_and_disclaimer():
                 "rank": 1,
                 "ticker": "TSLA",
                 "final_score": 87.4,
+                "recommendation_type": "Momentum setup",
+                "risk_flag": "medium",
+                "risk_explanation": "No major pump/noise signals detected.",
                 "mention_count": 42,
                 "unique_posts": 12,
+                "unique_subreddits": 2,
+                "seven_day_avg_mentions": 10,
+                "attention_acceleration": 4.2,
                 "avg_sentiment": 0.61,
-                "total_upvotes": 5200,
-                "comment_volume": 840,
+                "net_conviction_score": 0.75,
+                "market_confirmation_score": 0.8,
+                "pump_risk_score": 0.1,
                 "latest_price": 214.52,
                 "market_cap": 650000000000,
                 "avg_volume": 98000000,
-                "risk_flag": "medium",
+                "one_day_return": 0.02,
+                "five_day_return": 0.05,
+                "relative_volume": 1.8,
+                "dominant_post_type": "DD",
+                "risk_reasons": ["Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds."],
+                "score_breakdown": {
+                    "attention_acceleration_score": 1.0,
+                    "engagement_quality_score": 0.8,
+                    "sentiment_score": 0.805,
+                    "net_conviction_score": 0.75,
+                    "market_confirmation_score": 0.8,
+                    "subreddit_spread_score": 0.5,
+                    "pump_risk_penalty": 0.02,
+                    "raw_score_0_to_1": 0.75,
+                    "final_score": 75.0,
+                    "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty",
+                },
                 "summary": "High Reddit attention with positive sentiment.",
                 "top_sources": [
                     {
                         "subreddit": "wallstreetbets",
                         "title": "Example post title",
                         "permalink": "https://reddit.com/r/wallstreetbets/example",
+                        "recency_weight": 1.0,
+                        "post_type": "DD",
                     }
                 ],
                 "generated_at": "2026-05-24T20:00:00+00:00",
@@ -35,6 +60,11 @@ def test_render_results_html_includes_ticker_metrics_and_disclaimer():
     assert "TSLA" in html
     assert "87.4" in html
     assert "42</b> mentions" in html
+    assert "4.20x</b> acceleration" in html
+    assert "Score breakdown" in html
+    assert "Risk explanation" in html
+    assert "Formula:" in html
+    assert "Momentum setup" in html
     assert "medium risk" in html
     assert "Not financial advice" in html
     assert "https://reddit.com/r/wallstreetbets/example" in html

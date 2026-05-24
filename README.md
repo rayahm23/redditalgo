@@ -53,9 +53,11 @@ REDDIT_USER_AGENT=reddit-alpha-scanner/0.1 by your_reddit_username
 The top 15 ranked tickers are written to:
 
 - `data/daily_results.json`
+- `data/daily_results.html`
 - `data/history/YYYY-MM-DD.json`
+- `data/history/YYYY-MM-DD.html`
 
-Each result includes rank, ticker, final score, mention counts, unique posts, sentiment, engagement, market fields, risk flag, summary, top sources, and generation timestamp.
+Each result includes rank, ticker, final score, raw and recency-weighted mention counts, unique posts, sentiment, engagement, market fields, risk flag, risk explanation, score breakdown, summary, top sources, and generation timestamp.
 
 ## Local setup
 
@@ -108,23 +110,115 @@ In your GitHub repository:
 
 The workflow installs dependencies, runs `python -m scanner.pipeline`, and commits updated JSON files back to the repository.
 
-## Scoring model
+## Scoring methodology
 
-The final score is an explainable 0-100 value based on:
+The scanner is rule-based and explainable. It is designed to surface better watchlist candidates, not simply the loudest meme tickers.
 
-- mention count
-- number of unique Reddit posts
-- total upvotes
-- average sentiment
-- comment volume
-- market data validity
-- risk penalty
+### Ticker extraction
 
-Risk is flagged as:
+The scanner supports `$TSLA` cashtags and plain uppercase `TSLA` mentions. It filters common Reddit/trading false positives such as `DD`, `YOLO`, `CEO`, `CFO`, `SEC`, `USA`, `USD`, `AI`, `GDP`, `CPI`, `ETF`, `IPO`, `ATH`, `FOMO`, `IMO`, `LOL`, `OP`, `THE`, `FOR`, `AND`, `ARE`, `YOU`, `NOT`, `PUT`, `CALL`, `ITM`, `OTM`, `ATM`, `RH`, `FED`, `EV`, `EPS`, `PE`, and `IV`. Invalid tickers are removed by yfinance validation before ranking.
 
-- `high`: penny stock, low average volume, small market cap, or invalid market data
-- `medium`: valid market data without low-risk liquidity/size signals
-- `low`: larger, liquid tickers with stronger market cap and volume signals
+### Historical baseline and attention acceleration
+
+Posts are filtered to the last 7 days. Recent posts are weighted more heavily:
+
+- today: `1.00`
+- yesterday: `0.85`
+- day 2: `0.70`
+- day 3: `0.55`
+- day 4: `0.40`
+- day 5: `0.25`
+- day 6: `0.10`
+
+The scanner loads the previous 7 daily history files and calculates:
+
+```text
+seven_day_avg_mentions
+attention_acceleration = today_mentions / max(seven_day_avg_mentions, 1)
+```
+
+`attention_acceleration_score` is normalized from 0 to 1, where roughly 4x baseline or higher reaches 1.0.
+
+### Post quality and conviction
+
+Posts are classified with keyword rules as `DD`, `News`, `Earnings`, `Options`, `YOLO`, `Meme`, `Question`, or `Other`. Higher-quality post types receive higher weight:
+
+```text
+DD 1.5, News 1.3, Earnings 1.25, Options 1.2, Other 1.0, YOLO 0.8, Meme 0.4, Question 0.3
+```
+
+Conviction scoring detects bullish phrases like `buying calls`, `loaded`, `all in`, `adding`, `holding`, `shares`, `leaps`, `squeeze`, `short interest`, `earnings`, `guidance`, `price target`, `PT`, `breakout`, and `unusual volume`, plus bearish phrases like `puts`, `shorting`, `rug pull`, `overvalued`, `dilution`, `bankruptcy`, `selloff`, and `downside`.
+
+### Market confirmation
+
+yfinance is used to add:
+
+- `latest_price`
+- `market_cap`
+- `avg_volume`
+- `one_day_return`
+- `five_day_return`
+- `relative_volume`
+- `above_20_day_high`
+
+`market_confirmation_score` increases with positive 1-day/5-day returns, relative volume above 1.5, and 20-day highs. Low liquidity reduces confirmation.
+
+### Pump/noise risk
+
+`pump_risk_score` is based on hype language, repeated ticker spam, penny-stock/low-volume/small-cap conditions, meme/YOLO-heavy discussion, and cases where sentiment is high but market confirmation is weak.
+
+### Final score
+
+The final score uses this formula and is normalized to 0-100:
+
+```text
+final_score =
+  0.25 * attention_acceleration_score
++ 0.20 * engagement_quality_score
++ 0.15 * sentiment_score
++ 0.15 * net_conviction_score
++ 0.15 * market_confirmation_score
++ 0.10 * subreddit_spread_score
+- pump_risk_penalty
+```
+
+Every result includes a `score_breakdown` object explaining these components.
+
+## Recommendation types
+
+- `Momentum setup`: stronger score with market confirmation.
+- `Possible squeeze`: strong attention acceleration and bullish conviction.
+- `Earnings chatter`: discussion dominated by earnings/guidance language.
+- `Watchlist`: worth monitoring but not enough confirmation for a stronger label.
+- `High-risk pump`: high pump/noise risk.
+- `Avoid / too noisy`: low score or weak market confirmation with elevated noise.
+
+Risk flags remain separate from recommendation type:
+
+- `high`: penny stock, low average volume, small market cap, or invalid market data.
+- `medium`: valid market data without low-risk liquidity/size signals.
+- `low`: larger, liquid tickers with stronger market cap and volume signals.
+
+Each result includes `risk_explanation`, `risk_reasons`, and `risk_thresholds`.
+
+## Backtesting
+
+Run a basic historical forward-return check with:
+
+```bash
+python -m scanner.backtest
+```
+
+It reads `data/history/*.json`, fetches forward prices with yfinance, and writes `data/backtest_results.json` with next-day, three-day, seven-day, and SPY-relative returns when available. Backtesting is best-effort and does not fail the main scan workflow.
+
+## Limitations
+
+- This is rule-based and heuristic-driven, not predictive ML.
+- Reddit posts can be noisy, promotional, sarcastic, or incomplete.
+- Apify actor schemas may vary; use `APIFY_INPUT_JSON` if your actor requires custom input.
+- yfinance data can be delayed, missing, or rate-limited.
+- Backtests are simplistic and do not account for slippage, liquidity, position sizing, or execution.
+- No output is financial advice.
 
 ## Future Vercel dashboard
 
