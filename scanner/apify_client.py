@@ -139,13 +139,32 @@ def normalize_apify_item(item: dict[str, Any], top_comments_limit: int) -> dict[
     }
 
 
+
+def _get_run_dataset_id(run: Any) -> str | None:
+    """Return an Apify run default dataset ID from dict or typed client models."""
+
+    if isinstance(run, dict):
+        return run.get("defaultDatasetId") or run.get("default_dataset_id")
+
+    dataset_id = getattr(run, "default_dataset_id", None)
+    if dataset_id:
+        return str(dataset_id)
+
+    model_dump = getattr(run, "model_dump", None)
+    if callable(model_dump):
+        dumped = model_dump(by_alias=True)
+        if isinstance(dumped, dict):
+            return dumped.get("defaultDatasetId") or dumped.get("default_dataset_id")
+
+    return None
+
 def fetch_apify_posts(config: ScannerConfig) -> list[dict[str, Any]]:
     """Run an Apify Reddit scraper actor and return normalized Reddit posts."""
 
     config.validate_apify_credentials()
     client = ApifyClient(config.apify_token)
     run = client.actor(config.apify_actor_id).call(run_input=config.get_apify_run_input())
-    dataset_id = run.get("defaultDatasetId")
+    dataset_id = _get_run_dataset_id(run)
     if not dataset_id:
         raise RuntimeError("Apify actor run did not return a default dataset")
 

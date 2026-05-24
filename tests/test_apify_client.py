@@ -1,4 +1,4 @@
-from scanner.apify_client import normalize_apify_item
+from scanner.apify_client import _get_run_dataset_id, normalize_apify_item
 from scanner.config import ScannerConfig
 
 
@@ -38,3 +38,12 @@ def test_default_apify_input_contains_subreddit_hot_and_top_urls():
     assert "https://www.reddit.com/r/wallstreetbets/hot/" in urls
     assert "https://www.reddit.com/r/wallstreetbets/top/?t=day" in urls
     assert run_input["maxItems"] == len(config.subreddits) * config.posts_per_listing * 2
+
+
+def test_get_run_dataset_id_supports_dict_and_typed_models():
+    class TypedRun:
+        default_dataset_id = "typed-dataset-id"
+
+    assert _get_run_dataset_id({"defaultDatasetId": "dict-dataset-id"}) == "dict-dataset-id"
+    assert _get_run_dataset_id({"default_dataset_id": "snake-dataset-id"}) == "snake-dataset-id"
+    assert _get_run_dataset_id(TypedRun()) == "typed-dataset-id"
