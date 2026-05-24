@@ -20,6 +20,17 @@
     h2 { margin: 0; font-size: 24px; letter-spacing: 0.04em; }
     .score { font-weight: 800; border-radius: 10px; padding: 5px 9px; background: #0969da; color: white; }
     .recommendation { border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 700; background: #ddf4ff; color: #0550ae; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 4px; }
+    .chip { border-radius: 999px; padding: 4px 9px; font-size: 11px; font-weight: 650; border: 1px solid var(--border); background: var(--bg); }
+    .chip-analyst { background: #fbefff; color: #6e40c9; border-color: #d8b9ff; }
+    .chip-catalyst { background: #fff8e6; color: #7a4c00; border-color: #f0d59b; }
+    .chip-confidence-high { background: #dafbe1; color: #116329; border-color: #aceebb; }
+    .chip-confidence-medium { background: #fff8c5; color: #7d4e00; border-color: #f0e68c; }
+    .chip-confidence-low { background: #ffebe9; color: #82071e; border-color: #ffbbb9; }
+    .trends { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: 8px 0 10px; }
+    .trend { border: 1px solid var(--border); border-radius: 10px; padding: 6px 8px; color: #0969da; }
+    .trend-label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+    .sparkline { display: block; width: 100%; height: auto; }
     .risk { border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
     .risk-low { background: #dafbe1; color: #116329; } .risk-medium { background: #fff8c5; color: #7d4e00; } .risk-high { background: #ffebe9; color: #82071e; }
     .summary { margin: 10px 0 12px; }
@@ -36,7 +47,7 @@
   <main class="wrap">
     <header>
       <h1>Reddit Alpha Scanner</h1>
-      <div class="meta">Generated at: 2026-05-24T21:00:10.368427+00:00</div>
+      <div class="meta">Generated at: 2026-05-24T22:40:28.377244+00:00</div>
       <div class="toolbar"><a href="daily_results.json">Raw JSON</a><a href="history/">History folder</a></div>
       <p class="disclaimer">Research/watchlist tool only. Not financial advice. Mentions are filtered to the last 7 days, compared with historical baselines, and penalized for pump/noise risk.</p>
     </header>
@@ -46,14 +57,20 @@
               <div class="main">
                 <div class="topline">
                   <h2>AMD</h2>
-                  <span class="score">70.8</span>
-                  <span class="recommendation">Earnings chatter</span>
+                  <span class="score">68.7</span>
+                  <span class="recommendation">Earnings momentum</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Earnings chatter: Earnings led discussion with positive sentiment, 9.00x mention acceleration, and pump risk 0.19.</p>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst mention 0.33</span>
+                  <span class="chip chip-confidence-high">HIGH confidence</span>
+                  <span class="chip chip-catalyst">Earnings catalyst</span>
+                </div>
+                <p class="summary">Earnings momentum: Earnings led discussion with positive sentiment, 3.60x mention acceleration, and pump risk 0.19.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div></div>
                 <div class="metrics">
                   <span><b>9</b> mentions</span>
-                  <span><b>9x</b> acceleration</span>
+                  <span><b>3.60x</b> acceleration</span>
                   <span><b>0</b> 7d avg mentions</span>
                   <span><b>3</b> posts</span>
                   <span><b>3</b> subreddits</span>
@@ -70,7 +87,7 @@
                 <details open>
                   <summary>Score breakdown</summary>
                   
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.7068</li><li><b>Sentiment:</b> 0.6964</li><li><b>Net conviction:</b> 0.6666</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.7500</li><li><b>Pump risk penalty:</b> 0.0381</li><li><b>Raw score 0-1:</b> 0.7077</li></ul>
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.9000</li><li><b>Engagement quality:</b> 0.7260</li><li><b>Sentiment:</b> 0.6964</li><li><b>Net conviction:</b> 0.6666</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.7500</li><li><b>Pump risk penalty:</b> 0.0381</li><li><b>Raw score 0-1:</b> 0.6865</li></ul>
       <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
     
                 </details>
@@ -91,14 +108,20 @@
               <div class="main">
                 <div class="topline">
                   <h2>ASTS</h2>
-                  <span class="score">65.0</span>
-                  <span class="recommendation">Momentum setup</span>
+                  <span class="score">52.7</span>
+                  <span class="recommendation">Watchlist</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Momentum setup: Question led discussion with mixed sentiment, 5.00x mention acceleration, and pump risk 0.11.</p>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst mention 0.33</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">Mixed catalyst</span>
+                </div>
+                <p class="summary">Watchlist: Question led discussion with mixed sentiment, 2.00x mention acceleration, and pump risk 0.11.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div></div>
                 <div class="metrics">
                   <span><b>5</b> mentions</span>
-                  <span><b>5x</b> acceleration</span>
+                  <span><b>2x</b> acceleration</span>
                   <span><b>0</b> 7d avg mentions</span>
                   <span><b>3</b> posts</span>
                   <span><b>1</b> subreddits</span>
@@ -115,7 +138,7 @@
                 <details open>
                   <summary>Score breakdown</summary>
                   
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.5782</li><li><b>Sentiment:</b> 0.5845</li><li><b>Net conviction:</b> 0.5416</li><li><b>Market confirmation:</b> 0.7500</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0222</li><li><b>Raw score 0-1:</b> 0.6498</li></ul>
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.5870</li><li><b>Sentiment:</b> 0.5845</li><li><b>Net conviction:</b> 0.5416</li><li><b>Market confirmation:</b> 0.7500</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0222</li><li><b>Raw score 0-1:</b> 0.5266</li></ul>
       <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
     
                 </details>
@@ -135,43 +158,49 @@
               <div class="rank">#3</div>
               <div class="main">
                 <div class="topline">
-                  <h2>RKLB</h2>
-                  <span class="score">62.7</span>
-                  <span class="recommendation">Momentum setup</span>
+                  <h2>NVDA</h2>
+                  <span class="score">52.5</span>
+                  <span class="recommendation">Institutional-style accumulation</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Momentum setup: Question led discussion with mixed sentiment, 4.00x mention acceleration, and pump risk 0.11.</p>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst mention 0.33</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">Other catalyst</span>
+                </div>
+                <p class="summary">Institutional-style accumulation: Other led discussion with positive sentiment, 3.60x mention acceleration, and pump risk 0.26.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div></div>
                 <div class="metrics">
-                  <span><b>4</b> mentions</span>
-                  <span><b>4x</b> acceleration</span>
+                  <span><b>9</b> mentions</span>
+                  <span><b>3.60x</b> acceleration</span>
                   <span><b>0</b> 7d avg mentions</span>
-                  <span><b>3</b> posts</span>
+                  <span><b>2</b> posts</span>
                   <span><b>1</b> subreddits</span>
-                  <span><b>Question</b> type</span>
-                  <span><b>0.17</b> sentiment</span>
-                  <span><b>0.54</b> conviction</span>
-                  <span><b>0.60</b> market confirm</span>
-                  <span><b>0.11</b> pump risk</span>
-                  <span><b>$135.76</b> price</span>
-                  <span><b>8.22%</b> 1d</span>
-                  <span><b>8.81%</b> 5d</span>
-                  <span><b>1.35</b> rel vol</span>
+                  <span><b>Other</b> type</span>
+                  <span><b>0.48</b> sentiment</span>
+                  <span><b>0.56</b> conviction</span>
+                  <span><b>0</b> market confirm</span>
+                  <span><b>0.26</b> pump risk</span>
+                  <span><b>$215.33</b> price</span>
+                  <span><b>-1.90%</b> 1d</span>
+                  <span><b>-4.43%</b> 5d</span>
+                  <span><b>0.98</b> rel vol</span>
                 </div>
                 <details open>
                   <summary>Score breakdown</summary>
                   
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.5782</li><li><b>Sentiment:</b> 0.5845</li><li><b>Net conviction:</b> 0.5416</li><li><b>Market confirmation:</b> 0.6000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0222</li><li><b>Raw score 0-1:</b> 0.6273</li></ul>
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.9000</li><li><b>Engagement quality:</b> 0.6557</li><li><b>Sentiment:</b> 0.7389</li><li><b>Net conviction:</b> 0.5625</li><li><b>Market confirmation:</b> 0</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0514</li><li><b>Raw score 0-1:</b> 0.5249</li></ul>
       <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
     
                 </details>
                 <details>
                   <summary>Risk explanation</summary>
-                  <p>No major pump/noise signals detected.</p>
+                  <p>Ticker is repeated many times within the same post/comment context. Sentiment is high but market confirmation is weak.</p>
                   <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
                 </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/stocks: The bull market is raging: what to buy? <span class="muted">(Question, weight 1.00)</span></li><li>r/stocks: 4 month update on r/Stocks favourite stock picks - up 43.62%! <span class="muted">(Meme, weight 1.00)</span></li><li>r/stocks: consolidating big winners for an unproved Winner? <span class="muted">(Question, weight 1.00)</span></li></ul>
+                  <ul><li>r/stocks: Why $AMD will easily surpass $1T and could come knocking at $NVDA door. <span class="muted">(Other, weight 1.00)</span></li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>
@@ -181,14 +210,20 @@
               <div class="main">
                 <div class="topline">
                   <h2>SMH</h2>
-                  <span class="score">61.6</span>
-                  <span class="recommendation">Earnings chatter</span>
+                  <span class="score">51.5</span>
+                  <span class="recommendation">Earnings momentum</span>
                   <span class="risk risk-medium">medium risk</span>
                 </div>
-                <p class="summary">Earnings chatter: Earnings led discussion with mixed sentiment, 6.00x mention acceleration, and pump risk 0.14.</p>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst mention 0.33</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">Earnings catalyst</span>
+                </div>
+                <p class="summary">Earnings momentum: Earnings led discussion with mixed sentiment, 2.40x mention acceleration, and pump risk 0.14.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div></div>
                 <div class="metrics">
                   <span><b>6</b> mentions</span>
-                  <span><b>6x</b> acceleration</span>
+                  <span><b>2.40x</b> acceleration</span>
                   <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
                   <span><b>1</b> subreddits</span>
@@ -205,7 +240,7 @@
                 <details open>
                   <summary>Score breakdown</summary>
                   
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.4518</li><li><b>Sentiment:</b> 0.6096</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0286</li><li><b>Raw score 0-1:</b> 0.6157</li></ul>
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.6000</li><li><b>Engagement quality:</b> 0.4461</li><li><b>Sentiment:</b> 0.6096</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0286</li><li><b>Raw score 0-1:</b> 0.5146</li></ul>
       <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
     
                 </details>
@@ -226,18 +261,24 @@
               <div class="main">
                 <div class="topline">
                   <h2>TSLA</h2>
-                  <span class="score">58.8</span>
-                  <span class="recommendation">Momentum setup</span>
+                  <span class="score">51.5</span>
+                  <span class="recommendation">Institutional-style accumulation</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Momentum setup: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.</p>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst quiet</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">Other catalyst</span>
+                </div>
+                <p class="summary">Institutional-style accumulation: Other led discussion with positive sentiment, 0.80x mention acceleration, and pump risk 0.00.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,26.0"/></svg></div></div>
                 <div class="metrics">
                   <span><b>2</b> mentions</span>
-                  <span><b>2x</b> acceleration</span>
+                  <span><b>0.80x</b> acceleration</span>
                   <span><b>0</b> 7d avg mentions</span>
                   <span><b>2</b> posts</span>
                   <span><b>2</b> subreddits</span>
-                  <span><b>News</b> type</span>
+                  <span><b>Other</b> type</span>
                   <span><b>0.26</b> sentiment</span>
                   <span><b>0.62</b> conviction</span>
                   <span><b>0.50</b> market confirm</span>
@@ -250,7 +291,7 @@
                 <details open>
                   <summary>Score breakdown</summary>
                   
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.7459</li><li><b>Sentiment:</b> 0.6305</li><li><b>Net conviction:</b> 0.6250</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.5000</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5875</li></ul>
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.2000</li><li><b>Engagement quality:</b> 0.7564</li><li><b>Sentiment:</b> 0.6305</li><li><b>Net conviction:</b> 0.6250</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.5000</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5146</li></ul>
       <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
     
                 </details>
@@ -271,14 +312,20 @@
               <div class="main">
                 <div class="topline">
                   <h2>CAKE</h2>
-                  <span class="score">58.5</span>
-                  <span class="recommendation">Momentum setup</span>
+                  <span class="score">51.4</span>
+                  <span class="recommendation">Institutional-style accumulation</span>
                   <span class="risk risk-medium">medium risk</span>
                 </div>
-                <p class="summary">Momentum setup: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.</p>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst quiet</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">News catalyst</span>
+                </div>
+                <p class="summary">Institutional-style accumulation: News led discussion with positive sentiment, 0.80x mention acceleration, and pump risk 0.00.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,26.0"/></svg></div></div>
                 <div class="metrics">
                   <span><b>2</b> mentions</span>
-                  <span><b>2x</b> acceleration</span>
+                  <span><b>0.80x</b> acceleration</span>
                   <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
                   <span><b>1</b> subreddits</span>
@@ -295,7 +342,7 @@
                 <details open>
                   <summary>Score breakdown</summary>
                   
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.6995</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5852</li></ul>
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.2000</li><li><b>Engagement quality:</b> 0.7164</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5136</li></ul>
       <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
     
                 </details>
@@ -315,240 +362,21 @@
               <div class="rank">#7</div>
               <div class="main">
                 <div class="topline">
-                  <h2>CAPEX</h2>
-                  <span class="score">58.2</span>
-                  <span class="recommendation">Earnings chatter</span>
-                  <span class="risk risk-medium">medium risk</span>
-                </div>
-                <p class="summary">Earnings chatter: Earnings led discussion with mixed sentiment, 3.00x mention acceleration, and pump risk 0.00.</p>
-                <div class="metrics">
-                  <span><b>3</b> mentions</span>
-                  <span><b>3x</b> acceleration</span>
-                  <span><b>0</b> 7d avg mentions</span>
-                  <span><b>1</b> posts</span>
-                  <span><b>1</b> subreddits</span>
-                  <span><b>Earnings</b> type</span>
-                  <span><b>0.22</b> sentiment</span>
-                  <span><b>0.75</b> conviction</span>
-                  <span><b>0.50</b> market confirm</span>
-                  <span><b>0</b> pump risk</span>
-                  <span><b>$3,153.38</b> price</span>
-                  <span><b>0.23%</b> 1d</span>
-                  <span><b>0.45%</b> 5d</span>
-                  <span><b>n/a</b> rel vol</span>
-                </div>
-                <details open>
-                  <summary>Score breakdown</summary>
-                  
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.7500</li><li><b>Engagement quality:</b> 0.4518</li><li><b>Sentiment:</b> 0.6096</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5818</li></ul>
-      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-    
-                </details>
-                <details>
-                  <summary>Risk explanation</summary>
-                  <p>No major pump/noise signals detected.</p>
-                  <ul><li>Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds.</li></ul>
-                </details>
-                <details>
-                  <summary>Top Reddit sources</summary>
-                  <ul><li>r/investing: I feel like it’s very difficult to get a read on the AI trade… (chips, smh, intc, bubble) <span class="muted">(Earnings, weight 1.00)</span></li></ul>
-                </details>
-              </div>
-            </article>
-            
-            <article class="card">
-              <div class="rank">#8</div>
-              <div class="main">
-                <div class="topline">
-                  <h2>NVDA</h2>
-                  <span class="score">54.6</span>
-                  <span class="recommendation">Watchlist</span>
-                  <span class="risk risk-low">low risk</span>
-                </div>
-                <p class="summary">Watchlist: DD led discussion with positive sentiment, 9.00x mention acceleration, and pump risk 0.26.</p>
-                <div class="metrics">
-                  <span><b>9</b> mentions</span>
-                  <span><b>9x</b> acceleration</span>
-                  <span><b>0</b> 7d avg mentions</span>
-                  <span><b>2</b> posts</span>
-                  <span><b>1</b> subreddits</span>
-                  <span><b>DD</b> type</span>
-                  <span><b>0.48</b> sentiment</span>
-                  <span><b>0.56</b> conviction</span>
-                  <span><b>0</b> market confirm</span>
-                  <span><b>0.26</b> pump risk</span>
-                  <span><b>$215.33</b> price</span>
-                  <span><b>-1.90%</b> 1d</span>
-                  <span><b>-4.43%</b> 5d</span>
-                  <span><b>0.98</b> rel vol</span>
-                </div>
-                <details open>
-                  <summary>Score breakdown</summary>
-                  
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.6356</li><li><b>Sentiment:</b> 0.7389</li><li><b>Net conviction:</b> 0.5625</li><li><b>Market confirmation:</b> 0</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0514</li><li><b>Raw score 0-1:</b> 0.5459</li></ul>
-      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-    
-                </details>
-                <details>
-                  <summary>Risk explanation</summary>
-                  <p>Ticker is repeated many times within the same post/comment context. Sentiment is high but market confirmation is weak.</p>
-                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
-                </details>
-                <details>
-                  <summary>Top Reddit sources</summary>
-                  <ul><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD, weight 1.00)</span></li><li>r/stocks: Why $AMD will easily surpass $1T and could come knocking at $NVDA door. <span class="muted">(Other, weight 1.00)</span></li></ul>
-                </details>
-              </div>
-            </article>
-            
-            <article class="card">
-              <div class="rank">#9</div>
-              <div class="main">
-                <div class="topline">
-                  <h2>RDDT</h2>
-                  <span class="score">54.3</span>
-                  <span class="recommendation">Watchlist</span>
-                  <span class="risk risk-low">low risk</span>
-                </div>
-                <p class="summary">Watchlist: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.</p>
-                <div class="metrics">
-                  <span><b>2</b> mentions</span>
-                  <span><b>2x</b> acceleration</span>
-                  <span><b>0</b> 7d avg mentions</span>
-                  <span><b>1</b> posts</span>
-                  <span><b>1</b> subreddits</span>
-                  <span><b>News</b> type</span>
-                  <span><b>0.44</b> sentiment</span>
-                  <span><b>0.75</b> conviction</span>
-                  <span><b>0.22</b> market confirm</span>
-                  <span><b>0</b> pump risk</span>
-                  <span><b>$141.67</b> price</span>
-                  <span><b>-5.58%</b> 1d</span>
-                  <span><b>-10.43%</b> 5d</span>
-                  <span><b>1.60</b> rel vol</span>
-                </div>
-                <details open>
-                  <summary>Score breakdown</summary>
-                  
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.6995</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.2200</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5432</li></ul>
-      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-    
-                </details>
-                <details>
-                  <summary>Risk explanation</summary>
-                  <p>No major pump/noise signals detected.</p>
-                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
-                </details>
-                <details>
-                  <summary>Top Reddit sources</summary>
-                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li></ul>
-                </details>
-              </div>
-            </article>
-            
-            <article class="card">
-              <div class="rank">#10</div>
-              <div class="main">
-                <div class="topline">
-                  <h2>MSFT</h2>
-                  <span class="score">53.4</span>
-                  <span class="recommendation">Watchlist</span>
-                  <span class="risk risk-low">low risk</span>
-                </div>
-                <p class="summary">Watchlist: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.</p>
-                <div class="metrics">
-                  <span><b>2</b> mentions</span>
-                  <span><b>2x</b> acceleration</span>
-                  <span><b>0</b> 7d avg mentions</span>
-                  <span><b>2</b> posts</span>
-                  <span><b>2</b> subreddits</span>
-                  <span><b>News</b> type</span>
-                  <span><b>0.44</b> sentiment</span>
-                  <span><b>0.69</b> conviction</span>
-                  <span><b>0</b> market confirm</span>
-                  <span><b>0</b> pump risk</span>
-                  <span><b>$418.57</b> price</span>
-                  <span><b>-0.12%</b> 1d</span>
-                  <span><b>-0.79%</b> 5d</span>
-                  <span><b>0.66</b> rel vol</span>
-                </div>
-                <details open>
-                  <summary>Score breakdown</summary>
-                  
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.7393</li><li><b>Sentiment:</b> 0.7179</li><li><b>Net conviction:</b> 0.6875</li><li><b>Market confirmation:</b> 0</li><li><b>Subreddit spread:</b> 0.5000</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5337</li></ul>
-      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-    
-                </details>
-                <details>
-                  <summary>Risk explanation</summary>
-                  <p>No major pump/noise signals detected.</p>
-                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
-                </details>
-                <details>
-                  <summary>Top Reddit sources</summary>
-                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD, weight 1.00)</span></li></ul>
-                </details>
-              </div>
-            </article>
-            
-            <article class="card">
-              <div class="rank">#11</div>
-              <div class="main">
-                <div class="topline">
-                  <h2>NXXT</h2>
-                  <span class="score">52.5</span>
-                  <span class="recommendation">Watchlist</span>
-                  <span class="risk risk-high">high risk</span>
-                </div>
-                <p class="summary">Watchlist: Other led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.30.</p>
-                <div class="metrics">
-                  <span><b>2</b> mentions</span>
-                  <span><b>2x</b> acceleration</span>
-                  <span><b>0</b> 7d avg mentions</span>
-                  <span><b>1</b> posts</span>
-                  <span><b>1</b> subreddits</span>
-                  <span><b>Other</b> type</span>
-                  <span><b>0.43</b> sentiment</span>
-                  <span><b>1</b> conviction</span>
-                  <span><b>0.75</b> market confirm</span>
-                  <span><b>0.30</b> pump risk</span>
-                  <span><b>$0.86</b> price</span>
-                  <span><b>23.00%</b> 1d</span>
-                  <span><b>207.50%</b> 5d</span>
-                  <span><b>3.13</b> rel vol</span>
-                </div>
-                <details open>
-                  <summary>Score breakdown</summary>
-                  
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.3274</li><li><b>Sentiment:</b> 0.7171</li><li><b>Net conviction:</b> 1</li><li><b>Market confirmation:</b> 0.7500</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0600</li><li><b>Raw score 0-1:</b> 0.5255</li></ul>
-      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
-    
-                </details>
-                <details>
-                  <summary>Risk explanation</summary>
-                  <p>Penny stock price increases pump risk. Very small market cap increases pump risk.</p>
-                  <ul><li>Penny stock: latest price is below $5.</li><li>Small market cap: market cap is below $300M.</li></ul>
-                </details>
-                <details>
-                  <summary>Top Reddit sources</summary>
-                  <ul><li>r/Shortsqueeze: NXXT setup for a mild squeeze. <span class="muted">(Other, weight 0.70)</span></li></ul>
-                </details>
-              </div>
-            </article>
-            
-            <article class="card">
-              <div class="rank">#12</div>
-              <div class="main">
-                <div class="topline">
                   <h2>ON</h2>
-                  <span class="score">52.3</span>
-                  <span class="recommendation">Watchlist</span>
+                  <span class="score">48.9</span>
+                  <span class="recommendation">Institutional-style accumulation</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Watchlist: News led discussion with positive sentiment, 1.00x mention acceleration, and pump risk 0.00.</p>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst quiet</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">News catalyst</span>
+                </div>
+                <p class="summary">Institutional-style accumulation: News led discussion with positive sentiment, 0.40x mention acceleration, and pump risk 0.00.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,26.0"/></svg></div></div>
                 <div class="metrics">
                   <span><b>1</b> mentions</span>
-                  <span><b>1x</b> acceleration</span>
+                  <span><b>0.40x</b> acceleration</span>
                   <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
                   <span><b>1</b> subreddits</span>
@@ -565,7 +393,7 @@
                 <details open>
                   <summary>Score breakdown</summary>
                   
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.2500</li><li><b>Engagement quality:</b> 0.6995</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5227</li></ul>
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.1000</li><li><b>Engagement quality:</b> 0.7164</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.4886</li></ul>
       <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
     
                 </details>
@@ -582,18 +410,24 @@
             </article>
             
             <article class="card">
-              <div class="rank">#13</div>
+              <div class="rank">#8</div>
               <div class="main">
                 <div class="topline">
                   <h2>SO</h2>
-                  <span class="score">52.3</span>
-                  <span class="recommendation">Watchlist</span>
+                  <span class="score">48.9</span>
+                  <span class="recommendation">Institutional-style accumulation</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Watchlist: News led discussion with positive sentiment, 1.00x mention acceleration, and pump risk 0.00.</p>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst quiet</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">News catalyst</span>
+                </div>
+                <p class="summary">Institutional-style accumulation: News led discussion with positive sentiment, 0.40x mention acceleration, and pump risk 0.00.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,26.0"/></svg></div></div>
                 <div class="metrics">
                   <span><b>1</b> mentions</span>
-                  <span><b>1x</b> acceleration</span>
+                  <span><b>0.40x</b> acceleration</span>
                   <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
                   <span><b>1</b> subreddits</span>
@@ -610,7 +444,7 @@
                 <details open>
                   <summary>Score breakdown</summary>
                   
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.2500</li><li><b>Engagement quality:</b> 0.6995</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5227</li></ul>
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.1000</li><li><b>Engagement quality:</b> 0.7164</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.4886</li></ul>
       <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
     
                 </details>
@@ -627,18 +461,279 @@
             </article>
             
             <article class="card">
+              <div class="rank">#9</div>
+              <div class="main">
+                <div class="topline">
+                  <h2>RKLB</h2>
+                  <span class="score">47.9</span>
+                  <span class="recommendation">Watchlist</span>
+                  <span class="risk risk-low">low risk</span>
+                </div>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst mention 0.33</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">Mixed catalyst</span>
+                </div>
+                <p class="summary">Watchlist: Question led discussion with mixed sentiment, 1.60x mention acceleration, and pump risk 0.11.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div></div>
+                <div class="metrics">
+                  <span><b>4</b> mentions</span>
+                  <span><b>1.60x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>3</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>Question</b> type</span>
+                  <span><b>0.17</b> sentiment</span>
+                  <span><b>0.54</b> conviction</span>
+                  <span><b>0.60</b> market confirm</span>
+                  <span><b>0.11</b> pump risk</span>
+                  <span><b>$135.76</b> price</span>
+                  <span><b>8.22%</b> 1d</span>
+                  <span><b>8.81%</b> 5d</span>
+                  <span><b>1.35</b> rel vol</span>
+                </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.4000</li><li><b>Engagement quality:</b> 0.5870</li><li><b>Sentiment:</b> 0.5845</li><li><b>Net conviction:</b> 0.5416</li><li><b>Market confirmation:</b> 0.6000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0222</li><li><b>Raw score 0-1:</b> 0.4791</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
+                <details>
+                  <summary>Top Reddit sources</summary>
+                  <ul><li>r/stocks: The bull market is raging: what to buy? <span class="muted">(Question, weight 1.00)</span></li><li>r/stocks: 4 month update on r/Stocks favourite stock picks - up 43.62%! <span class="muted">(Meme, weight 1.00)</span></li><li>r/stocks: consolidating big winners for an unproved Winner? <span class="muted">(Question, weight 1.00)</span></li></ul>
+                </details>
+              </div>
+            </article>
+            
+            <article class="card">
+              <div class="rank">#10</div>
+              <div class="main">
+                <div class="topline">
+                  <h2>MSFT</h2>
+                  <span class="score">47.6</span>
+                  <span class="recommendation">Institutional-style accumulation</span>
+                  <span class="risk risk-low">low risk</span>
+                </div>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst mention 0.33</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">DD catalyst</span>
+                </div>
+                <p class="summary">Institutional-style accumulation: DD led discussion with positive sentiment, 1.20x mention acceleration, and pump risk 0.00.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div></div>
+                <div class="metrics">
+                  <span><b>3</b> mentions</span>
+                  <span><b>1.20x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>3</b> posts</span>
+                  <span><b>2</b> subreddits</span>
+                  <span><b>DD</b> type</span>
+                  <span><b>0.41</b> sentiment</span>
+                  <span><b>0.62</b> conviction</span>
+                  <span><b>0</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
+                  <span><b>$418.57</b> price</span>
+                  <span><b>-0.12%</b> 1d</span>
+                  <span><b>-0.79%</b> 5d</span>
+                  <span><b>0.66</b> rel vol</span>
+                </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.3000</li><li><b>Engagement quality:</b> 0.7609</li><li><b>Sentiment:</b> 0.7027</li><li><b>Net conviction:</b> 0.6250</li><li><b>Market confirmation:</b> 0</li><li><b>Subreddit spread:</b> 0.5000</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.4763</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
+                <details>
+                  <summary>Top Reddit sources</summary>
+                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li><li>r/stocks: The Capex Unwind Thesis 2027 - 2028 <span class="muted">(DD, weight 1.00)</span></li><li>r/stocks: TOST my personal recommendation <span class="muted">(DD, weight 1.00)</span></li></ul>
+                </details>
+              </div>
+            </article>
+            
+            <article class="card">
+              <div class="rank">#11</div>
+              <div class="main">
+                <div class="topline">
+                  <h2>RDDT</h2>
+                  <span class="score">47.2</span>
+                  <span class="recommendation">Institutional-style accumulation</span>
+                  <span class="risk risk-low">low risk</span>
+                </div>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst quiet</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">News catalyst</span>
+                </div>
+                <p class="summary">Institutional-style accumulation: News led discussion with positive sentiment, 0.80x mention acceleration, and pump risk 0.00.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,26.0"/></svg></div></div>
+                <div class="metrics">
+                  <span><b>2</b> mentions</span>
+                  <span><b>0.80x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>1</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>News</b> type</span>
+                  <span><b>0.44</b> sentiment</span>
+                  <span><b>0.75</b> conviction</span>
+                  <span><b>0.22</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
+                  <span><b>$141.67</b> price</span>
+                  <span><b>-5.58%</b> 1d</span>
+                  <span><b>-10.43%</b> 5d</span>
+                  <span><b>1.60</b> rel vol</span>
+                </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.2000</li><li><b>Engagement quality:</b> 0.7164</li><li><b>Sentiment:</b> 0.7187</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.2200</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.4716</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B.</li></ul>
+                </details>
+                <details>
+                  <summary>Top Reddit sources</summary>
+                  <ul><li>r/wallstreetbets: Why the app you’re using should be a stock you own ($RDDT) <span class="muted">(News, weight 1.00)</span></li></ul>
+                </details>
+              </div>
+            </article>
+            
+            <article class="card">
+              <div class="rank">#12</div>
+              <div class="main">
+                <div class="topline">
+                  <h2>CAPEX</h2>
+                  <span class="score">46.8</span>
+                  <span class="recommendation">Earnings momentum</span>
+                  <span class="risk risk-medium">medium risk</span>
+                </div>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst mention 0.33</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">Earnings catalyst</span>
+                </div>
+                <p class="summary">Earnings momentum: Earnings led discussion with mixed sentiment, 1.20x mention acceleration, and pump risk 0.00.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div></div>
+                <div class="metrics">
+                  <span><b>3</b> mentions</span>
+                  <span><b>1.20x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>1</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>Earnings</b> type</span>
+                  <span><b>0.22</b> sentiment</span>
+                  <span><b>0.75</b> conviction</span>
+                  <span><b>0.50</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
+                  <span><b>$3,153.38</b> price</span>
+                  <span><b>0.23%</b> 1d</span>
+                  <span><b>0.45%</b> 5d</span>
+                  <span><b>n/a</b> rel vol</span>
+                </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.3000</li><li><b>Engagement quality:</b> 0.4461</li><li><b>Sentiment:</b> 0.6096</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.4682</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds.</li></ul>
+                </details>
+                <details>
+                  <summary>Top Reddit sources</summary>
+                  <ul><li>r/investing: I feel like it’s very difficult to get a read on the AI trade… (chips, smh, intc, bubble) <span class="muted">(Earnings, weight 1.00)</span></li></ul>
+                </details>
+              </div>
+            </article>
+            
+            <article class="card">
+              <div class="rank">#13</div>
+              <div class="main">
+                <div class="topline">
+                  <h2>NXXT</h2>
+                  <span class="score">44.8</span>
+                  <span class="recommendation">Watchlist</span>
+                  <span class="risk risk-high">high risk</span>
+                </div>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst mention 0.33</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">Other catalyst</span>
+                </div>
+                <p class="summary">Watchlist: Other led discussion with positive sentiment, 0.80x mention acceleration, and pump risk 0.30.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div></div>
+                <div class="metrics">
+                  <span><b>2</b> mentions</span>
+                  <span><b>0.80x</b> acceleration</span>
+                  <span><b>0</b> 7d avg mentions</span>
+                  <span><b>1</b> posts</span>
+                  <span><b>1</b> subreddits</span>
+                  <span><b>Other</b> type</span>
+                  <span><b>0.43</b> sentiment</span>
+                  <span><b>1</b> conviction</span>
+                  <span><b>0.75</b> market confirm</span>
+                  <span><b>0.30</b> pump risk</span>
+                  <span><b>$0.86</b> price</span>
+                  <span><b>23.00%</b> 1d</span>
+                  <span><b>207.50%</b> 5d</span>
+                  <span><b>3.13</b> rel vol</span>
+                </div>
+                <details open>
+                  <summary>Score breakdown</summary>
+                  
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.2000</li><li><b>Engagement quality:</b> 0.3165</li><li><b>Sentiment:</b> 0.7171</li><li><b>Net conviction:</b> 1</li><li><b>Market confirmation:</b> 0.7500</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0600</li><li><b>Raw score 0-1:</b> 0.4484</li></ul>
+      <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
+    
+                </details>
+                <details>
+                  <summary>Risk explanation</summary>
+                  <p>Penny stock price increases pump risk. Very small market cap increases pump risk.</p>
+                  <ul><li>Penny stock: latest price is below $5.</li><li>Small market cap: market cap is below $300M.</li></ul>
+                </details>
+                <details>
+                  <summary>Top Reddit sources</summary>
+                  <ul><li>r/Shortsqueeze: NXXT setup for a mild squeeze. <span class="muted">(Other, weight 0.70)</span></li></ul>
+                </details>
+              </div>
+            </article>
+            
+            <article class="card">
               <div class="rank">#14</div>
               <div class="main">
                 <div class="topline">
                   <h2>INTC</h2>
-                  <span class="score">51.9</span>
-                  <span class="recommendation">Earnings chatter</span>
+                  <span class="score">44.3</span>
+                  <span class="recommendation">Earnings momentum</span>
                   <span class="risk risk-low">low risk</span>
                 </div>
-                <p class="summary">Earnings chatter: Earnings led discussion with mixed sentiment, 2.00x mention acceleration, and pump risk 0.00.</p>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst mention 0.33</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">Earnings catalyst</span>
+                </div>
+                <p class="summary">Earnings momentum: Earnings led discussion with mixed sentiment, 0.80x mention acceleration, and pump risk 0.00.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div></div>
                 <div class="metrics">
                   <span><b>2</b> mentions</span>
-                  <span><b>2x</b> acceleration</span>
+                  <span><b>0.80x</b> acceleration</span>
                   <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
                   <span><b>1</b> subreddits</span>
@@ -655,7 +750,7 @@
                 <details open>
                   <summary>Score breakdown</summary>
                   
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.5000</li><li><b>Engagement quality:</b> 0.4518</li><li><b>Sentiment:</b> 0.6096</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.5193</li></ul>
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.2000</li><li><b>Engagement quality:</b> 0.4461</li><li><b>Sentiment:</b> 0.6096</li><li><b>Net conviction:</b> 0.7500</li><li><b>Market confirmation:</b> 0.5000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.4432</li></ul>
       <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
     
                 </details>
@@ -675,43 +770,49 @@
               <div class="rank">#15</div>
               <div class="main">
                 <div class="topline">
-                  <h2>HOLO</h2>
-                  <span class="score">51.8</span>
-                  <span class="recommendation">Earnings chatter</span>
-                  <span class="risk risk-high">high risk</span>
+                  <h2>INFQ</h2>
+                  <span class="score">43.4</span>
+                  <span class="recommendation">Watchlist</span>
+                  <span class="risk risk-medium">medium risk</span>
                 </div>
-                <p class="summary">Earnings chatter: Earnings led discussion with positive sentiment, 4.00x mention acceleration, and pump risk 0.33.</p>
+                <div class="chips">
+                  <span class="chip chip-analyst">Analyst quiet</span>
+                  <span class="chip chip-confidence-medium">MEDIUM confidence</span>
+                  <span class="chip chip-catalyst">Mixed catalyst</span>
+                </div>
+                <p class="summary">Watchlist: Question led discussion with mixed sentiment, 0.40x mention acceleration, and pump risk 0.00.</p>
+                <div class="trends"><div class="trend"><span class="trend-label">Mentions</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Sentiment</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Score</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,2.0"/></svg></div><div class="trend"><span class="trend-label">Analyst upside</span><svg class="sparkline" width="112" height="28" viewBox="0 0 112 28" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" points="2.0,26.0 20.0,26.0 38.0,26.0 56.0,26.0 74.0,26.0 92.0,26.0 110.0,26.0"/></svg></div></div>
                 <div class="metrics">
-                  <span><b>4</b> mentions</span>
-                  <span><b>4x</b> acceleration</span>
+                  <span><b>1</b> mentions</span>
+                  <span><b>0.40x</b> acceleration</span>
                   <span><b>0</b> 7d avg mentions</span>
                   <span><b>1</b> posts</span>
                   <span><b>1</b> subreddits</span>
-                  <span><b>Earnings</b> type</span>
-                  <span><b>0.27</b> sentiment</span>
-                  <span><b>0.38</b> conviction</span>
-                  <span><b>0.60</b> market confirm</span>
-                  <span><b>0.33</b> pump risk</span>
-                  <span><b>$1.89</b> price</span>
-                  <span><b>2.16%</b> 1d</span>
-                  <span><b>11.83%</b> 5d</span>
-                  <span><b>1.12</b> rel vol</span>
+                  <span><b>Question</b> type</span>
+                  <span><b>0.12</b> sentiment</span>
+                  <span><b>0.50</b> conviction</span>
+                  <span><b>0.75</b> market confirm</span>
+                  <span><b>0</b> pump risk</span>
+                  <span><b>$16.35</b> price</span>
+                  <span><b>11.22%</b> 1d</span>
+                  <span><b>31.43%</b> 5d</span>
+                  <span><b>7.53</b> rel vol</span>
                 </div>
                 <details open>
                   <summary>Score breakdown</summary>
                   
-      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 1</li><li><b>Engagement quality:</b> 0.3327</li><li><b>Sentiment:</b> 0.6361</li><li><b>Net conviction:</b> 0.3750</li><li><b>Market confirmation:</b> 0.6000</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0.0657</li><li><b>Raw score 0-1:</b> 0.5175</li></ul>
+      <ul class="breakdown-list"><li><b>Attention acceleration:</b> 0.1000</li><li><b>Engagement quality:</b> 0.5643</li><li><b>Sentiment:</b> 0.5585</li><li><b>Net conviction:</b> 0.5000</li><li><b>Market confirmation:</b> 0.7500</li><li><b>Subreddit spread:</b> 0.2500</li><li><b>Pump risk penalty:</b> 0</li><li><b>Raw score 0-1:</b> 0.4341</li></ul>
       <p class="muted"><b>Formula:</b> 0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty</p>
     
                 </details>
                 <details>
                   <summary>Risk explanation</summary>
-                  <p>Ticker is repeated many times within the same post/comment context. Penny stock price increases pump risk. Very small market cap increases pump risk.</p>
-                  <ul><li>Penny stock: latest price is below $5.</li><li>Small market cap: market cap is below $300M.</li></ul>
+                  <p>No major pump/noise signals detected.</p>
+                  <ul><li>Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds.</li></ul>
                 </details>
                 <details>
                   <summary>Top Reddit sources</summary>
-                  <ul><li>r/pennystocks: $HOLO Public Filing Red Flags: Reverse Splits, Convertible Notes, Revenue Substance, and Dilution Risk <span class="muted">(Earnings, weight 1.00)</span></li></ul>
+                  <ul><li>r/stocks: The bull market is raging: what to buy? <span class="muted">(Question, weight 1.00)</span></li></ul>
                 </details>
               </div>
             </article>

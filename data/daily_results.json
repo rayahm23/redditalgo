@@ -1,8 +1,102 @@
 [
   {
     "ticker": "AMD",
-    "final_score": 70.77,
-    "recommendation_type": "Earnings chatter",
+    "final_score": 68.66,
+    "signal_confidence_score": 0.6851,
+    "signal_confidence_label": "HIGH",
+    "recommendation_type": "Earnings momentum",
+    "discussion_quality_score": 0.7463,
+    "analyst_target_score": 0.3333,
+    "catalyst_confidence_score": 0.895,
+    "unique_users_score": 0.82,
+    "unique_users": 3,
+    "catalyst_type": "Earnings",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        9.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3927
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        68.66
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        9.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3927
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        68.66
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
     "risk_flag": "low",
     "risk_explanation": "Ticker is repeated many times within the same post/comment context.",
     "mention_count": 9,
@@ -11,7 +105,7 @@
     "unique_subreddits": 3,
     "weighted_unique_posts": 3.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 9.0,
+    "attention_acceleration": 3.6,
     "avg_sentiment": 0.3927,
     "bullish_conviction_score": 0.5,
     "bearish_conviction_score": 0.1667,
@@ -38,18 +132,19 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 1.0,
-      "engagement_quality_score": 0.7068,
+      "attention_acceleration": 3.6,
+      "attention_acceleration_score": 0.9,
+      "engagement_quality_score": 0.726,
       "sentiment_score": 0.6964,
       "net_conviction_score": 0.6666,
       "market_confirmation_score": 0.5,
       "subreddit_spread_score": 0.75,
       "pump_risk_penalty": 0.0381,
-      "raw_score_0_to_1": 0.7077,
-      "final_score": 70.77,
+      "raw_score_0_to_1": 0.6865,
+      "final_score": 68.66,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Earnings chatter: Earnings led discussion with positive sentiment, 9.00x mention acceleration, and pump risk 0.19.",
+    "summary": "Earnings momentum: Earnings led discussion with positive sentiment, 3.60x mention acceleration, and pump risk 0.19.",
     "top_sources": [
       {
         "subreddit": "wallstreetbets",
@@ -76,13 +171,107 @@
         "post_type": "Earnings"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
     "rank": 1
   },
   {
     "ticker": "ASTS",
-    "final_score": 64.98,
-    "recommendation_type": "Momentum setup",
+    "final_score": 52.66,
+    "signal_confidence_score": 0.5004,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Watchlist",
+    "discussion_quality_score": 0.2935,
+    "analyst_target_score": 0.3333,
+    "catalyst_confidence_score": 0.1925,
+    "unique_users_score": 0.82,
+    "unique_users": 3,
+    "catalyst_type": "Mixed",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        5.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.1689
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        52.66
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        5.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.1689
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        52.66
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
     "risk_flag": "low",
     "risk_explanation": "No major pump/noise signals detected.",
     "mention_count": 5,
@@ -91,7 +280,7 @@
     "unique_subreddits": 1,
     "weighted_unique_posts": 3.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 5.0,
+    "attention_acceleration": 2.0,
     "avg_sentiment": 0.1689,
     "bullish_conviction_score": 0.0833,
     "bearish_conviction_score": 0.0,
@@ -118,18 +307,19 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 1.0,
-      "engagement_quality_score": 0.5782,
+      "attention_acceleration": 2.0,
+      "attention_acceleration_score": 0.5,
+      "engagement_quality_score": 0.587,
       "sentiment_score": 0.5845,
       "net_conviction_score": 0.5416,
       "market_confirmation_score": 0.75,
       "subreddit_spread_score": 0.25,
       "pump_risk_penalty": 0.0222,
-      "raw_score_0_to_1": 0.6498,
-      "final_score": 64.98,
+      "raw_score_0_to_1": 0.5266,
+      "final_score": 52.66,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Momentum setup: Question led discussion with mixed sentiment, 5.00x mention acceleration, and pump risk 0.11.",
+    "summary": "Watchlist: Question led discussion with mixed sentiment, 2.00x mention acceleration, and pump risk 0.11.",
     "top_sources": [
       {
         "subreddit": "stocks",
@@ -156,37 +346,131 @@
         "post_type": "Question"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
     "rank": 2
   },
   {
-    "ticker": "RKLB",
-    "final_score": 62.73,
-    "recommendation_type": "Momentum setup",
+    "ticker": "NVDA",
+    "final_score": 52.49,
+    "signal_confidence_score": 0.4542,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Institutional-style accumulation",
+    "discussion_quality_score": 0.6529,
+    "analyst_target_score": 0.3333,
+    "catalyst_confidence_score": 0.5288,
+    "unique_users_score": 0.73,
+    "unique_users": 2,
+    "catalyst_type": "Other",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        9.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4779
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        52.49
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        9.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4779
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        52.49
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
     "risk_flag": "low",
-    "risk_explanation": "No major pump/noise signals detected.",
-    "mention_count": 4,
-    "weighted_mention_count": 4.0,
-    "unique_posts": 3,
+    "risk_explanation": "Ticker is repeated many times within the same post/comment context. Sentiment is high but market confirmation is weak.",
+    "mention_count": 9,
+    "weighted_mention_count": 9.0,
+    "unique_posts": 2,
     "unique_subreddits": 1,
-    "weighted_unique_posts": 3.0,
+    "weighted_unique_posts": 2.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 4.0,
-    "avg_sentiment": 0.1689,
-    "bullish_conviction_score": 0.0833,
+    "attention_acceleration": 3.6,
+    "avg_sentiment": 0.4779,
+    "bullish_conviction_score": 0.125,
     "bearish_conviction_score": 0.0,
-    "net_conviction_score": 0.5416,
-    "market_confirmation_score": 0.6,
-    "pump_risk_score": 0.1111,
-    "latest_price": 135.76,
-    "market_cap": 78587045226,
-    "avg_volume": 24322965,
-    "one_day_return": 0.0822,
-    "five_day_return": 0.0881,
-    "relative_volume": 1.3511,
+    "net_conviction_score": 0.5625,
+    "market_confirmation_score": 0.0,
+    "pump_risk_score": 0.2571,
+    "latest_price": 215.33,
+    "market_cap": 5215507974349,
+    "avg_volume": 171284223,
+    "one_day_return": -0.019,
+    "five_day_return": -0.0443,
+    "relative_volume": 0.9828,
     "above_20_day_high": false,
-    "dominant_post_type": "Question",
-    "post_type_weight_avg": 0.3333,
+    "dominant_post_type": "Other",
+    "post_type_weight_avg": 1.25,
     "risk_reasons": [
       "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
     ],
@@ -198,51 +482,138 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 1.0,
-      "engagement_quality_score": 0.5782,
-      "sentiment_score": 0.5845,
-      "net_conviction_score": 0.5416,
-      "market_confirmation_score": 0.6,
+      "attention_acceleration": 3.6,
+      "attention_acceleration_score": 0.9,
+      "engagement_quality_score": 0.6557,
+      "sentiment_score": 0.7389,
+      "net_conviction_score": 0.5625,
+      "market_confirmation_score": 0.0,
       "subreddit_spread_score": 0.25,
-      "pump_risk_penalty": 0.0222,
-      "raw_score_0_to_1": 0.6273,
-      "final_score": 62.73,
+      "pump_risk_penalty": 0.0514,
+      "raw_score_0_to_1": 0.5249,
+      "final_score": 52.49,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Momentum setup: Question led discussion with mixed sentiment, 4.00x mention acceleration, and pump risk 0.11.",
+    "summary": "Institutional-style accumulation: Other led discussion with positive sentiment, 3.60x mention acceleration, and pump risk 0.26.",
     "top_sources": [
       {
         "subreddit": "stocks",
-        "title": "The bull market is raging: what to buy?",
+        "title": "Why $AMD will easily surpass $1T and could come knocking at $NVDA door.",
         "permalink": "",
-        "created_utc": 1779622535.0,
+        "created_utc": 1779647532.0,
         "recency_weight": 1.0,
-        "post_type": "Question"
+        "post_type": "Other"
       },
       {
         "subreddit": "stocks",
-        "title": "4 month update on r/Stocks favourite stock picks - up 43.62%!",
+        "title": "The Capex Unwind Thesis 2027 - 2028",
         "permalink": "",
-        "created_utc": 1779632500.0,
+        "created_utc": 1779634672.0,
         "recency_weight": 1.0,
-        "post_type": "Meme"
-      },
-      {
-        "subreddit": "stocks",
-        "title": "consolidating big winners for an unproved Winner?",
-        "permalink": "",
-        "created_utc": 1779652877.0,
-        "recency_weight": 1.0,
-        "post_type": "Question"
+        "post_type": "DD"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
     "rank": 3
   },
   {
     "ticker": "SMH",
-    "final_score": 61.57,
-    "recommendation_type": "Earnings chatter",
+    "final_score": 51.46,
+    "signal_confidence_score": 0.6086,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Earnings momentum",
+    "discussion_quality_score": 0.723,
+    "analyst_target_score": 0.3333,
+    "catalyst_confidence_score": 1.0,
+    "unique_users_score": 0.64,
+    "unique_users": 1,
+    "catalyst_type": "Earnings",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        6.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2191
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        51.46
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        6.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2191
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        51.46
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
     "risk_flag": "medium",
     "risk_explanation": "Ticker is repeated many times within the same post/comment context.",
     "mention_count": 6,
@@ -251,7 +622,7 @@
     "unique_subreddits": 1,
     "weighted_unique_posts": 1.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 6.0,
+    "attention_acceleration": 2.4,
     "avg_sentiment": 0.2191,
     "bullish_conviction_score": 0.75,
     "bearish_conviction_score": 0.25,
@@ -278,18 +649,19 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 1.0,
-      "engagement_quality_score": 0.4518,
+      "attention_acceleration": 2.4,
+      "attention_acceleration_score": 0.6,
+      "engagement_quality_score": 0.4461,
       "sentiment_score": 0.6096,
       "net_conviction_score": 0.75,
       "market_confirmation_score": 0.5,
       "subreddit_spread_score": 0.25,
       "pump_risk_penalty": 0.0286,
-      "raw_score_0_to_1": 0.6157,
-      "final_score": 61.57,
+      "raw_score_0_to_1": 0.5146,
+      "final_score": 51.46,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Earnings chatter: Earnings led discussion with mixed sentiment, 6.00x mention acceleration, and pump risk 0.14.",
+    "summary": "Earnings momentum: Earnings led discussion with mixed sentiment, 2.40x mention acceleration, and pump risk 0.14.",
     "top_sources": [
       {
         "subreddit": "investing",
@@ -300,13 +672,107 @@
         "post_type": "Earnings"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
     "rank": 4
   },
   {
     "ticker": "TSLA",
-    "final_score": 58.75,
-    "recommendation_type": "Momentum setup",
+    "final_score": 51.46,
+    "signal_confidence_score": 0.569,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Institutional-style accumulation",
+    "discussion_quality_score": 0.7032,
+    "analyst_target_score": 0.0,
+    "catalyst_confidence_score": 0.54,
+    "unique_users_score": 0.73,
+    "unique_users": 2,
+    "catalyst_type": "Other",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2611
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        51.46
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2611
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        51.46
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
     "risk_flag": "low",
     "risk_explanation": "No major pump/noise signals detected.",
     "mention_count": 2,
@@ -315,7 +781,7 @@
     "unique_subreddits": 2,
     "weighted_unique_posts": 2.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 2.0,
+    "attention_acceleration": 0.8,
     "avg_sentiment": 0.2611,
     "bullish_conviction_score": 0.375,
     "bearish_conviction_score": 0.125,
@@ -329,7 +795,7 @@
     "five_day_return": 0.0089,
     "relative_volume": 0.7433,
     "above_20_day_high": false,
-    "dominant_post_type": "News",
+    "dominant_post_type": "Other",
     "post_type_weight_avg": 1.15,
     "risk_reasons": [
       "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
@@ -342,18 +808,19 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 0.5,
-      "engagement_quality_score": 0.7459,
+      "attention_acceleration": 0.8,
+      "attention_acceleration_score": 0.2,
+      "engagement_quality_score": 0.7564,
       "sentiment_score": 0.6305,
       "net_conviction_score": 0.625,
       "market_confirmation_score": 0.5,
       "subreddit_spread_score": 0.5,
       "pump_risk_penalty": 0.0,
-      "raw_score_0_to_1": 0.5875,
-      "final_score": 58.75,
+      "raw_score_0_to_1": 0.5146,
+      "final_score": 51.46,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Momentum setup: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.",
+    "summary": "Institutional-style accumulation: Other led discussion with positive sentiment, 0.80x mention acceleration, and pump risk 0.00.",
     "top_sources": [
       {
         "subreddit": "wallstreetbets",
@@ -372,13 +839,107 @@
         "post_type": "Other"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
     "rank": 5
   },
   {
     "ticker": "CAKE",
-    "final_score": 58.52,
-    "recommendation_type": "Momentum setup",
+    "final_score": 51.36,
+    "signal_confidence_score": 0.5883,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Institutional-style accumulation",
+    "discussion_quality_score": 0.8582,
+    "analyst_target_score": 0.0,
+    "catalyst_confidence_score": 0.85,
+    "unique_users_score": 0.64,
+    "unique_users": 1,
+    "catalyst_type": "News",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4374
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        51.36
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4374
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        51.36
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
     "risk_flag": "medium",
     "risk_explanation": "No major pump/noise signals detected.",
     "mention_count": 2,
@@ -387,7 +948,7 @@
     "unique_subreddits": 1,
     "weighted_unique_posts": 1.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 2.0,
+    "attention_acceleration": 0.8,
     "avg_sentiment": 0.4374,
     "bullish_conviction_score": 0.75,
     "bearish_conviction_score": 0.25,
@@ -414,18 +975,19 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 0.5,
-      "engagement_quality_score": 0.6995,
+      "attention_acceleration": 0.8,
+      "attention_acceleration_score": 0.2,
+      "engagement_quality_score": 0.7164,
       "sentiment_score": 0.7187,
       "net_conviction_score": 0.75,
       "market_confirmation_score": 0.5,
       "subreddit_spread_score": 0.25,
       "pump_risk_penalty": 0.0,
-      "raw_score_0_to_1": 0.5852,
-      "final_score": 58.52,
+      "raw_score_0_to_1": 0.5136,
+      "final_score": 51.36,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Momentum setup: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.",
+    "summary": "Institutional-style accumulation: News led discussion with positive sentiment, 0.80x mention acceleration, and pump risk 0.00.",
     "top_sources": [
       {
         "subreddit": "wallstreetbets",
@@ -436,101 +998,131 @@
         "post_type": "News"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
     "rank": 6
   },
   {
-    "ticker": "CAPEX",
-    "final_score": 58.18,
-    "recommendation_type": "Earnings chatter",
-    "risk_flag": "medium",
+    "ticker": "ON",
+    "final_score": 48.86,
+    "signal_confidence_score": 0.5883,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Institutional-style accumulation",
+    "discussion_quality_score": 0.8582,
+    "analyst_target_score": 0.0,
+    "catalyst_confidence_score": 0.85,
+    "unique_users_score": 0.64,
+    "unique_users": 1,
+    "catalyst_type": "News",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4374
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        48.86
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4374
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        48.86
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
+    "risk_flag": "low",
     "risk_explanation": "No major pump/noise signals detected.",
-    "mention_count": 3,
-    "weighted_mention_count": 3.0,
+    "mention_count": 1,
+    "weighted_mention_count": 1.0,
     "unique_posts": 1,
     "unique_subreddits": 1,
     "weighted_unique_posts": 1.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 3.0,
-    "avg_sentiment": 0.2191,
+    "attention_acceleration": 0.4,
+    "avg_sentiment": 0.4374,
     "bullish_conviction_score": 0.75,
     "bearish_conviction_score": 0.25,
     "net_conviction_score": 0.75,
     "market_confirmation_score": 0.5,
     "pump_risk_score": 0.0,
-    "latest_price": 3153.3799,
-    "market_cap": null,
-    "avg_volume": null,
-    "one_day_return": 0.0023,
-    "five_day_return": 0.0045,
-    "relative_volume": null,
+    "latest_price": 116.2,
+    "market_cap": 45178929607,
+    "avg_volume": 9802954,
+    "one_day_return": 0.0601,
+    "five_day_return": 0.0273,
+    "relative_volume": 0.8663,
     "above_20_day_high": false,
-    "dominant_post_type": "Earnings",
-    "post_type_weight_avg": 1.25,
-    "risk_reasons": [
-      "Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds."
-    ],
-    "risk_thresholds": {
-      "penny_stock_price_lt": 5,
-      "low_avg_volume_lt": 500000,
-      "small_market_cap_lt": 300000000,
-      "low_risk_avg_volume_gte": 2000000,
-      "low_risk_market_cap_gte": 10000000000
-    },
-    "score_breakdown": {
-      "attention_acceleration_score": 0.75,
-      "engagement_quality_score": 0.4518,
-      "sentiment_score": 0.6096,
-      "net_conviction_score": 0.75,
-      "market_confirmation_score": 0.5,
-      "subreddit_spread_score": 0.25,
-      "pump_risk_penalty": 0.0,
-      "raw_score_0_to_1": 0.5818,
-      "final_score": 58.18,
-      "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
-    },
-    "summary": "Earnings chatter: Earnings led discussion with mixed sentiment, 3.00x mention acceleration, and pump risk 0.00.",
-    "top_sources": [
-      {
-        "subreddit": "investing",
-        "title": "I feel like it\u2019s very difficult to get a read on the AI trade\u2026 (chips, smh, intc, bubble)",
-        "permalink": "",
-        "created_utc": 1779586696.0,
-        "recency_weight": 1.0,
-        "post_type": "Earnings"
-      }
-    ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
-    "rank": 7
-  },
-  {
-    "ticker": "NVDA",
-    "final_score": 54.59,
-    "recommendation_type": "Watchlist",
-    "risk_flag": "low",
-    "risk_explanation": "Ticker is repeated many times within the same post/comment context. Sentiment is high but market confirmation is weak.",
-    "mention_count": 9,
-    "weighted_mention_count": 9.0,
-    "unique_posts": 2,
-    "unique_subreddits": 1,
-    "weighted_unique_posts": 2.0,
-    "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 9.0,
-    "avg_sentiment": 0.4779,
-    "bullish_conviction_score": 0.125,
-    "bearish_conviction_score": 0.0,
-    "net_conviction_score": 0.5625,
-    "market_confirmation_score": 0.0,
-    "pump_risk_score": 0.2571,
-    "latest_price": 215.33,
-    "market_cap": 5215507974349,
-    "avg_volume": 171284223,
-    "one_day_return": -0.019,
-    "five_day_return": -0.0443,
-    "relative_volume": 0.9828,
-    "above_20_day_high": false,
-    "dominant_post_type": "DD",
-    "post_type_weight_avg": 1.25,
+    "dominant_post_type": "News",
+    "post_type_weight_avg": 1.3,
     "risk_reasons": [
       "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
     ],
@@ -542,19 +1134,521 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 1.0,
-      "engagement_quality_score": 0.6356,
-      "sentiment_score": 0.7389,
-      "net_conviction_score": 0.5625,
-      "market_confirmation_score": 0.0,
+      "attention_acceleration": 0.4,
+      "attention_acceleration_score": 0.1,
+      "engagement_quality_score": 0.7164,
+      "sentiment_score": 0.7187,
+      "net_conviction_score": 0.75,
+      "market_confirmation_score": 0.5,
       "subreddit_spread_score": 0.25,
-      "pump_risk_penalty": 0.0514,
-      "raw_score_0_to_1": 0.5459,
-      "final_score": 54.59,
+      "pump_risk_penalty": 0.0,
+      "raw_score_0_to_1": 0.4886,
+      "final_score": 48.86,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Watchlist: DD led discussion with positive sentiment, 9.00x mention acceleration, and pump risk 0.26.",
+    "summary": "Institutional-style accumulation: News led discussion with positive sentiment, 0.40x mention acceleration, and pump risk 0.00.",
     "top_sources": [
+      {
+        "subreddit": "wallstreetbets",
+        "title": "Why the app you\u2019re using should be a stock you own ($RDDT)",
+        "permalink": "",
+        "created_utc": 1779642120.0,
+        "recency_weight": 1.0,
+        "post_type": "News"
+      }
+    ],
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
+    "rank": 7
+  },
+  {
+    "ticker": "SO",
+    "final_score": 48.86,
+    "signal_confidence_score": 0.5883,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Institutional-style accumulation",
+    "discussion_quality_score": 0.8582,
+    "analyst_target_score": 0.0,
+    "catalyst_confidence_score": 0.85,
+    "unique_users_score": 0.64,
+    "unique_users": 1,
+    "catalyst_type": "News",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4374
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        48.86
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4374
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        48.86
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
+    "risk_flag": "low",
+    "risk_explanation": "No major pump/noise signals detected.",
+    "mention_count": 1,
+    "weighted_mention_count": 1.0,
+    "unique_posts": 1,
+    "unique_subreddits": 1,
+    "weighted_unique_posts": 1.0,
+    "seven_day_avg_mentions": 0.0,
+    "attention_acceleration": 0.4,
+    "avg_sentiment": 0.4374,
+    "bullish_conviction_score": 0.75,
+    "bearish_conviction_score": 0.25,
+    "net_conviction_score": 0.75,
+    "market_confirmation_score": 0.5,
+    "pump_risk_score": 0.0,
+    "latest_price": 94.55,
+    "market_cap": 106586322256,
+    "avg_volume": 5233050,
+    "one_day_return": 0.0033,
+    "five_day_return": 0.0216,
+    "relative_volume": 0.649,
+    "above_20_day_high": false,
+    "dominant_post_type": "News",
+    "post_type_weight_avg": 1.3,
+    "risk_reasons": [
+      "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
+    ],
+    "risk_thresholds": {
+      "penny_stock_price_lt": 5,
+      "low_avg_volume_lt": 500000,
+      "small_market_cap_lt": 300000000,
+      "low_risk_avg_volume_gte": 2000000,
+      "low_risk_market_cap_gte": 10000000000
+    },
+    "score_breakdown": {
+      "attention_acceleration": 0.4,
+      "attention_acceleration_score": 0.1,
+      "engagement_quality_score": 0.7164,
+      "sentiment_score": 0.7187,
+      "net_conviction_score": 0.75,
+      "market_confirmation_score": 0.5,
+      "subreddit_spread_score": 0.25,
+      "pump_risk_penalty": 0.0,
+      "raw_score_0_to_1": 0.4886,
+      "final_score": 48.86,
+      "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
+    },
+    "summary": "Institutional-style accumulation: News led discussion with positive sentiment, 0.40x mention acceleration, and pump risk 0.00.",
+    "top_sources": [
+      {
+        "subreddit": "wallstreetbets",
+        "title": "Why the app you\u2019re using should be a stock you own ($RDDT)",
+        "permalink": "",
+        "created_utc": 1779642120.0,
+        "recency_weight": 1.0,
+        "post_type": "News"
+      }
+    ],
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
+    "rank": 8
+  },
+  {
+    "ticker": "RKLB",
+    "final_score": 47.91,
+    "signal_confidence_score": 0.4764,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Watchlist",
+    "discussion_quality_score": 0.2935,
+    "analyst_target_score": 0.3333,
+    "catalyst_confidence_score": 0.1925,
+    "unique_users_score": 0.82,
+    "unique_users": 3,
+    "catalyst_type": "Mixed",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        4.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.1689
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        47.91
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        4.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.1689
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        47.91
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
+    "risk_flag": "low",
+    "risk_explanation": "No major pump/noise signals detected.",
+    "mention_count": 4,
+    "weighted_mention_count": 4.0,
+    "unique_posts": 3,
+    "unique_subreddits": 1,
+    "weighted_unique_posts": 3.0,
+    "seven_day_avg_mentions": 0.0,
+    "attention_acceleration": 1.6,
+    "avg_sentiment": 0.1689,
+    "bullish_conviction_score": 0.0833,
+    "bearish_conviction_score": 0.0,
+    "net_conviction_score": 0.5416,
+    "market_confirmation_score": 0.6,
+    "pump_risk_score": 0.1111,
+    "latest_price": 135.76,
+    "market_cap": 78587045226,
+    "avg_volume": 24322965,
+    "one_day_return": 0.0822,
+    "five_day_return": 0.0881,
+    "relative_volume": 1.3511,
+    "above_20_day_high": false,
+    "dominant_post_type": "Question",
+    "post_type_weight_avg": 0.3333,
+    "risk_reasons": [
+      "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
+    ],
+    "risk_thresholds": {
+      "penny_stock_price_lt": 5,
+      "low_avg_volume_lt": 500000,
+      "small_market_cap_lt": 300000000,
+      "low_risk_avg_volume_gte": 2000000,
+      "low_risk_market_cap_gte": 10000000000
+    },
+    "score_breakdown": {
+      "attention_acceleration": 1.6,
+      "attention_acceleration_score": 0.4,
+      "engagement_quality_score": 0.587,
+      "sentiment_score": 0.5845,
+      "net_conviction_score": 0.5416,
+      "market_confirmation_score": 0.6,
+      "subreddit_spread_score": 0.25,
+      "pump_risk_penalty": 0.0222,
+      "raw_score_0_to_1": 0.4791,
+      "final_score": 47.91,
+      "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
+    },
+    "summary": "Watchlist: Question led discussion with mixed sentiment, 1.60x mention acceleration, and pump risk 0.11.",
+    "top_sources": [
+      {
+        "subreddit": "stocks",
+        "title": "The bull market is raging: what to buy?",
+        "permalink": "",
+        "created_utc": 1779622535.0,
+        "recency_weight": 1.0,
+        "post_type": "Question"
+      },
+      {
+        "subreddit": "stocks",
+        "title": "4 month update on r/Stocks favourite stock picks - up 43.62%!",
+        "permalink": "",
+        "created_utc": 1779632500.0,
+        "recency_weight": 1.0,
+        "post_type": "Meme"
+      },
+      {
+        "subreddit": "stocks",
+        "title": "consolidating big winners for an unproved Winner?",
+        "permalink": "",
+        "created_utc": 1779652877.0,
+        "recency_weight": 1.0,
+        "post_type": "Question"
+      }
+    ],
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
+    "rank": 9
+  },
+  {
+    "ticker": "MSFT",
+    "final_score": 47.63,
+    "signal_confidence_score": 0.6105,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Institutional-style accumulation",
+    "discussion_quality_score": 0.8805,
+    "analyst_target_score": 0.3333,
+    "catalyst_confidence_score": 0.8075,
+    "unique_users_score": 0.82,
+    "unique_users": 3,
+    "catalyst_type": "DD",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4055
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        47.63
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4055
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        47.63
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
+    "risk_flag": "low",
+    "risk_explanation": "No major pump/noise signals detected.",
+    "mention_count": 3,
+    "weighted_mention_count": 3.0,
+    "unique_posts": 3,
+    "unique_subreddits": 2,
+    "weighted_unique_posts": 3.0,
+    "seven_day_avg_mentions": 0.0,
+    "attention_acceleration": 1.2,
+    "avg_sentiment": 0.4055,
+    "bullish_conviction_score": 0.3333,
+    "bearish_conviction_score": 0.0833,
+    "net_conviction_score": 0.625,
+    "market_confirmation_score": 0.0,
+    "pump_risk_score": 0.0,
+    "latest_price": 418.57,
+    "market_cap": 3109319968460,
+    "avg_volume": 34078610,
+    "one_day_return": -0.0012,
+    "five_day_return": -0.0079,
+    "relative_volume": 0.6556,
+    "above_20_day_high": false,
+    "dominant_post_type": "DD",
+    "post_type_weight_avg": 1.4333,
+    "risk_reasons": [
+      "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
+    ],
+    "risk_thresholds": {
+      "penny_stock_price_lt": 5,
+      "low_avg_volume_lt": 500000,
+      "small_market_cap_lt": 300000000,
+      "low_risk_avg_volume_gte": 2000000,
+      "low_risk_market_cap_gte": 10000000000
+    },
+    "score_breakdown": {
+      "attention_acceleration": 1.2,
+      "attention_acceleration_score": 0.3,
+      "engagement_quality_score": 0.7609,
+      "sentiment_score": 0.7027,
+      "net_conviction_score": 0.625,
+      "market_confirmation_score": 0.0,
+      "subreddit_spread_score": 0.5,
+      "pump_risk_penalty": 0.0,
+      "raw_score_0_to_1": 0.4763,
+      "final_score": 47.63,
+      "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
+    },
+    "summary": "Institutional-style accumulation: DD led discussion with positive sentiment, 1.20x mention acceleration, and pump risk 0.00.",
+    "top_sources": [
+      {
+        "subreddit": "wallstreetbets",
+        "title": "Why the app you\u2019re using should be a stock you own ($RDDT)",
+        "permalink": "",
+        "created_utc": 1779642120.0,
+        "recency_weight": 1.0,
+        "post_type": "News"
+      },
       {
         "subreddit": "stocks",
         "title": "The Capex Unwind Thesis 2027 - 2028",
@@ -565,20 +1659,114 @@
       },
       {
         "subreddit": "stocks",
-        "title": "Why $AMD will easily surpass $1T and could come knocking at $NVDA door.",
+        "title": "TOST my personal recommendation",
         "permalink": "",
-        "created_utc": 1779647532.0,
+        "created_utc": 1779660071.0,
         "recency_weight": 1.0,
-        "post_type": "Other"
+        "post_type": "DD"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
-    "rank": 8
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
+    "rank": 10
   },
   {
     "ticker": "RDDT",
-    "final_score": 54.32,
-    "recommendation_type": "Watchlist",
+    "final_score": 47.16,
+    "signal_confidence_score": 0.5435,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Institutional-style accumulation",
+    "discussion_quality_score": 0.8582,
+    "analyst_target_score": 0.0,
+    "catalyst_confidence_score": 0.85,
+    "unique_users_score": 0.64,
+    "unique_users": 1,
+    "catalyst_type": "News",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4374
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        47.16
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4374
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        47.16
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
     "risk_flag": "low",
     "risk_explanation": "No major pump/noise signals detected.",
     "mention_count": 2,
@@ -587,7 +1775,7 @@
     "unique_subreddits": 1,
     "weighted_unique_posts": 1.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 2.0,
+    "attention_acceleration": 0.8,
     "avg_sentiment": 0.4374,
     "bullish_conviction_score": 0.75,
     "bearish_conviction_score": 0.25,
@@ -614,18 +1802,19 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 0.5,
-      "engagement_quality_score": 0.6995,
+      "attention_acceleration": 0.8,
+      "attention_acceleration_score": 0.2,
+      "engagement_quality_score": 0.7164,
       "sentiment_score": 0.7187,
       "net_conviction_score": 0.75,
       "market_confirmation_score": 0.22,
       "subreddit_spread_score": 0.25,
       "pump_risk_penalty": 0.0,
-      "raw_score_0_to_1": 0.5432,
-      "final_score": 54.32,
+      "raw_score_0_to_1": 0.4716,
+      "final_score": 47.16,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Watchlist: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.",
+    "summary": "Institutional-style accumulation: News led discussion with positive sentiment, 0.80x mention acceleration, and pump risk 0.00.",
     "top_sources": [
       {
         "subreddit": "wallstreetbets",
@@ -636,39 +1825,133 @@
         "post_type": "News"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
-    "rank": 9
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
+    "rank": 11
   },
   {
-    "ticker": "MSFT",
-    "final_score": 53.37,
-    "recommendation_type": "Watchlist",
-    "risk_flag": "low",
+    "ticker": "CAPEX",
+    "final_score": 46.82,
+    "signal_confidence_score": 0.6286,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Earnings momentum",
+    "discussion_quality_score": 0.723,
+    "analyst_target_score": 0.3333,
+    "catalyst_confidence_score": 1.0,
+    "unique_users_score": 0.64,
+    "unique_users": 1,
+    "catalyst_type": "Earnings",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2191
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        46.82
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        3.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2191
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        46.82
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
+    "risk_flag": "medium",
     "risk_explanation": "No major pump/noise signals detected.",
-    "mention_count": 2,
-    "weighted_mention_count": 2.0,
-    "unique_posts": 2,
-    "unique_subreddits": 2,
-    "weighted_unique_posts": 2.0,
+    "mention_count": 3,
+    "weighted_mention_count": 3.0,
+    "unique_posts": 1,
+    "unique_subreddits": 1,
+    "weighted_unique_posts": 1.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 2.0,
-    "avg_sentiment": 0.4358,
-    "bullish_conviction_score": 0.5,
-    "bearish_conviction_score": 0.125,
-    "net_conviction_score": 0.6875,
-    "market_confirmation_score": 0.0,
+    "attention_acceleration": 1.2,
+    "avg_sentiment": 0.2191,
+    "bullish_conviction_score": 0.75,
+    "bearish_conviction_score": 0.25,
+    "net_conviction_score": 0.75,
+    "market_confirmation_score": 0.5,
     "pump_risk_score": 0.0,
-    "latest_price": 418.57,
-    "market_cap": 3109319968460,
-    "avg_volume": 34078610,
-    "one_day_return": -0.0012,
-    "five_day_return": -0.0079,
-    "relative_volume": 0.6556,
+    "latest_price": 3153.3799,
+    "market_cap": null,
+    "avg_volume": null,
+    "one_day_return": 0.0023,
+    "five_day_return": 0.0045,
+    "relative_volume": null,
     "above_20_day_high": false,
-    "dominant_post_type": "News",
-    "post_type_weight_avg": 1.4,
+    "dominant_post_type": "Earnings",
+    "post_type_weight_avg": 1.25,
     "risk_reasons": [
-      "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
+      "Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds."
     ],
     "risk_thresholds": {
       "penny_stock_price_lt": 5,
@@ -678,43 +1961,130 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 0.5,
-      "engagement_quality_score": 0.7393,
-      "sentiment_score": 0.7179,
-      "net_conviction_score": 0.6875,
-      "market_confirmation_score": 0.0,
-      "subreddit_spread_score": 0.5,
+      "attention_acceleration": 1.2,
+      "attention_acceleration_score": 0.3,
+      "engagement_quality_score": 0.4461,
+      "sentiment_score": 0.6096,
+      "net_conviction_score": 0.75,
+      "market_confirmation_score": 0.5,
+      "subreddit_spread_score": 0.25,
       "pump_risk_penalty": 0.0,
-      "raw_score_0_to_1": 0.5337,
-      "final_score": 53.37,
+      "raw_score_0_to_1": 0.4682,
+      "final_score": 46.82,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Watchlist: News led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.00.",
+    "summary": "Earnings momentum: Earnings led discussion with mixed sentiment, 1.20x mention acceleration, and pump risk 0.00.",
     "top_sources": [
       {
-        "subreddit": "wallstreetbets",
-        "title": "Why the app you\u2019re using should be a stock you own ($RDDT)",
+        "subreddit": "investing",
+        "title": "I feel like it\u2019s very difficult to get a read on the AI trade\u2026 (chips, smh, intc, bubble)",
         "permalink": "",
-        "created_utc": 1779642120.0,
+        "created_utc": 1779586696.0,
         "recency_weight": 1.0,
-        "post_type": "News"
-      },
-      {
-        "subreddit": "stocks",
-        "title": "The Capex Unwind Thesis 2027 - 2028",
-        "permalink": "",
-        "created_utc": 1779634672.0,
-        "recency_weight": 1.0,
-        "post_type": "DD"
+        "post_type": "Earnings"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
-    "rank": 10
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
+    "rank": 12
   },
   {
     "ticker": "NXXT",
-    "final_score": 52.55,
+    "final_score": 44.84,
+    "signal_confidence_score": 0.486,
+    "signal_confidence_label": "MEDIUM",
     "recommendation_type": "Watchlist",
+    "discussion_quality_score": 0.3083,
+    "analyst_target_score": 0.3333,
+    "catalyst_confidence_score": 0.45,
+    "unique_users_score": 0.64,
+    "unique_users": 1,
+    "catalyst_type": "Other",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4342
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        44.84
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.4342
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        44.84
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
     "risk_flag": "high",
     "risk_explanation": "Penny stock price increases pump risk. Very small market cap increases pump risk.",
     "mention_count": 2,
@@ -723,7 +2093,7 @@
     "unique_subreddits": 1,
     "weighted_unique_posts": 0.7,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 2.0,
+    "attention_acceleration": 0.8,
     "avg_sentiment": 0.4342,
     "bullish_conviction_score": 1.0,
     "bearish_conviction_score": 0.0,
@@ -751,18 +2121,19 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 0.5,
-      "engagement_quality_score": 0.3274,
+      "attention_acceleration": 0.8,
+      "attention_acceleration_score": 0.2,
+      "engagement_quality_score": 0.3165,
       "sentiment_score": 0.7171,
       "net_conviction_score": 1.0,
       "market_confirmation_score": 0.75,
       "subreddit_spread_score": 0.25,
       "pump_risk_penalty": 0.06,
-      "raw_score_0_to_1": 0.5255,
-      "final_score": 52.55,
+      "raw_score_0_to_1": 0.4484,
+      "final_score": 44.84,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Watchlist: Other led discussion with positive sentiment, 2.00x mention acceleration, and pump risk 0.30.",
+    "summary": "Watchlist: Other led discussion with positive sentiment, 0.80x mention acceleration, and pump risk 0.30.",
     "top_sources": [
       {
         "subreddit": "Shortsqueeze",
@@ -773,141 +2144,107 @@
         "post_type": "Other"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
-    "rank": 11
-  },
-  {
-    "ticker": "ON",
-    "final_score": 52.27,
-    "recommendation_type": "Watchlist",
-    "risk_flag": "low",
-    "risk_explanation": "No major pump/noise signals detected.",
-    "mention_count": 1,
-    "weighted_mention_count": 1.0,
-    "unique_posts": 1,
-    "unique_subreddits": 1,
-    "weighted_unique_posts": 1.0,
-    "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 1.0,
-    "avg_sentiment": 0.4374,
-    "bullish_conviction_score": 0.75,
-    "bearish_conviction_score": 0.25,
-    "net_conviction_score": 0.75,
-    "market_confirmation_score": 0.5,
-    "pump_risk_score": 0.0,
-    "latest_price": 116.2,
-    "market_cap": 45178929607,
-    "avg_volume": 9802954,
-    "one_day_return": 0.0601,
-    "five_day_return": 0.0273,
-    "relative_volume": 0.8663,
-    "above_20_day_high": false,
-    "dominant_post_type": "News",
-    "post_type_weight_avg": 1.3,
-    "risk_reasons": [
-      "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
-    ],
-    "risk_thresholds": {
-      "penny_stock_price_lt": 5,
-      "low_avg_volume_lt": 500000,
-      "small_market_cap_lt": 300000000,
-      "low_risk_avg_volume_gte": 2000000,
-      "low_risk_market_cap_gte": 10000000000
-    },
-    "score_breakdown": {
-      "attention_acceleration_score": 0.25,
-      "engagement_quality_score": 0.6995,
-      "sentiment_score": 0.7187,
-      "net_conviction_score": 0.75,
-      "market_confirmation_score": 0.5,
-      "subreddit_spread_score": 0.25,
-      "pump_risk_penalty": 0.0,
-      "raw_score_0_to_1": 0.5227,
-      "final_score": 52.27,
-      "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
-    },
-    "summary": "Watchlist: News led discussion with positive sentiment, 1.00x mention acceleration, and pump risk 0.00.",
-    "top_sources": [
-      {
-        "subreddit": "wallstreetbets",
-        "title": "Why the app you\u2019re using should be a stock you own ($RDDT)",
-        "permalink": "",
-        "created_utc": 1779642120.0,
-        "recency_weight": 1.0,
-        "post_type": "News"
-      }
-    ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
-    "rank": 12
-  },
-  {
-    "ticker": "SO",
-    "final_score": 52.27,
-    "recommendation_type": "Watchlist",
-    "risk_flag": "low",
-    "risk_explanation": "No major pump/noise signals detected.",
-    "mention_count": 1,
-    "weighted_mention_count": 1.0,
-    "unique_posts": 1,
-    "unique_subreddits": 1,
-    "weighted_unique_posts": 1.0,
-    "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 1.0,
-    "avg_sentiment": 0.4374,
-    "bullish_conviction_score": 0.75,
-    "bearish_conviction_score": 0.25,
-    "net_conviction_score": 0.75,
-    "market_confirmation_score": 0.5,
-    "pump_risk_score": 0.0,
-    "latest_price": 94.55,
-    "market_cap": 106586322256,
-    "avg_volume": 5233050,
-    "one_day_return": 0.0033,
-    "five_day_return": 0.0216,
-    "relative_volume": 0.649,
-    "above_20_day_high": false,
-    "dominant_post_type": "News",
-    "post_type_weight_avg": 1.3,
-    "risk_reasons": [
-      "Liquid large-cap profile: price is at least $5, average volume is at least 2M, and market cap is at least $10B."
-    ],
-    "risk_thresholds": {
-      "penny_stock_price_lt": 5,
-      "low_avg_volume_lt": 500000,
-      "small_market_cap_lt": 300000000,
-      "low_risk_avg_volume_gte": 2000000,
-      "low_risk_market_cap_gte": 10000000000
-    },
-    "score_breakdown": {
-      "attention_acceleration_score": 0.25,
-      "engagement_quality_score": 0.6995,
-      "sentiment_score": 0.7187,
-      "net_conviction_score": 0.75,
-      "market_confirmation_score": 0.5,
-      "subreddit_spread_score": 0.25,
-      "pump_risk_penalty": 0.0,
-      "raw_score_0_to_1": 0.5227,
-      "final_score": 52.27,
-      "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
-    },
-    "summary": "Watchlist: News led discussion with positive sentiment, 1.00x mention acceleration, and pump risk 0.00.",
-    "top_sources": [
-      {
-        "subreddit": "wallstreetbets",
-        "title": "Why the app you\u2019re using should be a stock you own ($RDDT)",
-        "permalink": "",
-        "created_utc": 1779642120.0,
-        "recency_weight": 1.0,
-        "post_type": "News"
-      }
-    ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
     "rank": 13
   },
   {
     "ticker": "INTC",
-    "final_score": 51.93,
-    "recommendation_type": "Earnings chatter",
+    "final_score": 44.32,
+    "signal_confidence_score": 0.6286,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Earnings momentum",
+    "discussion_quality_score": 0.723,
+    "analyst_target_score": 0.3333,
+    "catalyst_confidence_score": 1.0,
+    "unique_users_score": 0.64,
+    "unique_users": 1,
+    "catalyst_type": "Earnings",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2191
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        44.32
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.2191
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        44.32
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.3333
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
     "risk_flag": "low",
     "risk_explanation": "No major pump/noise signals detected.",
     "mention_count": 2,
@@ -916,7 +2253,7 @@
     "unique_subreddits": 1,
     "weighted_unique_posts": 1.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 2.0,
+    "attention_acceleration": 0.8,
     "avg_sentiment": 0.2191,
     "bullish_conviction_score": 0.75,
     "bearish_conviction_score": 0.25,
@@ -943,18 +2280,19 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 0.5,
-      "engagement_quality_score": 0.4518,
+      "attention_acceleration": 0.8,
+      "attention_acceleration_score": 0.2,
+      "engagement_quality_score": 0.4461,
       "sentiment_score": 0.6096,
       "net_conviction_score": 0.75,
       "market_confirmation_score": 0.5,
       "subreddit_spread_score": 0.25,
       "pump_risk_penalty": 0.0,
-      "raw_score_0_to_1": 0.5193,
-      "final_score": 51.93,
+      "raw_score_0_to_1": 0.4432,
+      "final_score": 44.32,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Earnings chatter: Earnings led discussion with mixed sentiment, 2.00x mention acceleration, and pump risk 0.00.",
+    "summary": "Earnings momentum: Earnings led discussion with mixed sentiment, 0.80x mention acceleration, and pump risk 0.00.",
     "top_sources": [
       {
         "subreddit": "investing",
@@ -965,40 +2303,133 @@
         "post_type": "Earnings"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
     "rank": 14
   },
   {
-    "ticker": "HOLO",
-    "final_score": 51.75,
-    "recommendation_type": "Earnings chatter",
-    "risk_flag": "high",
-    "risk_explanation": "Ticker is repeated many times within the same post/comment context. Penny stock price increases pump risk. Very small market cap increases pump risk.",
-    "mention_count": 4,
-    "weighted_mention_count": 4.0,
+    "ticker": "INFQ",
+    "final_score": 43.41,
+    "signal_confidence_score": 0.4466,
+    "signal_confidence_label": "MEDIUM",
+    "recommendation_type": "Watchlist",
+    "discussion_quality_score": 0.2822,
+    "analyst_target_score": 0.0,
+    "catalyst_confidence_score": 0.2,
+    "unique_users_score": 0.64,
+    "unique_users": 1,
+    "catalyst_type": "Mixed",
+    "historical_trends": {
+      "mentions_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sentiment_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.117
+      ],
+      "score_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        43.41
+      ],
+      "analyst_target_upside_7d": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "sparklines": {
+      "mentions": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "sentiment": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.117
+      ],
+      "score": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        43.41
+      ],
+      "analyst_target_upside": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "length": 7
+    },
+    "trend_dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-20",
+      "2026-05-21",
+      "2026-05-22",
+      "2026-05-23",
+      "2026-05-24"
+    ],
+    "risk_flag": "medium",
+    "risk_explanation": "No major pump/noise signals detected.",
+    "mention_count": 1,
+    "weighted_mention_count": 1.0,
     "unique_posts": 1,
     "unique_subreddits": 1,
     "weighted_unique_posts": 1.0,
     "seven_day_avg_mentions": 0.0,
-    "attention_acceleration": 4.0,
-    "avg_sentiment": 0.2723,
+    "attention_acceleration": 0.4,
+    "avg_sentiment": 0.117,
     "bullish_conviction_score": 0.0,
-    "bearish_conviction_score": 0.25,
-    "net_conviction_score": 0.375,
-    "market_confirmation_score": 0.6,
-    "pump_risk_score": 0.3286,
-    "latest_price": 1.89,
-    "market_cap": 43304360,
-    "avg_volume": 742429,
-    "one_day_return": 0.0216,
-    "five_day_return": 0.1183,
-    "relative_volume": 1.1198,
+    "bearish_conviction_score": 0.0,
+    "net_conviction_score": 0.5,
+    "market_confirmation_score": 0.75,
+    "pump_risk_score": 0.0,
+    "latest_price": 16.35,
+    "market_cap": 3567519251,
+    "avg_volume": 8671745,
+    "one_day_return": 0.1122,
+    "five_day_return": 0.3143,
+    "relative_volume": 7.533,
     "above_20_day_high": false,
-    "dominant_post_type": "Earnings",
-    "post_type_weight_avg": 1.25,
+    "dominant_post_type": "Question",
+    "post_type_weight_avg": 0.3,
     "risk_reasons": [
-      "Penny stock: latest price is below $5.",
-      "Small market cap: market cap is below $300M."
+      "Valid market data is available, but the ticker does not meet all low-risk liquidity and market-cap thresholds."
     ],
     "risk_thresholds": {
       "penny_stock_price_lt": 5,
@@ -1008,29 +2439,30 @@
       "low_risk_market_cap_gte": 10000000000
     },
     "score_breakdown": {
-      "attention_acceleration_score": 1.0,
-      "engagement_quality_score": 0.3327,
-      "sentiment_score": 0.6361,
-      "net_conviction_score": 0.375,
-      "market_confirmation_score": 0.6,
+      "attention_acceleration": 0.4,
+      "attention_acceleration_score": 0.1,
+      "engagement_quality_score": 0.5643,
+      "sentiment_score": 0.5585,
+      "net_conviction_score": 0.5,
+      "market_confirmation_score": 0.75,
       "subreddit_spread_score": 0.25,
-      "pump_risk_penalty": 0.0657,
-      "raw_score_0_to_1": 0.5175,
-      "final_score": 51.75,
+      "pump_risk_penalty": 0.0,
+      "raw_score_0_to_1": 0.4341,
+      "final_score": 43.41,
       "formula": "0.25*attention_acceleration + 0.20*engagement_quality + 0.15*sentiment + 0.15*net_conviction + 0.15*market_confirmation + 0.10*subreddit_spread - pump_risk_penalty"
     },
-    "summary": "Earnings chatter: Earnings led discussion with positive sentiment, 4.00x mention acceleration, and pump risk 0.33.",
+    "summary": "Watchlist: Question led discussion with mixed sentiment, 0.40x mention acceleration, and pump risk 0.00.",
     "top_sources": [
       {
-        "subreddit": "pennystocks",
-        "title": "$HOLO Public Filing Red Flags: Reverse Splits, Convertible Notes, Revenue Substance, and Dilution Risk",
+        "subreddit": "stocks",
+        "title": "The bull market is raging: what to buy?",
         "permalink": "",
-        "created_utc": 1779643960.0,
+        "created_utc": 1779622535.0,
         "recency_weight": 1.0,
-        "post_type": "Earnings"
+        "post_type": "Question"
       }
     ],
-    "generated_at": "2026-05-24T21:00:10.368427+00:00",
+    "generated_at": "2026-05-24T22:40:28.377244+00:00",
     "rank": 15
   }
 ]
