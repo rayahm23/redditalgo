@@ -12,7 +12,7 @@ import { getMarketDataForTickers } from "../shared/marketData.js";
 import { aggregatePosts, rankTickers } from "../shared/scoring.js";
 import type { ScanPayload, SourcePost } from "../shared/types.js";
 
-async function collectComments(redditClient: RedditClient, postId: string): Promise<string[]> {
+async function collectComments(redditClient: RedditClient, postId: `t3_${string}`): Promise<string[]> {
   try {
     const comments = await redditClient
       .getComments({ postId, limit: TOP_COMMENTS_PER_POST, pageSize: TOP_COMMENTS_PER_POST, sort: "top" })
@@ -71,7 +71,10 @@ export async function runScan(redditClient: RedditClient): Promise<ScanPayload> 
   const generatedAt = new Date().toISOString();
   const posts = await fetchRedditPosts(redditClient);
   const aggregates = aggregatePosts(posts);
-  const candidateTickers = [...aggregates.keys()].slice(0, MAX_MARKET_LOOKUPS);
+  const candidateTickers = [...aggregates.values()]
+    .sort((left, right) => right.mentionCount - left.mentionCount)
+    .slice(0, MAX_MARKET_LOOKUPS)
+    .map((aggregate) => aggregate.ticker);
   const marketData = await getMarketDataForTickers(candidateTickers);
   const results = rankTickers(aggregates, marketData, generatedAt, TOP_RESULT_LIMIT);
 
