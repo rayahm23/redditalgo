@@ -25,53 +25,81 @@ def _format_number(value: Any, digits: int = 1) -> str:
     return f"{number:,.{digits}f}"
 
 
-def _format_price(value: Any) -> str:
+def _format_price(value: Any, *, compact: bool = False) -> str:
     if value is None:
         return "n/a"
     try:
-        return f"${float(value):,.2f}"
+        number = float(value)
     except (TypeError, ValueError):
         return "n/a"
+    if compact and number >= 1000:
+        return f"${_format_number(number, 0)}"
+    return f"${number:,.2f}"
 
 
-def _format_percent(value: Any) -> str:
+def _format_percent(value: Any, *, signed: bool = False) -> str:
     if value is None:
         return "n/a"
     try:
-        return f"{float(value) * 100:.2f}%"
+        pct = float(value) * 100
     except (TypeError, ValueError):
         return "n/a"
+    if signed and pct > 0:
+        return f"+{pct:.0f}%"
+    if signed and pct < 0:
+        return f"{pct:.0f}%"
+    return f"{pct:.2f}%"
 
 
-def _risk_class(risk_flag: str) -> str:
-    return {"low": "risk-low", "medium": "risk-medium", "high": "risk-high"}.get(
-        risk_flag, "risk-medium"
+def _risk_label(risk_flag: str) -> str:
+    return {"low": "Low Risk", "medium": "Medium Risk", "high": "High Risk"}.get(
+        str(risk_flag).lower(), "Medium Risk"
     )
 
 
-def _confidence_class(label: str) -> str:
+def _strength_class(tier: str) -> str:
     return {
-        "HIGH": "chip-confidence-high",
-        "MEDIUM": "chip-confidence-medium",
-        "LOW": "chip-confidence-low",
-    }.get(str(label).upper(), "chip-confidence-medium")
+        "Strong": "tier-strong",
+        "Moderate": "tier-moderate",
+        "Weak": "tier-weak",
+    }.get(tier, "tier-moderate")
 
 
-def _analyst_chip_label(score: Any) -> str:
-    try:
-        value = float(score)
-    except (TypeError, ValueError):
-        return "Analyst n/a"
-    if value >= 0.5:
-        return f"Analyst upside {_format_number(value, 2)}"
-    if value > 0:
-        return f"Analyst mention {_format_number(value, 2)}"
-    return "Analyst quiet"
+def _analyst_target_html(row: dict[str, Any]) -> str:
+    """Render street analyst target vs current price (not Reddit language score)."""
+
+    target = row.get("analyst_target_mean")
+    upside = row.get("analyst_target_upside_pct")
+    if target is None or upside is None:
+        return '<span class="analyst-target analyst-neutral">Street target unavailable</span>'
+
+    price_text = _format_price(target, compact=True)
+    pct_text = _format_percent(upside, signed=True)
+    if upside > 0.02:
+        css = "analyst-upside"
+    elif upside < -0.02:
+        css = "analyst-downside"
+    else:
+        css = "analyst-neutral"
+    return (
+        f'<span class="analyst-target {css}">'
+        f"{escape(price_text)} avg target ({escape(pct_text)})"
+        f"</span>"
+    )
 
 
-def _sparkline_svg(values: list[Any], width: int = 112, height: int = 28) -> str:
-    """Render a compact inline SVG sparkline from numeric series."""
+def _meta_line(row: dict[str, Any]) -> str:
+    confidence = str(row.get("signal_confidence_label") or "n/a").title()
+    catalyst = str(row.get("catalyst_type") or row.get("dominant_post_type") or "Mixed")
+    if catalyst.lower() == "mixed":
+        catalyst_label = "Mixed Catalyst"
+    else:
+        catalyst_label = f"{catalyst} Catalyst"
+    risk = _risk_label(str(row.get("risk_flag") or "medium"))
+    return escape(f"{confidence} Confidence • {catalyst_label} • {risk}")
 
+
+def _sparkline_svg(values: list[Any], width: int = 88, height: int = 22) -> str:
     numeric = []
     for value in values:
         try:
@@ -80,29 +108,209 @@ def _sparkline_svg(values: list[Any], width: int = 112, height: int = 28) -> str
             continue
     if len(numeric) < 2:
         return ""
-
     minimum = min(numeric)
     maximum = max(numeric)
     span = maximum - minimum or 1.0
     step = (width - 4) / (len(numeric) - 1)
-    points: list[str] = []
+    points = []
     for index, value in enumerate(numeric):
         x = 2 + index * step
         y = height - 2 - ((value - minimum) / span) * (height - 4)
         points.append(f"{x:.1f},{y:.1f}")
-
     return (
         f'<svg class="sparkline" width="{width}" height="{height}" viewBox="0 0 {width} {height}" '
-        f'aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.75" '
+        f'aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" '
         f'points="{" ".join(points)}"/></svg>'
     )
 
 
-def _trend_block(label: str, values: list[Any]) -> str:
-    svg = _sparkline_svg(values)
-    if not svg:
-        return ""
-    return f'<div class="trend"><span class="trend-label">{escape(label)}</span>{svg}</div>'
+def _signal_summary_html(row: dict[str, Any]) -> str:
+    summaries = row.get("signal_summaries") or {}
+    labels = {
+        "retail_attention": "Retail Attention",
+        "discussion_quality": "Discussion Quality",
+        "market_confirmation": "Market Confirmation",
+        "speculation_risk": "Speculation Risk",
+        "analyst_outlook": "Analyst Outlook",
+    }
+    items = []
+    for key, label in labels.items():
+        tier = str(summaries.get(key) or "Moderate")
+        if key == "speculation_risk":
+            css = {
+                "Strong": "tier-risk-high",
+                "Moderate": "tier-moderate",
+                "Weak": "tier-risk-low",
+            }.get(tier, "tier-moderate")
+        else:
+            css = _strength_class(tier)
+        items.append(
+            f'<div class="signal-row"><span>{escape(label)}</span>'
+            f'<span class="signal-tier {css}">{escape(tier)}</span></div>'
+        )
+    return "".join(items)
+
+
+def _key_metrics_html(row: dict[str, Any]) -> str:
+    accel = row.get("attention_acceleration")
+    five_day = row.get("five_day_return")
+    upside = row.get("analyst_target_upside_pct")
+    subs = row.get("unique_subreddits", 0)
+    risk = _risk_label(str(row.get("risk_flag") or "medium"))
+
+    accel_text = f"{_format_number(accel, 1)}x mention acceleration"
+    five_day_text = f"{_format_percent(five_day, signed=True)} 5d"
+    if upside is not None:
+        upside_text = f"{_format_percent(upside, signed=True)} to avg target"
+    else:
+        upside_text = "Target data n/a"
+    spread_text = f"{subs} subreddit{'s' if int(subs or 0) != 1 else ''}"
+
+    return f"""
+      <div class="key-metrics">
+        <div><span class="metric-label">Attention</span><span class="metric-value">{escape(accel_text)}</span></div>
+        <div><span class="metric-label">5D Performance</span><span class="metric-value">{escape(five_day_text)}</span></div>
+        <div><span class="metric-label">Analyst Upside</span><span class="metric-value">{escape(upside_text)}</span></div>
+        <div><span class="metric-label">Risk</span><span class="metric-value">{escape(risk)}</span></div>
+        <div><span class="metric-label">Spread</span><span class="metric-value">{escape(spread_text)}</span></div>
+      </div>
+    """
+
+
+def _human_breakdown_html(breakdown: dict[str, Any], row: dict[str, Any]) -> str:
+    if not breakdown:
+        return "<p>No score breakdown available for this run.</p>"
+
+    def label(score: Any, *, positive: bool = True) -> str:
+        try:
+            value = float(score)
+        except (TypeError, ValueError):
+            return "n/a"
+        if positive:
+            if value >= 0.65:
+                return "Strong"
+            if value >= 0.4:
+                return "Moderate"
+            return "Weak"
+        if value >= 0.65:
+            return "Elevated"
+        if value >= 0.4:
+            return "Moderate"
+        return "Low"
+
+    items = [
+        ("Retail attention", label(breakdown.get("attention_acceleration_score"))),
+        ("Discussion quality", label(breakdown.get("engagement_quality_score"))),
+        ("Sentiment tone", label(breakdown.get("sentiment_score"))),
+        ("Conviction", label(breakdown.get("net_conviction_score"))),
+        ("Market confirmation", label(breakdown.get("market_confirmation_score"))),
+        ("Subreddit breadth", label(breakdown.get("subreddit_spread_score"))),
+        ("Speculative activity", label(row.get("pump_risk_score"), positive=False)),
+    ]
+    readable = "".join(
+        f"<li><span>{escape(name)}</span><strong>{escape(value)}</strong></li>" for name, value in items
+    )
+    formula = escape(str(breakdown.get("formula", "")))
+    raw = breakdown.get("raw_score_0_to_1")
+    final = breakdown.get("final_score")
+    return f"""
+      <ul class="readable-breakdown">{readable}</ul>
+      <details class="nested-details">
+        <summary>Algorithm details</summary>
+        <ul class="telemetry">
+          <li><b>Raw model score:</b> {_format_number(raw, 3)}</li>
+          <li><b>Normalized score:</b> {_format_number(final, 1)}</li>
+          <li><b>Pump penalty:</b> {_format_number(breakdown.get('pump_risk_penalty'), 3)}</li>
+        </ul>
+        <p class="muted"><b>Formula:</b> {formula}</p>
+      </details>
+    """
+
+
+def _secondary_metrics_html(row: dict[str, Any]) -> str:
+    parts = [
+        ("Mentions", str(row.get("mention_count", 0))),
+        ("Posts", str(row.get("unique_posts", 0))),
+        ("Sentiment tone", _sentiment_label(row.get("avg_sentiment"))),
+        ("Conviction", _conviction_label(row.get("net_conviction_score"))),
+        ("Market confirm", _market_label(row.get("market_confirmation_score"))),
+        ("Speculation", _pump_label(row.get("pump_risk_score"))),
+        ("Rel volume", _format_number(row.get("relative_volume"), 1)),
+        ("Price", _format_price(row.get("latest_price"), compact=True)),
+    ]
+    return "".join(
+        f"<span><b>{escape(label)}:</b> {escape(value)}</span>" for label, value in parts
+    )
+
+
+def _sentiment_label(value: Any) -> str:
+    try:
+        score = float(value)
+    except (TypeError, ValueError):
+        return "n/a"
+    if score >= 0.25:
+        return "Positive"
+    if score <= -0.25:
+        return "Negative"
+    return "Mixed"
+
+
+def _conviction_label(value: Any) -> str:
+    try:
+        score = float(value)
+    except (TypeError, ValueError):
+        return "n/a"
+    if score >= 0.65:
+        return "Bullish lean"
+    if score <= 0.35:
+        return "Bearish lean"
+    return "Balanced"
+
+
+def _market_label(value: Any) -> str:
+    try:
+        score = float(value)
+    except (TypeError, ValueError):
+        return "n/a"
+    if score >= 0.6:
+        return "Confirmed"
+    if score >= 0.35:
+        return "Partial"
+    return "Weak"
+
+
+def _pump_label(value: Any) -> str:
+    try:
+        score = float(value)
+    except (TypeError, ValueError):
+        return "n/a"
+    if score >= 0.55:
+        return "Elevated"
+    if score >= 0.3:
+        return "Moderate"
+    return "Low"
+
+
+def _trends_detail_html(row: dict[str, Any]) -> str:
+    trends = row.get("historical_trends") or {}
+    dates = row.get("trend_dates") or []
+    if not trends.get("mentions_7d"):
+        return "<p class='muted'>Historical trend data will populate after several daily scans.</p>"
+
+    def series_rows(key: str, label: str) -> str:
+        values = trends.get(key) or []
+        cells = []
+        for index, value in enumerate(values):
+            day = escape(dates[index]) if index < len(dates) else f"D{index + 1}"
+            cells.append(f"<li><span>{day}</span><span>{_format_number(value, 2)}</span></li>")
+        return f"<div><h4>{escape(label)}</h4><ul class='trend-series'>{''.join(cells)}</ul></div>"
+
+    return (
+        series_rows("mentions_7d", "Mentions")
+        + series_rows("score_7d", "Score")
+        + series_rows("sentiment_7d", "Sentiment")
+        + series_rows("analyst_target_upside_7d", "Reddit analyst-language index")
+    )
 
 
 def _source_html(source: dict[str, Any]) -> str:
@@ -110,38 +318,11 @@ def _source_html(source: dict[str, Any]) -> str:
     subreddit = escape(str(source.get("subreddit") or "unknown"))
     post_type = escape(str(source.get("post_type") or ""))
     permalink = str(source.get("permalink") or "")
-    weight = source.get("recency_weight")
-    meta = []
-    if post_type:
-        meta.append(post_type)
-    if weight is not None:
-        meta.append(f"weight {float(weight):.2f}")
-    meta_text = f" <span class=\"muted\">({', '.join(meta)})</span>" if meta else ""
-    label = f"r/{subreddit}: {title}{meta_text}"
+    label = f"r/{subreddit}: {title}"
+    meta = f' <span class="muted">({post_type})</span>' if post_type else ""
     if permalink:
-        return f'<li><a href="{escape(permalink)}">{label}</a></li>'
-    return f"<li>{label}</li>"
-
-
-def _breakdown_html(breakdown: dict[str, Any]) -> str:
-    if not breakdown:
-        return "<p>No score breakdown available for this run.</p>"
-    parts = [
-        ("Attention acceleration", breakdown.get("attention_acceleration_score")),
-        ("Engagement quality", breakdown.get("engagement_quality_score")),
-        ("Sentiment", breakdown.get("sentiment_score")),
-        ("Net conviction", breakdown.get("net_conviction_score")),
-        ("Market confirmation", breakdown.get("market_confirmation_score")),
-        ("Subreddit spread", breakdown.get("subreddit_spread_score")),
-        ("Pump risk penalty", breakdown.get("pump_risk_penalty")),
-        ("Raw score 0-1", breakdown.get("raw_score_0_to_1")),
-    ]
-    items = "".join(f"<li><b>{escape(label)}:</b> {_format_number(value, 4)}</li>" for label, value in parts)
-    formula = escape(str(breakdown.get("formula", "")))
-    return f"""
-      <ul class="breakdown-list">{items}</ul>
-      <p class="muted"><b>Formula:</b> {formula}</p>
-    """
+        return f'<li><a href="{escape(permalink)}">{label}{meta}</a></li>'
+    return f"<li>{label}{meta}</li>"
 
 
 def _list_html(items: list[Any], fallback: str) -> str:
@@ -150,130 +331,294 @@ def _list_html(items: list[Any], fallback: str) -> str:
     return "".join(f"<li>{escape(str(item))}</li>" for item in items)
 
 
+def _card_html(row: dict[str, Any]) -> str:
+    ticker = escape(str(row.get("ticker", "")))
+    recommendation = escape(str(row.get("recommendation_type") or "Watchlist"))
+    confidence = escape(str(row.get("signal_confidence_label") or "n/a").title())
+    summary = escape(str(row.get("summary") or ""))
+    trends = row.get("historical_trends") or {}
+    sparklines = row.get("sparklines") or trends
+    mentions_svg = _sparkline_svg(sparklines.get("mentions") or trends.get("mentions_7d", []))
+    score_svg = _sparkline_svg(sparklines.get("score") or trends.get("score_7d", []))
+    sources = "".join(_source_html(source) for source in row.get("top_sources", []))
+
+    trend_blocks = ""
+    if mentions_svg:
+        trend_blocks += (
+            f'<div class="mini-trend"><span>Mentions</span>{mentions_svg}</div>'
+        )
+    if score_svg:
+        trend_blocks += f'<div class="mini-trend"><span>Score</span>{score_svg}</div>'
+
+    return f"""
+      <article class="card">
+        <div class="card-header">
+          <div class="identity">
+            <span class="rank">#{row.get("rank", "-")}</span>
+            <h2>{ticker}</h2>
+          </div>
+          <div class="score-block">
+            <span class="score-label">Signal Score</span>
+            <span class="score">{float(row.get("final_score", 0)):.0f}</span>
+          </div>
+        </div>
+
+        <div class="headline-row">
+          <span class="recommendation">{recommendation}</span>
+          <span class="confidence-pill">{confidence} Confidence</span>
+        </div>
+
+        <p class="meta-line">{_meta_line(row)}</p>
+        <div class="analyst-row">{_analyst_target_html(row)}</div>
+        <p class="summary">{summary}</p>
+
+        <div class="signal-panel">{_signal_summary_html(row)}</div>
+        {_key_metrics_html(row)}
+        {f'<div class="mini-trends">{trend_blocks}</div>' if trend_blocks else ''}
+
+        <details>
+          <summary>More metrics & telemetry</summary>
+          <div class="secondary-metrics">{_secondary_metrics_html(row)}</div>
+        </details>
+        <details>
+          <summary>Score breakdown</summary>
+          {_human_breakdown_html(row.get("score_breakdown") or {}, row)}
+        </details>
+        <details>
+          <summary>Risk explanation</summary>
+          <p>{escape(str(row.get("risk_explanation") or ""))}</p>
+          <ul>{_list_html(row.get("risk_reasons") or [], "No risk reason details available.")}</ul>
+        </details>
+        <details>
+          <summary>Historical trends</summary>
+          {_trends_detail_html(row)}
+        </details>
+        <details>
+          <summary>Reddit sources</summary>
+          <ul>{sources or "<li>No source links available</li>"}</ul>
+        </details>
+      </article>
+    """
+
+
 def render_results_html(results: list[dict[str, Any]]) -> str:
-    """Render ranked scanner results as a readable standalone HTML document."""
+    """Render ranked scanner results as a polished market-intelligence dashboard."""
 
     generated_at = results[0].get("generated_at") if results else "No scan results yet"
-    rows = []
-    for row in results:
-        risk = escape(str(row.get("risk_flag") or "unknown"))
-        recommendation = escape(str(row.get("recommendation_type") or "Watchlist"))
-        confidence_label = str(row.get("signal_confidence_label") or "n/a")
-        confidence = escape(confidence_label)
-        confidence_class = _confidence_class(confidence_label)
-        catalyst = escape(str(row.get("catalyst_type") or row.get("dominant_post_type") or "Other"))
-        analyst_chip = escape(_analyst_chip_label(row.get("analyst_target_score")))
-        trends = row.get("historical_trends") or {}
-        sparklines = row.get("sparklines") or trends
-        trend_html = "".join(
-            [
-                _trend_block("Mentions", sparklines.get("mentions") or trends.get("mentions_7d", [])),
-                _trend_block("Sentiment", sparklines.get("sentiment") or trends.get("sentiment_7d", [])),
-                _trend_block("Score", sparklines.get("score") or trends.get("score_7d", [])),
-                _trend_block(
-                    "Analyst upside",
-                    sparklines.get("analyst_target_upside")
-                    or trends.get("analyst_target_upside_7d", []),
-                ),
-            ]
-        )
-        sources = "".join(_source_html(source) for source in row.get("top_sources", []))
-        rows.append(
-            f"""
-            <article class="card">
-              <div class="rank">#{row.get("rank", "-")}</div>
-              <div class="main">
-                <div class="topline">
-                  <h2>{escape(str(row.get("ticker", "")))}</h2>
-                  <span class="score">{float(row.get("final_score", 0)):.1f}</span>
-                  <span class="recommendation">{recommendation}</span>
-                  <span class="risk {_risk_class(risk)}">{risk} risk</span>
-                </div>
-                <div class="chips">
-                  <span class="chip chip-analyst">{analyst_chip}</span>
-                  <span class="chip {confidence_class}">{confidence} confidence</span>
-                  <span class="chip chip-catalyst">{catalyst} catalyst</span>
-                </div>
-                <p class="summary">{escape(str(row.get("summary", "")))}</p>
-                {f'<div class="trends">{trend_html}</div>' if trend_html else ''}
-                <div class="metrics">
-                  <span><b>{row.get("mention_count", 0)}</b> mentions</span>
-                  <span><b>{_format_number(row.get("attention_acceleration"), 2)}x</b> acceleration</span>
-                  <span><b>{_format_number(row.get("seven_day_avg_mentions"), 2)}</b> 7d avg mentions</span>
-                  <span><b>{row.get("unique_posts", 0)}</b> posts</span>
-                  <span><b>{row.get("unique_subreddits", 0)}</b> subreddits</span>
-                  <span><b>{escape(str(row.get("dominant_post_type") or "Other"))}</b> type</span>
-                  <span><b>{float(row.get("avg_sentiment", 0)):.2f}</b> sentiment</span>
-                  <span><b>{_format_number(row.get("net_conviction_score"), 2)}</b> conviction</span>
-                  <span><b>{_format_number(row.get("market_confirmation_score"), 2)}</b> market confirm</span>
-                  <span><b>{_format_number(row.get("pump_risk_score"), 2)}</b> pump risk</span>
-                  <span><b>{_format_price(row.get("latest_price"))}</b> price</span>
-                  <span><b>{_format_percent(row.get("one_day_return"))}</b> 1d</span>
-                  <span><b>{_format_percent(row.get("five_day_return"))}</b> 5d</span>
-                  <span><b>{_format_number(row.get("relative_volume"), 2)}</b> rel vol</span>
-                </div>
-                <details open>
-                  <summary>Score breakdown</summary>
-                  {_breakdown_html(row.get("score_breakdown") or {})}
-                </details>
-                <details>
-                  <summary>Risk explanation</summary>
-                  <p>{escape(str(row.get("risk_explanation") or ""))}</p>
-                  <ul>{_list_html(row.get("risk_reasons") or [], "No risk reason details available.")}</ul>
-                </details>
-                <details>
-                  <summary>Top Reddit sources</summary>
-                  <ul>{sources or "<li>No source links available</li>"}</ul>
-                </details>
-              </div>
-            </article>
-            """
-        )
+    cards = "".join(_card_html(row) for row in results) or '<div class="empty">No ranked tickers yet.</div>'
 
-    cards = "".join(rows) or '<div class="empty">No ranked tickers yet.</div>'
     return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Reddit Alpha Scanner Results</title>
+  <title>Reddit Alpha Scanner</title>
   <style>
-    :root {{ color-scheme: light dark; --border: #d8dee4; --muted: #656d76; --card: #ffffff; --bg: #f6f8fa; --text: #24292f; }}
-    @media (prefers-color-scheme: dark) {{ :root {{ --border: #30363d; --muted: #8b949e; --card: #161b22; --bg: #0d1117; --text: #e6edf3; }} }}
-    body {{ margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: var(--bg); color: var(--text); }}
-    .wrap {{ max-width: 1120px; margin: 0 auto; padding: 32px 18px; }}
-    h1 {{ margin: 0 0 8px; font-size: clamp(28px, 4vw, 44px); }}
+    :root {{
+      color-scheme: light dark;
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #1b2430;
+      --muted: #5f6b7a;
+      --line: #e4e9ef;
+      --accent: #0b57d0;
+      --accent-soft: #e8f1ff;
+      --up: #137333;
+      --up-soft: #e6f4ea;
+      --down: #b3261e;
+      --down-soft: #fce8e6;
+      --neutral: #5f6368;
+    }}
+    @media (prefers-color-scheme: dark) {{
+      :root {{
+        --bg: #0f141b;
+        --card: #171d25;
+        --text: #e8edf3;
+        --muted: #9aa7b5;
+        --line: #2a3441;
+        --accent: #6ea8fe;
+        --accent-soft: #1a2a44;
+        --up: #6dd58c;
+        --up-soft: #173422;
+        --down: #ff8a80;
+        --down-soft: #3a1d1d;
+        --neutral: #b0bac5;
+      }}
+    }}
+    * {{ box-sizing: border-box; }}
+    body {{
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }}
+    .wrap {{ max-width: 980px; margin: 0 auto; padding: 40px 20px 56px; }}
+    header h1 {{ margin: 0 0 6px; font-size: clamp(28px, 4vw, 36px); font-weight: 650; letter-spacing: -0.02em; }}
     .meta, .disclaimer, .muted {{ color: var(--muted); font-size: 14px; }}
-    .toolbar {{ display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }}
-    .toolbar a {{ color: inherit; border: 1px solid var(--border); border-radius: 999px; padding: 8px 12px; text-decoration: none; background: var(--card); }}
-    .grid {{ display: grid; gap: 14px; }}
-    .card {{ display: grid; grid-template-columns: 58px 1fr; gap: 14px; border: 1px solid var(--border); background: var(--card); border-radius: 16px; padding: 16px; box-shadow: 0 1px 2px rgb(0 0 0 / 5%); }}
-    .rank {{ color: var(--muted); font-weight: 800; font-size: 20px; padding-top: 4px; }}
-    .topline {{ display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }}
-    h2 {{ margin: 0; font-size: 24px; letter-spacing: 0.04em; }}
-    .score {{ font-weight: 800; border-radius: 10px; padding: 5px 9px; background: #0969da; color: white; }}
-    .recommendation {{ border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 700; background: #ddf4ff; color: #0550ae; }}
-    .chips {{ display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 4px; }}
-    .chip {{ border-radius: 999px; padding: 4px 9px; font-size: 11px; font-weight: 650; border: 1px solid var(--border); background: var(--bg); }}
-    .chip-analyst {{ background: #fbefff; color: #6e40c9; border-color: #d8b9ff; }}
-    .chip-catalyst {{ background: #fff8e6; color: #7a4c00; border-color: #f0d59b; }}
-    .chip-confidence-high {{ background: #dafbe1; color: #116329; border-color: #aceebb; }}
-    .chip-confidence-medium {{ background: #fff8c5; color: #7d4e00; border-color: #f0e68c; }}
-    .chip-confidence-low {{ background: #ffebe9; color: #82071e; border-color: #ffbbb9; }}
-    .trends {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin: 8px 0 10px; }}
-    .trend {{ border: 1px solid var(--border); border-radius: 10px; padding: 6px 8px; color: #0969da; }}
-    .trend-label {{ display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; }}
-    .sparkline {{ display: block; width: 100%; height: auto; }}
-    .risk {{ border-radius: 999px; padding: 5px 9px; font-size: 12px; font-weight: 700; text-transform: uppercase; }}
-    .risk-low {{ background: #dafbe1; color: #116329; }} .risk-medium {{ background: #fff8c5; color: #7d4e00; }} .risk-high {{ background: #ffebe9; color: #82071e; }}
-    .summary {{ margin: 10px 0 12px; }}
-    .metrics {{ display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }}
-    .metrics span {{ border: 1px solid var(--border); border-radius: 999px; padding: 6px 9px; font-size: 13px; }}
-    details {{ color: var(--muted); margin-top: 8px; }} summary {{ cursor: pointer; font-weight: 650; color: var(--text); }}
-    .breakdown-list {{ columns: 2; }}
-    a {{ color: #0969da; }} li {{ margin: 4px 0; }}
-    .empty {{ border: 1px dashed var(--border); padding: 20px; border-radius: 12px; color: var(--muted); }}
-    @media (max-width: 640px) {{ .card {{ grid-template-columns: 1fr; }} .rank {{ padding: 0; }} .breakdown-list {{ columns: 1; }} }}
+    .toolbar {{ display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0 10px; }}
+    .toolbar a {{
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }}
+    .grid {{ display: grid; gap: 22px; }}
+    .card {{
+      background: var(--card);
+      border-radius: 18px;
+      padding: 24px 24px 18px;
+      box-shadow: 0 8px 24px rgba(16, 24, 40, 0.04);
+    }}
+    .card-header {{
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 14px;
+    }}
+    .identity {{ display: flex; align-items: baseline; gap: 12px; }}
+    .rank {{ color: var(--muted); font-size: 14px; font-weight: 700; }}
+    h2 {{ margin: 0; font-size: 30px; letter-spacing: 0.03em; font-weight: 700; }}
+    .score-block {{ text-align: right; }}
+    .score-label {{ display: block; color: var(--muted); font-size: 12px; margin-bottom: 2px; }}
+    .score {{
+      display: inline-block;
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }}
+    .headline-row {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }}
+    .recommendation {{
+      font-size: 15px;
+      font-weight: 650;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 999px;
+      padding: 6px 12px;
+    }}
+    .confidence-pill {{
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }}
+    .meta-line {{ margin: 0 0 10px; color: var(--muted); font-size: 14px; }}
+    .analyst-row {{ margin-bottom: 14px; }}
+    .analyst-target {{ font-size: 15px; font-weight: 650; }}
+    .analyst-upside {{ color: var(--up); }}
+    .analyst-downside {{ color: var(--down); }}
+    .analyst-neutral {{ color: var(--neutral); }}
+    .summary {{
+      margin: 0 0 20px;
+      font-size: 16px;
+      line-height: 1.65;
+      max-width: 72ch;
+    }}
+    .signal-panel {{
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 14px 0 4px;
+      border-top: 1px solid var(--line);
+    }}
+    .signal-row {{
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+    }}
+    .signal-tier {{ font-weight: 650; }}
+    .tier-strong {{ color: var(--up); }}
+    .tier-moderate {{ color: var(--neutral); }}
+    .tier-weak {{ color: var(--down); }}
+    .tier-risk-high {{ color: var(--down); }}
+    .tier-risk-low {{ color: var(--up); }}
+    .key-metrics {{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px 18px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }}
+    .metric-label {{
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }}
+    .metric-value {{ font-size: 15px; font-weight: 600; }}
+    .mini-trends {{
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+      color: var(--muted);
+    }}
+    .mini-trend span {{
+      display: block;
+      font-size: 11px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }}
+    .sparkline {{ display: block; opacity: 0.8; }}
+    details {{
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }}
+    summary {{
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+      padding: 8px 0;
+    }}
+    .secondary-metrics {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }}
+    .readable-breakdown, .trend-series, .telemetry {{
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }}
+    .readable-breakdown li, .trend-series li {{
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
+    }}
+    .nested-details {{ margin-top: 10px; }}
+    a {{ color: var(--accent); }}
+    .empty {{
+      padding: 28px;
+      border-radius: 14px;
+      color: var(--muted);
+      background: var(--card);
+      text-align: center;
+    }}
+    @media (max-width: 640px) {{
+      .card-header {{ flex-direction: column; }}
+      .score-block {{ text-align: left; }}
+      h2 {{ font-size: 26px; }}
+    }}
   </style>
 </head>
 <body>
@@ -281,8 +626,11 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
     <header>
       <h1>Reddit Alpha Scanner</h1>
       <div class="meta">Generated at: {escape(str(generated_at))}</div>
-      <div class="toolbar"><a href="daily_results.json">Raw JSON</a><a href="history/">History folder</a></div>
-      <p class="disclaimer">Research/watchlist tool only. Not financial advice. Mentions are filtered to the last 7 days, compared with historical baselines, and penalized for pump/noise risk.</p>
+      <div class="toolbar">
+        <a href="daily_results.json">Raw JSON</a>
+        <a href="history/">History folder</a>
+      </div>
+      <p class="disclaimer">Research/watchlist tool only. Not financial advice.</p>
     </header>
     <section class="grid">{cards}</section>
   </main>

@@ -20,6 +20,10 @@ class MarketData:
     five_day_return: float | None = None
     relative_volume: float | None = None
     above_20_day_high: bool | None = None
+    analyst_target_mean: float | None = None
+    analyst_target_high: float | None = None
+    analyst_target_low: float | None = None
+    analyst_target_upside_pct: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -49,6 +53,26 @@ def _fast_info_value(fast_info: Any, *keys: str) -> Any:
         if value not in (None, ""):
             return value
     return None
+
+
+def analyst_target_upside(latest_price: float | None, target_mean: float | None) -> float | None:
+    """Return percent upside to mean analyst target vs latest price."""
+
+    if latest_price is None or target_mean is None or latest_price <= 0:
+        return None
+    return round((target_mean - latest_price) / latest_price, 4)
+
+
+def _analyst_targets_from_info(info: dict[str, Any], latest_price: float | None) -> dict[str, Any]:
+    target_mean = _safe_number(info.get("targetMeanPrice") or info.get("targetMedianPrice"))
+    target_high = _safe_number(info.get("targetHighPrice"))
+    target_low = _safe_number(info.get("targetLowPrice"))
+    return {
+        "analyst_target_mean": target_mean,
+        "analyst_target_high": target_high,
+        "analyst_target_low": target_low,
+        "analyst_target_upside_pct": analyst_target_upside(latest_price, target_mean),
+    }
 
 
 def _history_metrics(yf_ticker: Any, avg_volume: int | None) -> dict[str, Any]:
@@ -108,8 +132,8 @@ def get_market_data(ticker: str) -> MarketData:
             _fast_info_value(fast_info, "market_cap", "marketCap"), integer=True
         )
 
+        info: dict[str, Any] = {}
         if latest_price is None or avg_volume is None or market_cap is None:
-            info: dict[str, Any] = {}
             try:
                 info = yf_ticker.get_info()
             except Exception:
@@ -121,7 +145,13 @@ def get_market_data(ticker: str) -> MarketData:
                 info.get("averageVolume") or info.get("averageVolume10days"), integer=True
             )
             market_cap = market_cap or _safe_number(info.get("marketCap"), integer=True)
+        elif latest_price is not None:
+            try:
+                info = yf_ticker.get_info()
+            except Exception:
+                info = {}
 
+        analyst = _analyst_targets_from_info(info, latest_price)
         trend = _history_metrics(yf_ticker, avg_volume if isinstance(avg_volume, int) else None)
         valid = latest_price is not None or avg_volume is not None or market_cap is not None
         return MarketData(
@@ -133,6 +163,10 @@ def get_market_data(ticker: str) -> MarketData:
             five_day_return=trend["five_day_return"],
             relative_volume=trend["relative_volume"],
             above_20_day_high=trend["above_20_day_high"],
+            analyst_target_mean=analyst["analyst_target_mean"],
+            analyst_target_high=analyst["analyst_target_high"],
+            analyst_target_low=analyst["analyst_target_low"],
+            analyst_target_upside_pct=analyst["analyst_target_upside_pct"],
         )
     except Exception:
         return MarketData(valid=False)
