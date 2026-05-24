@@ -10,6 +10,7 @@ from scanner.apify_client import fetch_apify_posts
 from scanner.config import ScannerConfig
 from scanner.market_data import get_market_data_for_tickers
 from scanner.reddit_client import fetch_reddit_posts
+from scanner.report import write_html_reports
 from scanner.scoring import aggregate_posts, rank_tickers
 
 
@@ -22,6 +23,7 @@ def write_results(results: list[dict], output_path: Path, history_dir: Path, run
     payload = json.dumps(results, indent=2) + "\n"
     output_path.write_text(payload, encoding="utf-8")
     (history_dir / f"{run_date}.json").write_text(payload, encoding="utf-8")
+    write_html_reports(results, output_path, history_dir, run_date)
 
 
 def fetch_posts(config: ScannerConfig) -> list[dict]:
