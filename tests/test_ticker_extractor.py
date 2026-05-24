@@ -21,3 +21,9 @@ def test_extracts_from_post_comments():
     )
 
     assert mentions == ["GME", "AMC", "NVDA"]
+
+
+def test_does_not_double_count_uppercase_cashtags():
+    text = "$TSLA is stronger than TSLA today"
+
+    assert extract_tickers_from_text(text) == ["TSLA", "TSLA"]

@@ -10,7 +10,7 @@ from scanner.config import EXCLUDED_TICKERS
 # Cashtags can include one-letter tickers such as $F. Plain words are limited to
 # 2-5 characters to reduce noise from ordinary single-letter initials.
 CASHTAG_PATTERN = re.compile(r"(?<![A-Za-z0-9_])\$([A-Za-z]{1,5})(?![A-Za-z])")
-PLAIN_TICKER_PATTERN = re.compile(r"\b[A-Z]{2,5}\b")
+PLAIN_TICKER_PATTERN = re.compile(r"(?<!\$)\b[A-Z]{2,5}\b")
 
 
 def normalize_ticker(candidate: str) -> str:
