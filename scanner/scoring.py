@@ -9,7 +9,13 @@ from datetime import datetime, timezone
 from typing import Any
 
 from scanner.conviction import conviction_scores
-from scanner.history import attention_acceleration_score
+from scanner.history import (
+    attention_acceleration_score,
+    build_historical_trends,
+    build_sparkline_payload,
+    catalyst_type_label,
+    smoothed_attention_acceleration,
+)
 from scanner.market_data import MarketData
 from scanner.post_classifier import dominant_post_type as choose_dominant_post_type
 from scanner.post_classifier import classify_post, post_type_weight
@@ -523,12 +529,16 @@ def score_breakdown(
     aggregate: TickerAggregate,
     market_data: MarketData,
     baseline: dict[str, float] | None = None,
+    mentions_7d: list[float] | None = None,
 ) -> dict[str, Any]:
     """Calculate component scores used to produce final_score."""
 
     baseline = baseline or {}
     seven_day_avg_mentions = float(baseline.get("seven_day_avg_mentions", 0.0) or 0.0)
-    attention_acceleration = aggregate.mention_count / max(seven_day_avg_mentions, 1)
+    if mentions_7d:
+        attention_acceleration = smoothed_attention_acceleration(mentions_7d)
+    else:
+        attention_acceleration = aggregate.mention_count / max(seven_day_avg_mentions, 1)
     acceleration_score = attention_acceleration_score(attention_acceleration)
     engagement_score = engagement_quality_score(aggregate)
     sentiment_score = normalized_sentiment_score(aggregate.avg_sentiment)
@@ -550,6 +560,7 @@ def score_breakdown(
     normalized = round(max(0.0, min(1.0, raw_score)) * 100, 2)
 
     return {
+        "attention_acceleration": round(attention_acceleration, 4),
         "attention_acceleration_score": acceleration_score,
         "engagement_quality_score": engagement_score,
         "sentiment_score": sentiment_score,
@@ -638,12 +649,37 @@ def build_summary(
     )
 
 
+def _mentions_series_for_ticker(
+    ticker: str,
+    snapshots: list[tuple[str, list[dict[str, Any]]]],
+    current_mentions: float,
+) -> list[float]:
+    """Build a 7-day mention series ending with the current run's mention count."""
+
+    symbol = ticker.upper()
+    series: list[float] = []
+    for index, (_day, rows) in enumerate(snapshots):
+        if index == len(snapshots) - 1:
+            series.append(float(current_mentions))
+            continue
+        row = next(
+            (item for item in rows if str(item.get("ticker") or "").upper() == symbol),
+            None,
+        )
+        try:
+            series.append(float(row.get("mention_count") or 0) if row else 0.0)
+        except (TypeError, ValueError):
+            series.append(0.0)
+    return series
+
+
 def rank_tickers(
     aggregates: dict[str, TickerAggregate],
     market_data_by_ticker: dict[str, MarketData],
     limit: int = 15,
     generated_at: str | None = None,
     baselines: dict[str, dict[str, float]] | None = None,
+    history_snapshots: list[tuple[str, list[dict[str, Any]]]] | None = None,
 ) -> list[dict[str, Any]]:
     """Rank valid tickers and return JSON-serializable result rows."""
 
@@ -658,10 +694,18 @@ def rank_tickers(
 
         baseline = baselines.get(ticker, {})
         seven_day_avg_mentions = float(baseline.get("seven_day_avg_mentions", 0.0) or 0.0)
-        attention_acceleration = aggregate.mention_count / max(seven_day_avg_mentions, 1)
+        mentions_7d = (
+            _mentions_series_for_ticker(ticker, history_snapshots, aggregate.mention_count)
+            if history_snapshots
+            else None
+        )
         details = risk_details(market_data)
         risk_flag = str(details["risk_flag"])
-        breakdown = score_breakdown(aggregate, market_data, baseline)
+        breakdown = score_breakdown(aggregate, market_data, baseline, mentions_7d=mentions_7d)
+        attention_acceleration = float(
+            breakdown.get("attention_acceleration")
+            or (aggregate.mention_count / max(seven_day_avg_mentions, 1))
+        )
         market_score = float(breakdown["market_confirmation_score"])
         pump = pump_risk_details(aggregate, market_data, market_score)
         spread_score = float(breakdown["subreddit_spread_score"])
@@ -712,6 +756,25 @@ def rank_tickers(
             for source in top_sources
         ]
 
+        if history_snapshots:
+            historical_trends = build_historical_trends(
+                ticker,
+                history_snapshots,
+                current_mentions=float(aggregate.mention_count),
+                current_sentiment=float(aggregate.avg_sentiment),
+                current_score=float(breakdown["final_score"]),
+                current_analyst_target=float(analyst_target),
+            )
+        else:
+            historical_trends = {
+                "mentions_7d": [0.0] * 6 + [float(aggregate.mention_count)],
+                "sentiment_7d": [0.0] * 6 + [float(aggregate.avg_sentiment)],
+                "score_7d": [0.0] * 6 + [float(breakdown["final_score"])],
+                "analyst_target_upside_7d": [0.0] * 6 + [float(analyst_target)],
+            }
+        sparklines = build_sparkline_payload(historical_trends)
+        catalyst_type = catalyst_type_label(aggregate.dominant_post_type, catalyst_confidence)
+
         rows.append(
             {
                 "ticker": ticker,
@@ -724,6 +787,10 @@ def rank_tickers(
                 "catalyst_confidence_score": catalyst_confidence,
                 "unique_users_score": unique_users,
                 "unique_users": aggregate.unique_users,
+                "catalyst_type": catalyst_type,
+                "historical_trends": historical_trends,
+                "sparklines": sparklines,
+                "trend_dates": [day for day, _rows in history_snapshots] if history_snapshots else [],
                 "risk_flag": risk_flag,
                 "risk_explanation": pump["risk_explanation"],
                 "mention_count": aggregate.mention_count,

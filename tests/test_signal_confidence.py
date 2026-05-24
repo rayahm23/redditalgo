@@ -115,3 +115,6 @@ def test_rank_tickers_includes_confidence_fields():
     assert "recommendation_type" in row
     assert 0.0 <= row["signal_confidence_score"] <= 1.0
     assert row["unique_users"] == 1
+    assert len(row["historical_trends"]["mentions_7d"]) == 7
+    assert row["historical_trends"]["mentions_7d"][-1] == 3
+    assert row["sparklines"]["length"] == 7

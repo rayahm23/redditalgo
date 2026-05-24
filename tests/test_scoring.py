@@ -1,4 +1,5 @@
 from scanner.market_data import MarketData
+from scanner.history import load_history_snapshots
 from scanner.scoring import (
     TickerAggregate,
     aggregate_posts,
@@ -153,3 +154,33 @@ def test_rank_tickers_excludes_invalid_market_data_and_adds_breakdowns():
     assert results[0]["top_sources"][0]["recency_weight"] == 0.85
     assert "signal_confidence_score" in results[0]
     assert results[0]["signal_confidence_label"] in {"LOW", "MEDIUM", "HIGH"}
+    assert "historical_trends" in results[0]
+    assert "sparklines" in results[0]
+    assert len(results[0]["historical_trends"]["mentions_7d"]) == 7
+
+
+def test_rank_tickers_uses_history_snapshots_for_trends(tmp_path):
+    history_dir = tmp_path / "history"
+    history_dir.mkdir()
+    import json
+
+    prior = [{"ticker": "TSLA", "mention_count": 2, "avg_sentiment": 0.1, "final_score": 40.0, "analyst_target_score": 0.0}]
+    (history_dir / "2026-05-23.json").write_text(json.dumps(prior), encoding="utf-8")
+
+    aggregate = TickerAggregate(ticker="TSLA", mention_count=6, total_upvotes=50, comment_volume=5)
+    aggregate.post_ids.add("p1")
+    aggregate.sentiment_scores.append(0.3)
+    aggregate.post_types.append("DD")
+    aggregate.post_type_weights.append(1.5)
+
+    snapshots = load_history_snapshots(history_dir, "2026-05-24", days=7)
+    results = rank_tickers(
+        {"TSLA": aggregate},
+        {"TSLA": MarketData(valid=True, latest_price=200, avg_volume=10_000_000, market_cap=500_000_000_000)},
+        generated_at="2026-05-24T12:00:00+00:00",
+        history_snapshots=snapshots,
+    )
+
+    trends = results[0]["historical_trends"]
+    assert trends["mentions_7d"][-1] == 6
+    assert trends["mentions_7d"][-2] == 2
