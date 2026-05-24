@@ -626,27 +626,117 @@ def recommendation_type(
     return "Watchlist"
 
 
+def strength_tier(score: float, *, invert: bool = False) -> str:
+    """Map a 0-1 score to Weak, Moderate, or Strong."""
+
+    value = 1.0 - score if invert else score
+    if value >= 0.65:
+        return "Strong"
+    if value >= 0.4:
+        return "Moderate"
+    return "Weak"
+
+
+def build_signal_summaries(
+    *,
+    attention_acceleration_score: float,
+    discussion_quality: float,
+    market_confirmation: float,
+    pump_risk: float,
+    analyst_target_upside_pct: float | None,
+    reddit_analyst_language: float,
+) -> dict[str, str]:
+    """Return compact signal summary tiers for dashboard display."""
+
+    if analyst_target_upside_pct is not None:
+        if analyst_target_upside_pct >= 0.10:
+            analyst_outlook = "Strong"
+        elif analyst_target_upside_pct >= -0.03:
+            analyst_outlook = "Moderate"
+        else:
+            analyst_outlook = "Weak"
+    elif reddit_analyst_language >= 0.5:
+        analyst_outlook = "Moderate"
+    else:
+        analyst_outlook = "Weak"
+
+    return {
+        "retail_attention": strength_tier(attention_acceleration_score),
+        "discussion_quality": strength_tier(discussion_quality),
+        "market_confirmation": strength_tier(market_confirmation),
+        "speculation_risk": strength_tier(pump_risk, invert=False),
+        "analyst_outlook": analyst_outlook,
+    }
+
+
 def build_summary(
     aggregate: TickerAggregate,
     recommendation: str,
     attention_acceleration: float,
     pump_risk_score: float,
+    *,
+    catalyst_type: str = "Other",
+    discussion_quality: float = 0.0,
+    market_score: float = 0.0,
+    analyst_target_upside_pct: float | None = None,
+    has_ai: bool = False,
 ) -> str:
-    """Produce a compact human-readable explanation for a ranked ticker."""
+    """Produce an insight-driven natural-language summary for a ranked ticker."""
 
-    sentiment = aggregate.avg_sentiment
-    if sentiment >= 0.25:
-        sentiment_label = "positive sentiment"
-    elif sentiment <= -0.25:
-        sentiment_label = "negative sentiment"
+    catalyst = catalyst_type or aggregate.dominant_post_type or "Other"
+    accel_phrase = "picked up sharply" if attention_acceleration >= 2.5 else (
+        "accelerated" if attention_acceleration >= 1.5 else "inched higher"
+    )
+
+    if catalyst == "Earnings":
+        driver = "earnings and guidance"
+    elif catalyst == "News":
+        driver = "news flow"
+    elif catalyst == "DD":
+        driver = "fundamental debate"
+    elif has_ai or catalyst == "AI sympathy trade":
+        driver = "AI-related catalysts"
+    elif catalyst in {"Meme", "YOLO"}:
+        driver = "meme-style momentum"
     else:
-        sentiment_label = "mixed sentiment"
+        driver = f"{catalyst.lower()} discussion"
+
+    quality = (
+        "while the tone still looks speculative"
+        if pump_risk_score >= 0.55
+        else "with relatively substantive thread quality"
+        if discussion_quality >= 0.6
+        else "though the conversation remains mixed in quality"
+    )
+
+    market_phrase = (
+        "Price action is confirming the narrative."
+        if market_score >= 0.6
+        else "The market has not fully confirmed the Reddit narrative yet."
+        if market_score >= 0.35
+        else "Market confirmation remains weak."
+    )
+
+    if analyst_target_upside_pct is not None:
+        if analyst_target_upside_pct >= 0.08:
+            street = (
+                f" The stock still trades below the average analyst target "
+                f"with about {analyst_target_upside_pct * 100:.0f}% upside to consensus."
+            )
+        elif analyst_target_upside_pct <= -0.08:
+            street = (
+                f" Consensus targets sit roughly {abs(analyst_target_upside_pct) * 100:.0f}% "
+                "below the current price."
+            )
+        else:
+            street = " The stock is trading near the average analyst target."
+    else:
+        street = ""
 
     return (
-        f"{recommendation}: {aggregate.dominant_post_type} led discussion with "
-        f"{sentiment_label}, {attention_acceleration:.2f}x mention acceleration, "
-        f"and pump risk {pump_risk_score:.2f}."
-    )
+        f"{aggregate.ticker} discussion {accel_phrase} as users focused on {driver}, {quality}. "
+        f"{market_phrase}{street}"
+    ).strip()
 
 
 def _mentions_series_for_ticker(
@@ -813,7 +903,20 @@ def rank_tickers(
                 "five_day_return": market_data.five_day_return,
                 "relative_volume": market_data.relative_volume,
                 "above_20_day_high": market_data.above_20_day_high,
+                "analyst_target_mean": market_data.analyst_target_mean,
+                "analyst_target_high": market_data.analyst_target_high,
+                "analyst_target_low": market_data.analyst_target_low,
+                "analyst_target_upside_pct": market_data.analyst_target_upside_pct,
                 "dominant_post_type": aggregate.dominant_post_type,
+                "subreddit_spread_score": spread_score,
+                "signal_summaries": build_signal_summaries(
+                    attention_acceleration_score=float(breakdown["attention_acceleration_score"]),
+                    discussion_quality=discussion_quality,
+                    market_confirmation=market_score,
+                    pump_risk=pump["pump_risk_score"],
+                    analyst_target_upside_pct=market_data.analyst_target_upside_pct,
+                    reddit_analyst_language=analyst_target,
+                ),
                 "post_type_weight_avg": aggregate.post_type_weight_avg,
                 "risk_reasons": details["risk_reasons"],
                 "risk_thresholds": details["risk_thresholds"],
@@ -823,6 +926,11 @@ def rank_tickers(
                     recommendation,
                     attention_acceleration,
                     pump["pump_risk_score"],
+                    catalyst_type=catalyst_type,
+                    discussion_quality=discussion_quality,
+                    market_score=market_score,
+                    analyst_target_upside_pct=market_data.analyst_target_upside_pct,
+                    has_ai=aggregate_has_ai_catalyst(aggregate),
                 ),
                 "top_sources": top_sources,
                 "generated_at": generated_at,

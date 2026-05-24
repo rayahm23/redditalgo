@@ -3,12 +3,15 @@ from scanner.scoring import (
     TickerAggregate,
     aggregate_has_ai_catalyst,
     analyst_target_score_from_text,
+    build_signal_summaries,
+    build_summary,
     catalyst_confidence_score,
     normalized_sentiment_score,
     recommendation_type,
     score_breakdown,
     signal_confidence_label,
     signal_confidence_score,
+    strength_tier,
 )
 from scanner.history import smoothed_attention_acceleration
 
@@ -74,6 +77,38 @@ def test_catalyst_detection_and_confidence_labels():
         catalyst_confidence=0.75,
     )
     assert signal_confidence_label(score) == "HIGH"
+
+
+def test_build_summary_is_natural_language():
+    aggregate = TickerAggregate(ticker="AMD")
+    aggregate.post_types.append("Earnings")
+    text = build_summary(
+        aggregate,
+        "Earnings momentum",
+        3.0,
+        0.2,
+        catalyst_type="Earnings",
+        discussion_quality=0.7,
+        market_score=0.6,
+        analyst_target_upside_pct=0.15,
+    )
+    assert "AMD discussion" in text
+    assert "0.20" not in text
+    assert "analyst target" in text.lower()
+
+
+def test_build_signal_summaries_tiers():
+    summaries = build_signal_summaries(
+        attention_acceleration_score=0.9,
+        discussion_quality=0.7,
+        market_confirmation=0.5,
+        pump_risk=0.2,
+        analyst_target_upside_pct=0.12,
+        reddit_analyst_language=0.3,
+    )
+    assert summaries["retail_attention"] == "Strong"
+    assert summaries["speculation_risk"] == "Weak"
+    assert strength_tier(0.7) == "Strong"
 
 
 def test_recommendation_logic_priority_order():
