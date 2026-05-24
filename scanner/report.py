@@ -6,6 +6,61 @@ from html import escape
 from pathlib import Path
 from typing import Any
 
+GENERAL_SIGNAL_LIMIT = 10
+SMALL_STOCK_LIMIT = 10
+SMALL_STOCK_PRICE_LT = 15.0
+
+
+def get_general_signals(results: list[dict[str, Any]], *, limit: int = GENERAL_SIGNAL_LIMIT) -> list[dict[str, Any]]:
+    """Top-ranked signals across all tickers by final_score."""
+
+    ranked = sorted(results, key=lambda row: float(row.get("final_score") or 0), reverse=True)
+    return [_with_section_rank(row, index) for index, row in enumerate(ranked[:limit], start=1)]
+
+
+def get_small_stock_signals(
+    results: list[dict[str, Any]],
+    *,
+    limit: int = SMALL_STOCK_LIMIT,
+    price_lt: float = SMALL_STOCK_PRICE_LT,
+) -> list[dict[str, Any]]:
+    """Top-ranked signals where latest_price is below the threshold."""
+
+    eligible: list[dict[str, Any]] = []
+    for row in results:
+        price = row.get("latest_price")
+        if price is None:
+            continue
+        try:
+            if float(price) < price_lt:
+                eligible.append(row)
+        except (TypeError, ValueError):
+            continue
+    ranked = sorted(eligible, key=lambda row: float(row.get("final_score") or 0), reverse=True)
+    return [_with_section_rank(row, index) for index, row in enumerate(ranked[:limit], start=1)]
+
+
+def _with_section_rank(row: dict[str, Any], rank: int) -> dict[str, Any]:
+    return {**row, "rank": rank}
+
+
+def format_analyst_target(result: dict[str, Any]) -> str:
+    """Human-readable street target line for dashboards."""
+
+    target = result.get("analyst_target_mean")
+    upside = result.get("analyst_target_upside_pct")
+    if target is None or upside is None:
+        return "Street target unavailable"
+    price_text = _format_price(target, compact=True)
+    pct_text = _format_percent(upside, signed=True)
+    return f"{price_text} avg target ({pct_text})"
+
+
+def format_narrative(result: dict[str, Any]) -> str:
+    """Primary narrative text with safe fallback."""
+
+    return str(result.get("primary_narrative") or "No clear narrative identified.")
+
 
 def _format_number(value: Any, digits: int = 1) -> str:
     if value is None:
@@ -312,15 +367,13 @@ def _theme_list_html(themes: list[Any], empty: str = "None identified") -> str:
 
 
 def _narrative_html(row: dict[str, Any]) -> str:
-    primary = escape(str(row.get("primary_narrative") or "No clear narrative identified."))
+    primary = escape(format_narrative(row))
     bullish = _theme_list_html(row.get("bullish_themes") or [])
     bearish = _theme_list_html(row.get("bearish_themes") or [], empty="No major bearish themes")
-    keywords = row.get("narrative_keywords") or []
-    keyword_text = ", ".join(escape(str(word)) for word in keywords[:6])
     return f"""
       <section class="narrative-panel">
         <h3>Discussion Summary</h3>
-        <p class="primary-narrative">{primary}</p>
+        <p class="primary-narrative"><strong>Primary Narrative:</strong> {primary}</p>
         <div class="theme-columns">
           <div>
             <h4>Bullish Themes</h4>
@@ -331,10 +384,6 @@ def _narrative_html(row: dict[str, Any]) -> str:
             <ul>{bearish}</ul>
           </div>
         </div>
-        <details class="nested-details">
-          <summary>Narrative keywords</summary>
-          <p class="muted">{keyword_text or "n/a"}</p>
-        </details>
       </section>
     """
 
@@ -401,11 +450,14 @@ def _list_html(items: list[Any], fallback: str) -> str:
     return "".join(f"<li>{escape(str(item))}</li>" for item in items)
 
 
-def _card_html(row: dict[str, Any]) -> str:
+def _card_html(row: dict[str, Any], *, price_chip: str | None = None) -> str:
     ticker = escape(str(row.get("ticker", "")))
     recommendation = escape(str(row.get("recommendation_type") or "Watchlist"))
     confidence = escape(str(row.get("signal_confidence_label") or "n/a").title())
     summary = escape(str(row.get("summary") or ""))
+    chip_html = ""
+    if price_chip:
+        chip_html = f'<span class="price-chip">{escape(price_chip)}</span>'
     trends = row.get("historical_trends") or {}
     sparklines = row.get("sparklines") or trends
     mentions_svg = _sparkline_svg(sparklines.get("mentions") or trends.get("mentions_7d", []))
@@ -435,6 +487,7 @@ def _card_html(row: dict[str, Any]) -> str:
 
         <div class="headline-row">
           <span class="recommendation">{recommendation}</span>
+          {chip_html}
           <span class="confidence-pill">{confidence} Confidence</span>
         </div>
 
@@ -476,11 +529,50 @@ def _card_html(row: dict[str, Any]) -> str:
     """
 
 
+def _section_html(
+    *,
+    section_id: str,
+    title: str,
+    subtitle: str,
+    rows: list[dict[str, Any]],
+    price_chip: str | None = None,
+) -> str:
+    cards = "".join(_card_html(row, price_chip=price_chip) for row in rows)
+    if not cards:
+        cards = '<div class="empty">No tickers in this section for the current scan.</div>'
+    return f"""
+    <section class="dashboard-section" id="{escape(section_id)}">
+      <div class="section-header">
+        <h2>{escape(title)}</h2>
+        <p class="section-subtitle">{escape(subtitle)}</p>
+      </div>
+      <div class="grid">{cards}</div>
+    </section>
+    """
+
+
 def render_results_html(results: list[dict[str, Any]]) -> str:
     """Render ranked scanner results as a polished market-intelligence dashboard."""
 
     generated_at = results[0].get("generated_at") if results else "No scan results yet"
-    cards = "".join(_card_html(row) for row in results) or '<div class="empty">No ranked tickers yet.</div>'
+    general_rows = get_general_signals(results)
+    small_rows = get_small_stock_signals(results)
+    general_section = _section_html(
+        section_id="general-signals",
+        title="General Signals",
+        subtitle="Highest-quality Reddit-driven watchlist ideas across all price ranges.",
+        rows=general_rows,
+    )
+    small_section = _section_html(
+        section_id="small-stocks",
+        title="Small Stocks Under $15",
+        subtitle=(
+            "Lower-priced, higher-upside names with Reddit traction. "
+            "These may be more volatile, so review liquidity and risk carefully."
+        ),
+        rows=small_rows,
+        price_chip="Under $15",
+    )
 
     return f"""<!doctype html>
 <html lang="en">
@@ -531,6 +623,30 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
     .wrap {{ max-width: 980px; margin: 0 auto; padding: 40px 20px 56px; }}
     header h1 {{ margin: 0 0 6px; font-size: clamp(28px, 4vw, 36px); font-weight: 650; letter-spacing: -0.02em; }}
     .meta, .disclaimer, .muted {{ color: var(--muted); font-size: 14px; }}
+    .dashboard-section {{ margin-bottom: 48px; }}
+    .section-header {{ margin-bottom: 22px; }}
+    .section-header h2 {{
+      margin: 0 0 8px;
+      font-size: clamp(22px, 3vw, 28px);
+      font-weight: 650;
+      letter-spacing: -0.02em;
+    }}
+    .section-subtitle {{
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 72ch;
+      line-height: 1.55;
+    }}
+    .price-chip {{
+      font-size: 12px;
+      font-weight: 650;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 10px;
+    }}
     .toolbar {{ display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0 10px; }}
     .toolbar a {{
       color: var(--text);
@@ -747,7 +863,8 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
       </div>
       <p class="disclaimer">Research/watchlist tool only. Not financial advice.</p>
     </header>
-    <section class="grid">{cards}</section>
+    {general_section}
+    {small_section}
   </main>
 </body>
 </html>
