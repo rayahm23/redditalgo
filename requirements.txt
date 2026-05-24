@@ -1,0 +1,6 @@
+apify-client
+praw
+vaderSentiment
+yfinance
+python-dotenv
+pytest
