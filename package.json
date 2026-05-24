@@ -1,0 +1,44 @@
+{
+  "name": "reddit-alpha-scanner",
+  "version": "0.1.0",
+  "description": "Devvit Reddit stock sentiment scanner MVP",
+  "main": "dist/server/index.js",
+  "scripts": {
+    "build": "tsc --noEmit && node tools/build.mjs",
+    "dev": "devvit playtest",
+    "upload": "devvit upload",
+    "publish": "devvit publish",
+    "test": "vitest run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rayahm23/redditalgo.git"
+  },
+  "keywords": [
+    "devvit",
+    "reddit",
+    "stocks",
+    "sentiment",
+    "watchlist"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rayahm23/redditalgo/issues"
+  },
+  "homepage": "https://github.com/rayahm23/redditalgo#readme",
+  "dependencies": {
+    "@devvit/redis": "^0.12.24",
+    "@devvit/web": "^0.12.24",
+    "vader-sentiment": "^1.1.3"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.1",
+    "devvit": "^0.12.24",
+    "esbuild": "^0.28.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.7"
+  },
+  "type": "module",
+  "private": true
+}

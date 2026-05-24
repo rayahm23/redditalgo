@@ -1,0 +1,60 @@
+{
+  "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
+  "name": "alpha-scanner",
+  "post": {
+    "dir": "public",
+    "entrypoints": {
+      "default": {
+        "entry": "index.html",
+        "height": "tall"
+      }
+    }
+  },
+  "server": {
+    "dir": "dist/server",
+    "entry": "index.js"
+  },
+  "permissions": {
+    "http": {
+      "enable": true,
+      "domains": ["query1.finance.yahoo.com"]
+    },
+    "redis": true,
+    "reddit": {
+      "enable": true
+    }
+  },
+  "menu": {
+    "items": [
+      {
+        "label": "Create Reddit Alpha Scanner post",
+        "description": "Create a watchlist display post for the latest scan results.",
+        "forUserType": "moderator",
+        "location": "subreddit",
+        "endpoint": "/internal/menu/create-post"
+      },
+      {
+        "label": "Run Reddit Alpha scan now",
+        "description": "Scan configured investing subreddits and store the latest ranked watchlist.",
+        "forUserType": "moderator",
+        "location": "subreddit",
+        "endpoint": "/internal/menu/run-scan"
+      }
+    ]
+  },
+  "scheduler": {
+    "tasks": {
+      "daily-scan": {
+        "endpoint": "/internal/scheduler/daily-scan",
+        "cron": "15 12 * * *"
+      }
+    }
+  },
+  "dev": {
+    "subreddit": "alpha_scanner_dev"
+  },
+  "scripts": {
+    "dev": "node tools/build.mjs --watch",
+    "build": "node tools/build.mjs --minify"
+  }
+}
