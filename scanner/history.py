@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import math
 from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -53,9 +54,9 @@ def calculate_historical_baselines(history_rows: list[dict[str, Any]], days: int
 
 
 def attention_acceleration_score(attention_acceleration: float) -> float:
-    """Normalize mention acceleration to a 0-1 score."""
+    """Normalize smoothed mention acceleration to a 0-1 score using log scaling."""
 
     if attention_acceleration <= 0:
         return 0.0
-    # 1x baseline = 0.25, 2x = 0.5, 4x or higher = 1.0.
-    return round(max(0.0, min(1.0, attention_acceleration / 4)), 4)
+    # Log scaling keeps large spikes explainable without letting extreme ratios dominate.
+    return round(max(0.0, min(1.0, math.log1p(attention_acceleration) / math.log1p(4))), 4)

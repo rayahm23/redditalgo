@@ -51,6 +51,7 @@ def _submission_to_dict(submission: Any, top_comments_limit: int) -> dict[str, A
         "subreddit": str(getattr(submission, "subreddit", "")),
         "title": getattr(submission, "title", "") or "",
         "selftext": getattr(submission, "selftext", "") or "",
+        "author": str(getattr(submission, "author", "") or ""),
         "score": int(getattr(submission, "score", 0) or 0),
         "upvote_ratio": float(getattr(submission, "upvote_ratio", 0) or 0),
         "num_comments": int(getattr(submission, "num_comments", 0) or 0),
