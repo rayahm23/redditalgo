@@ -105,9 +105,9 @@ def test_score_rewards_attention_and_penalizes_high_risk():
     breakdown = score_breakdown(
         aggregate, MarketData(valid=True, latest_price=200, avg_volume=50_000_000, market_cap=500_000_000_000)
     )
-    assert breakdown["formula"].startswith("min(100")
-    assert breakdown["recency_window_days"] == 7
-    assert breakdown["attention_score"] > 0
+    assert "attention_acceleration" in breakdown["formula"]
+    assert breakdown["attention_acceleration_score"] >= 0
+    assert breakdown["engagement_quality_score"] > 0
 
 
 def test_rank_tickers_excludes_invalid_market_data_and_adds_breakdowns():

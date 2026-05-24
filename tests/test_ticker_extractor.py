@@ -27,3 +27,9 @@ def test_does_not_double_count_uppercase_cashtags():
     text = "$TSLA is stronger than TSLA today"
 
     assert extract_tickers_from_text(text) == ["TSLA", "TSLA"]
+
+
+def test_filters_trading_jargon_false_positives():
+    text = "CALL PUT ITM OTM ATM RH FED EV EPS PE IV but TSLA and $nvda remain"
+
+    assert extract_tickers_from_text(text) == ["NVDA", "TSLA"]

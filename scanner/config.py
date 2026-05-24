@@ -44,6 +44,17 @@ EXCLUDED_TICKERS = {
     "ARE",
     "YOU",
     "NOT",
+    "PUT",
+    "CALL",
+    "ITM",
+    "OTM",
+    "ATM",
+    "RH",
+    "FED",
+    "EV",
+    "EPS",
+    "PE",
+    "IV",
 }
 
 

@@ -16,6 +16,10 @@ class MarketData:
     latest_price: float | None = None
     avg_volume: int | None = None
     market_cap: int | None = None
+    one_day_return: float | None = None
+    five_day_return: float | None = None
+    relative_volume: float | None = None
+    above_20_day_high: bool | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -47,8 +51,40 @@ def _fast_info_value(fast_info: Any, *keys: str) -> Any:
     return None
 
 
+def _history_metrics(yf_ticker: Any, avg_volume: int | None) -> dict[str, Any]:
+    metrics: dict[str, Any] = {
+        "one_day_return": None,
+        "five_day_return": None,
+        "relative_volume": None,
+        "above_20_day_high": None,
+    }
+    try:
+        history = yf_ticker.history(period="1mo", interval="1d", auto_adjust=False)
+    except Exception:
+        return metrics
+    if history is None or history.empty or "Close" not in history:
+        return metrics
+
+    closes = history["Close"].dropna()
+    if len(closes) >= 2 and closes.iloc[-2] > 0:
+        metrics["one_day_return"] = round((closes.iloc[-1] / closes.iloc[-2]) - 1, 4)
+    if len(closes) >= 6 and closes.iloc[-6] > 0:
+        metrics["five_day_return"] = round((closes.iloc[-1] / closes.iloc[-6]) - 1, 4)
+
+    if "Volume" in history and not history["Volume"].dropna().empty:
+        latest_volume = _safe_number(history["Volume"].dropna().iloc[-1], integer=True)
+        if latest_volume and avg_volume:
+            metrics["relative_volume"] = round(latest_volume / avg_volume, 4)
+
+    if "High" in history and len(history["High"].dropna()) >= 20:
+        highs = history["High"].dropna().tail(20)
+        metrics["above_20_day_high"] = bool(closes.iloc[-1] >= highs.max())
+
+    return metrics
+
+
 def get_market_data(ticker: str) -> MarketData:
-    """Validate a ticker and return best-effort price, volume, and cap data."""
+    """Validate a ticker and return best-effort price, volume, cap, and trend data."""
 
     symbol = ticker.upper()
     try:
@@ -86,12 +122,17 @@ def get_market_data(ticker: str) -> MarketData:
             )
             market_cap = market_cap or _safe_number(info.get("marketCap"), integer=True)
 
+        trend = _history_metrics(yf_ticker, avg_volume if isinstance(avg_volume, int) else None)
         valid = latest_price is not None or avg_volume is not None or market_cap is not None
         return MarketData(
             valid=valid,
             latest_price=latest_price,
-            avg_volume=avg_volume,
-            market_cap=market_cap,
+            avg_volume=avg_volume if isinstance(avg_volume, int) else None,
+            market_cap=market_cap if isinstance(market_cap, int) else None,
+            one_day_return=trend["one_day_return"],
+            five_day_return=trend["five_day_return"],
+            relative_volume=trend["relative_volume"],
+            above_20_day_high=trend["above_20_day_high"],
         )
     except Exception:
         return MarketData(valid=False)
