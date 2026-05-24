@@ -1,0 +1,5 @@
+praw
+vaderSentiment
+yfinance
+python-dotenv
+pytest
