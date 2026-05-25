@@ -118,25 +118,78 @@ AI_SUBTHEME_RULES: tuple[dict[str, Any], ...] = (
     },
 )
 
-MA_BUYER_PATTERNS = (
-    "acquiring", "acquires", " buys ", " bought ", "acquisition of", "takeover of",
-    "purchasing", "deal to buy", "to acquire", "will acquire", "plans to acquire",
+# Corporate M&A requires strong keywords — "buy/bought/deal/target" alone are insufficient.
+STRONG_MNA_PHRASES: tuple[str, ...] = (
+    "acquisition",
+    "acquire",
+    "acquired",
+    "acquiring",
+    "merger",
+    "takeover",
+    "buyout",
+    "tender offer",
+    "strategic buyer",
+    "deal to acquire",
+    "all-stock deal",
+    "cash-and-stock deal",
+    "merger agreement",
+    "antitrust approval",
+    "acquisition of",
+    "merger with",
+    "merger between",
+    "buyout target",
+    "takeover target",
+    "being acquired",
+    "getting bought",
+    "acquisition target",
+    "announced acquisition",
+    "definitive agreement",
+    "merger partner",
 )
-MA_TARGET_PATTERNS = (
-    "being acquired", "buyout target", "takeover target", "getting bought",
-    "could be bought", "acquisition target", "takeover bid", "buyout rumor",
-    "potential target", "sale target",
+
+MNA_DENIAL_PHRASES: tuple[str, ...] = (
+    "no acquisition",
+    "not an acquisition",
+    "no buyout",
+    "fake buyout",
+    "buyout rumor was denied",
+    "acquisition rumor was denied",
+    "rumor was denied",
+    "not acquiring",
+    "no merger",
+    "denied acquisition",
+    "denied the rumor",
 )
-MA_MERGER_PATTERNS = (
-    "merging with", "merger with", "merger between", "merge with", "all-stock merger",
+
+MNA_SPECULATIVE_MARKERS: tuple[str, ...] = (
+    "rumor",
+    "speculation",
+    "speculated",
+    "could ",
+    " may ",
+    " might ",
+    "possible",
+    "potentially",
 )
-MA_CONFIRMED_PATTERNS = (
-    "announced acquisition", "definitive agreement", "deal closed", "completed acquisition",
-    "signed merger", "approved merger", "confirmed acquisition",
+
+MNA_CONFIRMED_MARKERS: tuple[str, ...] = (
+    "announced",
+    "confirmed",
+    "signed agreement",
+    "definitive agreement",
+    "completed acquisition",
+    "deal closed",
+    "approved merger",
 )
-MA_VAGUE_PATTERNS = (
-    " m&a ", " merger ", " acquisition ", " takeover ", " buyout ", " deal rumors",
-)
+
+TRADING_BUY_CLAIM_RULE: dict[str, Any] = {
+    "id": "bullish_trading_interest",
+    "claim_type": "Retail flow",
+    "short_label": "bullish trading interest",
+    "polarity": "bullish",
+    "claim_template": "Users showed bullish trading interest in {ticker}, without clear corporate M&A discussion.",
+    "supporting_terms": ("buy", "long", "calls"),
+}
 
 OTHER_CLAIM_RULES: tuple[dict[str, Any], ...] = (
     {
@@ -305,116 +358,310 @@ def _phrase_negated(text: str, phrase: str) -> bool:
     return False
 
 
-def detect_ma_directionality(text: str, ticker: str) -> str:
+def _ticker_in_text(text: str, ticker: str) -> bool:
+    symbol = ticker.lower()
+    return symbol in text or f"${symbol}" in text
+
+
+def _has_strong_mna_keyword(text: str) -> bool:
+    for phrase in STRONG_MNA_PHRASES:
+        if phrase in text and not _phrase_negated(text, phrase.strip()):
+            return True
+    return False
+
+
+def _mna_denied(text: str) -> bool:
+    return any(phrase in text for phrase in MNA_DENIAL_PHRASES)
+
+
+def _mna_certainty_label(text: str) -> str | None:
+    if any(marker in text for marker in MNA_CONFIRMED_MARKERS):
+        return "confirmed"
+    if any(marker in text for marker in MNA_SPECULATIVE_MARKERS):
+        return "speculative"
+    return None
+
+
+def _matches_trading_buy_patterns(text: str, ticker: str) -> bool:
+    normalized = _normalize_text(text)
+    if not _ticker_in_text(normalized, ticker):
+        return False
+    symbol = re.escape(ticker.lower())
+    patterns = (
+        rf"\b(?:should\s+i\s+)?(?:buy|buying|bought)\s+\$?{symbol}\b",
+        rf"\b(?:buy|buying|bought)\s+\$?{symbol}\s+instead\b",
+        rf"\b{symbol}\s+is\s+a\s+buy\b",
+        rf"\bbuy\s+{symbol}\s+or\b",
+        rf"\b(?:buy|buying)\s+(?:the\s+)?dip\b",
+        rf"\bbought\s+calls\b",
+        rf"\bbuy\s+calls\b",
+        rf"\bbuy\s+shares\b",
+        rf"\bloading\s+up\b",
+        rf"\badding\s+shares\b",
+        rf"\blong\s+this\s+stock\b",
+        rf"\bcalls\s+on\s+\$?{symbol}\b",
+        rf"\b(?:i'm|im|i\s+am)\s+buying\s+\$?{symbol}\b",
+    )
+    return any(re.search(pattern, normalized) for pattern in patterns)
+
+
+def detect_trading_buy_intent(text: str, ticker: str) -> bool:
+    """Detect retail trading-buy language (not corporate M&A)."""
+
+    normalized = _normalize_text(text)
+    if not _matches_trading_buy_patterns(text, ticker):
+        return False
+    if _has_strong_mna_keyword(normalized) and not _mna_denied(normalized):
+        if _corporate_mna_direction(normalized, ticker) != "none":
+            return False
+    return True
+
+
+def _corporate_mna_direction(text: str, ticker: str) -> str:
+    """Classify corporate M&A direction when strong keywords are present."""
+
+    normalized = _normalize_text(text)
+    symbol = re.escape(ticker.lower())
+    ticker_present = _ticker_in_text(normalized, ticker)
+
+    merger_patterns = (
+        rf"\b{symbol}\s+merging\s+with\b",
+        r"\bmerger\s+with\b",
+        r"\bmerger\s+between\b",
+        r"\bmerging\s+with\b",
+        r"\ball-stock\s+merger\b",
+    )
+    if ticker_present and any(re.search(pattern, normalized) for pattern in merger_patterns):
+        return "merger"
+
+    target_patterns = (
+        rf"\b{symbol}\s+could\s+be\s+acquired\b",
+        rf"\b{symbol}\s+is\s+a\s+buyout\s+target\b",
+        rf"\b{symbol}\s+is\s+an\s+acquisition\s+target\b",
+        r"\bbuyout\s+target\b",
+        r"\btakeover\s+target\b",
+        r"\bbeing\s+acquired\b",
+        r"\bgetting\s+bought\b",
+        r"\bacquisition\s+target\b",
+        r"\btakeover\s+bid\b",
+        r"\bmay\s+acquire\s+\$?" + symbol,
+        r"\bsomeone\s+(?:may|might|could)\s+acquire\s+\$?" + symbol,
+        r"\bshould\s+acquire\s+\$?" + symbol,
+    )
+    if ticker_present and any(re.search(pattern, normalized) for pattern in target_patterns):
+        return "target"
+
+    acquirer_patterns = (
+        rf"\b{symbol}\s+is\s+acquiring\b",
+        rf"\b{symbol}\s+acquiring\b",
+        rf"\b{symbol}\s+announced\s+acquisition\b",
+        rf"\b{symbol}\s+(?:will|plans\s+to)\s+acquire\b",
+        r"\bacquisition\s+of\b",
+        r"\bdeal\s+to\s+acquire\b",
+        r"\btakeover\s+of\b",
+        r"\bto\s+acquire\b",
+        rf"\b{symbol}\s+buys\b",
+        rf"\b{symbol}\s+bought\b",
+    )
+    if ticker_present and any(re.search(pattern, normalized) for pattern in acquirer_patterns):
+        # "buys/bought" only counts as acquirer alongside explicit M&A nouns.
+        if re.search(rf"\b{symbol}\s+buys?\b", normalized):
+            if not re.search(r"\b(acquir|acquisition|merger|takeover|buyout)\w*\b", normalized):
+                return "unclear"
+        return "acquirer"
+
+    if ticker_present and _has_strong_mna_keyword(normalized):
+        return "unclear"
+    return "none"
+
+
+def analyze_corporate_mna(text: str, ticker: str) -> dict[str, Any]:
     """
-    Return M&A direction: acquirer, target, merger, confirmed, vague, unclear, or none.
+    Analyze corporate M&A intent separately from trading-buy language.
+
+    Returns mna_detected, mna_direction, mna_certainty, mna_status, and evidence snippet.
     """
 
     normalized = _normalize_text(text)
-    if not any(pattern in normalized for pattern in MA_VAGUE_PATTERNS + MA_BUYER_PATTERNS + MA_TARGET_PATTERNS):
-        return "none"
+    empty = {
+        "mna_detected": False,
+        "mna_direction": None,
+        "mna_certainty": None,
+        "mna_status": "none",
+        "mna_evidence_snippet": None,
+        "mna_confidence_score": 0.0,
+        "corporate_mna_intent": False,
+        "trading_buy_intent": _matches_trading_buy_patterns(text, ticker),
+    }
 
-    ticker_lower = ticker.lower()
-    ticker_present = ticker_lower in normalized or f"${ticker_lower}" in normalized
-    if not ticker_present:
-        return "none"
+    if not _has_strong_mna_keyword(normalized):
+        return {**empty, "trading_buy_intent": detect_trading_buy_intent(text, ticker)}
 
-    if any(p in normalized for p in MA_CONFIRMED_PATTERNS):
-        if any(p in normalized for p in MA_BUYER_PATTERNS):
-            return "confirmed_acquirer" if ticker_present else "confirmed"
-        if any(p in normalized for p in MA_TARGET_PATTERNS):
-            return "confirmed_target" if ticker_present else "confirmed"
+    if not _ticker_in_text(normalized, ticker):
+        return empty
+
+    snippet_source = text.strip()
+    certainty = _mna_certainty_label(normalized)
+    if _mna_denied(normalized):
+        return {
+            **empty,
+            "mna_detected": True,
+            "mna_direction": _corporate_mna_direction(normalized, ticker) or "unclear",
+            "mna_certainty": certainty,
+            "mna_status": "denied_or_negated",
+            "mna_evidence_snippet": _snippet(snippet_source),
+            "corporate_mna_intent": False,
+        }
+
+    direction = _corporate_mna_direction(normalized, ticker)
+    if direction == "none":
+        return empty
+
+    confidence = 0.45
+    if certainty == "confirmed":
+        confidence += 0.25
+    elif certainty == "speculative":
+        confidence += 0.1
+    if direction in {"acquirer", "target", "merger"}:
+        confidence += 0.15
+    confidence = round(min(1.0, confidence), 4)
+
+    return {
+        "mna_detected": True,
+        "mna_direction": direction,
+        "mna_certainty": certainty or "speculative",
+        "mna_status": "active",
+        "mna_evidence_snippet": _snippet(snippet_source),
+        "mna_confidence_score": confidence,
+        "corporate_mna_intent": True,
+        "trading_buy_intent": False,
+    }
+
+
+def detect_ma_directionality(text: str, ticker: str) -> str:
+    """Backward-compatible direction string for tests and legacy callers."""
+
+    analysis = analyze_corporate_mna(text, ticker)
+    if not analysis.get("mna_detected") or analysis.get("mna_status") == "denied_or_negated":
+        return "none"
+    direction = str(analysis.get("mna_direction") or "unclear")
+    certainty = analysis.get("mna_certainty")
+    if certainty == "confirmed":
+        if direction == "acquirer":
+            return "confirmed_acquirer"
+        if direction == "target":
+            return "confirmed_target"
         return "confirmed"
-
-    buyer_hits = sum(1 for p in MA_BUYER_PATTERNS if p in normalized)
-    target_hits = sum(1 for p in MA_TARGET_PATTERNS if p in normalized)
-    merger_hits = sum(1 for p in MA_MERGER_PATTERNS if p in normalized)
-
-    if merger_hits and ticker_present:
+    if direction == "merger":
         return "merger_partner"
-    if buyer_hits > target_hits and buyer_hits > 0:
-        return "acquirer" if ticker_present else "acquirer_context"
-    if target_hits > buyer_hits and target_hits > 0:
-        return "target" if ticker_present else "target_context"
-    if buyer_hits and target_hits:
-        return "unclear"
-    if any(p in normalized for p in MA_VAGUE_PATTERNS):
-        return "vague" if ticker_present else "vague_context"
+    if direction == "acquirer":
+        return "acquirer"
+    if direction == "target":
+        return "target"
     return "unclear"
 
 
-def _ma_claim_from_direction(ticker: str, direction: str) -> dict[str, Any] | None:
+def _ma_claim_from_analysis(ticker: str, analysis: dict[str, Any]) -> dict[str, Any] | None:
+    if not analysis.get("corporate_mna_intent"):
+        return None
+
+    direction = str(analysis.get("mna_direction") or "unclear")
+    certainty = str(analysis.get("mna_certainty") or "speculative")
+    direction_key = direction
+    if certainty == "confirmed":
+        if direction == "acquirer":
+            direction_key = "confirmed_acquirer"
+        elif direction == "target":
+            direction_key = "confirmed_target"
+        else:
+            direction_key = "confirmed"
+
     mapping = {
         "acquirer": (
-            "M&A / corporate",
             "possible acquirer speculation",
             "bullish",
-            "beneficiary",
+            "acquirer",
             f"Users speculated that {ticker} may acquire another company.",
         ),
         "target": (
-            "M&A / corporate",
             "buyout target rumor",
             "bullish",
             "target",
             f"Users speculated that {ticker} could be an acquisition target.",
         ),
-        "merger_partner": (
-            "M&A / corporate",
+        "merger": (
             "merger partner speculation",
             "neutral",
             "merger",
             f"Users discussed a potential merger involving {ticker}.",
         ),
         "confirmed_acquirer": (
-            "M&A / corporate",
             "confirmed acquirer",
             "bullish",
             "confirmed_buyer",
             f"Users discussed a confirmed or announced acquisition where {ticker} is the buyer.",
         ),
         "confirmed_target": (
-            "M&A / corporate",
             "confirmed acquisition target",
             "bullish",
             "confirmed_target",
             f"Users discussed a confirmed acquisition involving {ticker} as the target.",
         ),
         "confirmed": (
-            "M&A / corporate",
             "confirmed M&A deal",
             "bullish",
             "confirmed",
             f"Users discussed a confirmed acquisition involving {ticker}.",
         ),
-        "vague": (
-            "M&A / corporate",
-            "M&A language (direction unclear)",
-            "neutral",
-            "unclear",
-            "M&A terms appeared, but the discussion did not clearly establish whether "
-            f"{ticker} is buyer or target.",
-        ),
         "unclear": (
-            "M&A / corporate",
             "M&A language (direction unclear)",
             "neutral",
             "unclear",
-            "M&A language appeared, but direction was unclear.",
+            "M&A language appeared, but posts did not clearly identify whether the company was buyer or target.",
         ),
     }
-    if direction not in mapping:
-        return None
-    claim_type, short_label, polarity, directionality, claim_text = mapping[direction]
+    entry = mapping.get(direction_key) or mapping["unclear"]
+    short_label, polarity, directionality, claim_text = entry
+    if certainty == "speculative" and direction_key in {"target", "acquirer", "unclear"}:
+        claim_text = claim_text.replace("speculated", "speculated (mostly rumor-based)")
+        if "rumor" not in claim_text.lower():
+            claim_text = claim_text.rstrip(".") + ", but evidence was limited and mostly rumor-based."
+
     return {
-        "claim_id": f"ma_{direction}",
+        "claim_id": f"ma_{direction_key}",
         "claim_text": claim_text,
-        "claim_type": claim_type,
+        "claim_type": "M&A / corporate",
         "directionality": directionality,
         "short_label": short_label,
         "polarity": polarity,
         "supporting_terms": ["M&A", "acquisition"],
+        "mna_certainty": certainty,
+        "mna_status": analysis.get("mna_status"),
     }
+
+
+def _ma_claim_from_direction(ticker: str, direction: str) -> dict[str, Any] | None:
+    """Legacy wrapper — build claim from direction string via analyze_corporate_mna heuristics."""
+
+    if direction == "none":
+        return None
+    analysis = {
+        "corporate_mna_intent": True,
+        "mna_direction": direction.replace("merger_partner", "merger").replace("confirmed_", ""),
+        "mna_certainty": "confirmed" if "confirmed" in direction else "speculative",
+        "mna_status": "active",
+    }
+    if direction in {"vague", "unclear"}:
+        analysis["mna_direction"] = "unclear"
+    if direction == "merger_partner":
+        analysis["mna_direction"] = "merger"
+    if direction == "confirmed_acquirer":
+        analysis["mna_direction"] = "acquirer"
+        analysis["mna_certainty"] = "confirmed"
+    if direction == "confirmed_target":
+        analysis["mna_direction"] = "target"
+        analysis["mna_certainty"] = "confirmed"
+    return _ma_claim_from_analysis(ticker, analysis)
 
 
 def _detect_ai_subtheme(text: str, *, specific_ids: set[str]) -> dict[str, Any] | None:
@@ -472,10 +719,13 @@ def _detect_claims_for_source(ticker: str, source: dict[str, Any]) -> list[dict[
     if ai_rule:
         claims.append(_claim_from_rule(ticker, ai_rule))
 
-    ma_dir = detect_ma_directionality(text, ticker)
-    ma_claim = _ma_claim_from_direction(ticker, ma_dir)
-    if ma_claim:
-        claims.append(ma_claim)
+    mna_analysis = analyze_corporate_mna(text, ticker)
+    if mna_analysis.get("corporate_mna_intent"):
+        ma_claim = _ma_claim_from_analysis(ticker, mna_analysis)
+        if ma_claim:
+            claims.append(ma_claim)
+    elif detect_trading_buy_intent(text, ticker):
+        claims.append(_claim_from_rule(ticker, TRADING_BUY_CLAIM_RULE))
 
     for rule in OTHER_CLAIM_RULES:
         if _rule_matches(text, rule):
@@ -553,7 +803,71 @@ def _aggregate_claims(
     return aggregated
 
 
-def _ma_direction_summary(claims: list[dict[str, Any]]) -> str | None:
+def _aggregate_intent_metrics(ticker: str, sources: list[dict[str, Any]]) -> dict[str, Any]:
+    """Aggregate trading-buy vs corporate M&A signals across sources."""
+
+    trading_buy_mentions_count = 0
+    corporate_mna_mentions_count = 0
+    mna_snippets: list[str] = []
+    best_mna: dict[str, Any] | None = None
+
+    for source in sources:
+        text = _collect_source_text(source)
+        if detect_trading_buy_intent(text, ticker):
+            trading_buy_mentions_count += 1
+        analysis = analyze_corporate_mna(text, ticker)
+        if analysis.get("mna_detected"):
+            corporate_mna_mentions_count += 1
+        if analysis.get("corporate_mna_intent"):
+            snippet = analysis.get("mna_evidence_snippet")
+            if snippet and snippet not in mna_snippets:
+                mna_snippets.append(str(snippet))
+            if best_mna is None or float(analysis.get("mna_confidence_score") or 0) > float(
+                best_mna.get("mna_confidence_score") or 0
+            ):
+                best_mna = analysis
+
+    if best_mna:
+        return {
+            "trading_buy_mentions_count": trading_buy_mentions_count,
+            "corporate_mna_mentions_count": corporate_mna_mentions_count,
+            "mna_detected": True,
+            "mna_direction": best_mna.get("mna_direction"),
+            "mna_certainty": best_mna.get("mna_certainty"),
+            "mna_status": best_mna.get("mna_status"),
+            "mna_evidence_snippets": mna_snippets[:3],
+            "mna_confidence_score": best_mna.get("mna_confidence_score"),
+        }
+
+    return {
+        "trading_buy_mentions_count": trading_buy_mentions_count,
+        "corporate_mna_mentions_count": corporate_mna_mentions_count,
+        "mna_detected": corporate_mna_mentions_count > 0,
+        "mna_direction": None,
+        "mna_certainty": None,
+        "mna_status": "none",
+        "mna_evidence_snippets": [],
+        "mna_confidence_score": 0.0,
+    }
+
+
+def _ma_direction_summary(claims: list[dict[str, Any]], *, mna_metrics: dict[str, Any] | None = None) -> str | None:
+    metrics = mna_metrics or {}
+    direction = metrics.get("mna_direction")
+    if metrics.get("mna_detected") and direction:
+        labels = []
+        if direction == "acquirer":
+            labels.append("possible acquirer")
+        elif direction == "target":
+            labels.append("possible target")
+        elif direction == "merger":
+            labels.append("merger partner")
+        else:
+            labels.append("unclear")
+        if metrics.get("mna_certainty") == "speculative":
+            labels.append("rumor-based")
+        return " / ".join(labels)
+
     ma_claims = [c for c in claims if c.get("claim_type") == "M&A / corporate"]
     if not ma_claims:
         return None
@@ -622,6 +936,14 @@ def extract_ticker_narrative(
         "bearish_claims": [],
         "claims": [],
         "ma_direction": None,
+        "trading_buy_mentions_count": 0,
+        "corporate_mna_mentions_count": 0,
+        "mna_detected": False,
+        "mna_direction": None,
+        "mna_certainty": None,
+        "mna_status": "none",
+        "mna_evidence_snippets": [],
+        "mna_confidence_score": 0.0,
         "narrative_confidence": "LOW",
         "narrative_confidence_score": 0.0,
         "narrative_keywords": [],
@@ -634,11 +956,17 @@ def extract_ticker_narrative(
     if not sources:
         return empty
 
+    intent_metrics = _aggregate_intent_metrics(ticker, sources)
     claims = _aggregate_claims(ticker, sources)
     if not claims:
         combined = "".join(_collect_source_text(s) for s in sources)
         keywords = extract_finance_phrases(combined, ticker=ticker)
-        return {**empty, "narrative_keywords": keywords, "narrative_sources_count": len(sources)}
+        return {
+            **empty,
+            **intent_metrics,
+            "narrative_keywords": keywords,
+            "narrative_sources_count": len(sources),
+        }
 
     primary = _compose_primary_claim(ticker, claims)
     primary_claim = dict(primary) if primary else None
@@ -680,7 +1008,8 @@ def extract_ticker_narrative(
         "bullish_claims": bullish_claims[:4],
         "bearish_claims": bearish_claims[:3],
         "claims": claims,
-        "ma_direction": _ma_direction_summary(claims),
+        "ma_direction": _ma_direction_summary(claims, mna_metrics=intent_metrics),
+        **intent_metrics,
         "narrative_confidence": conf_label,
         "narrative_confidence_score": conf_score,
         "narrative_keywords": keywords,
@@ -718,18 +1047,32 @@ def build_narrative_summary(
     else:
         focus_clause = focus.rstrip(".")
 
+    trading_count = int(narrative.get("trading_buy_mentions_count") or 0)
+    mna_detected = narrative.get("mna_detected")
     ma_direction = narrative.get("ma_direction")
+    mna_certainty = narrative.get("mna_certainty")
     ma_note = ""
-    if ma_direction:
-        ma_note = (
-            f" Some comments referenced M&A ({ma_direction}); treat that as weaker evidence "
-            "unless direction is confirmed."
-        )
-        if "unclear" in ma_direction:
+
+    if mna_detected and ma_direction:
+        if mna_certainty == "speculative":
             ma_note = (
-                " Some comments referenced M&A, but the direction was unclear, "
-                "so this should be treated as weak evidence."
+                f" Users speculated about corporate M&A ({ma_direction}), "
+                "but evidence was limited and mostly rumor-based."
             )
+        elif "unclear" in str(ma_direction):
+            ma_note = (
+                " M&A language appeared, but posts did not clearly identify "
+                "whether the company was buyer or target."
+            )
+        else:
+            ma_note = (
+                f" Some comments referenced corporate M&A ({ma_direction}); "
+                "treat unconfirmed rumors cautiously."
+            )
+    elif trading_count > 0 and not mna_detected:
+        ma_note = (
+            " Users showed bullish trading interest, but there was no clear corporate M&A discussion."
+        )
 
     bearish = narrative.get("bearish_claims") or narrative.get("bearish_themes") or []
     caution = ""
