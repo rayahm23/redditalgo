@@ -68,7 +68,7 @@ def run_pipeline(config: ScannerConfig | None = None) -> list[dict]:
     results, excluded = rank_tickers_with_exclusions(
         aggregates,
         market_data,
-        limit=15,
+        limit=config.ranked_output_limit,
         generated_at=generated_at,
         baselines=baselines,
         history_snapshots=history_snapshots,
