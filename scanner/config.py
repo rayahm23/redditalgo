@@ -69,6 +69,9 @@ class ScannerConfig:
     top_comments_per_post: int = 8
     output_path: Path = Path("data/daily_results.json")
     history_dir: Path = Path("data/history")
+    excluded_path: Path = Path("data/excluded_signals.json")
+    backtest_results_path: Path = Path("data/backtest_results.json")
+    backtest_summary_path: Path = Path("data/backtest_summary.json")
     excluded_tickers: set[str] = field(default_factory=lambda: set(EXCLUDED_TICKERS))
 
     @classmethod

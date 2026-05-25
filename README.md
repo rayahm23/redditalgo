@@ -273,15 +273,32 @@ Investability flags (`risk_flag`) are separate from recommendation type:
 
 Each result includes `risk_explanation`, `risk_reasons`, and `risk_thresholds`.
 
-## Backtesting
+## Signal trust, filters, and watchlist reasoning
 
-Run a basic historical forward-return check with:
+- **Spam / duplicate detection:** `duplicate_content_score`, `spam_cluster_score`, `repeated_ticker_score`, `spam_risk_explanation` — penalizes copy-paste hype, not popular tickers with diverse discussion.
+- **Disagreement / consensus:** `bullish_evidence_count`, `bearish_evidence_count`, `disagreement_score`, `consensus_label` (e.g. Mixed / contested).
+- **Watchlist copy:** `watch_reason`, `caution_reason` on every ranked ticker.
+- **Peer context:** `sector_group`, `peer_group`, `peer_attention_rank`, `peer_context_summary` for mapped sectors (semis, fintech, biotech, etc.).
+- **Alerts:** `alerts`, `alert_level` (NONE / INFO / IMPORTANT / HIGH) for events like new top-10 entry or >3x acceleration.
+- **Hard filters:** illiquid, sub-$2, OTC-like, extreme pump/spam profiles go to `data/excluded_signals.json` and never appear in ranked lists. Volatility alone is not excluded.
+
+## Backtesting (forward history)
+
+Each pipeline run saves full ranked rows to `data/history/YYYY-MM-DD.json` (including `price_at_signal`, `signal_score_at_signal`, `under_15_flag`, alerts, sector).
+
+Then:
 
 ```bash
+python -m scanner.pipeline
 python -m scanner.backtest
 ```
 
-It reads `data/history/*.json`, fetches forward prices with yfinance, and writes `data/backtest_results.json` with next-day, three-day, seven-day, and SPY-relative returns when available. Backtesting is best-effort and does not fail the main scan workflow.
+`scanner/backtest.py` reads all history files, fetches forward prices via yfinance, and writes:
+
+- `data/backtest_results.json` — per-signal 1d/3d/7d/30d returns, SPY-relative returns, max drawdown, `pending` when not enough days elapsed
+- `data/backtest_summary.json` — aggregate win rates, averages, breakdowns by recommendation, confidence, sector, under-$15, and alert type
+
+Backtesting never fails the main scan; partial yfinance errors are skipped per ticker.
 
 ## Limitations
 

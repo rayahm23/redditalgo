@@ -8,7 +8,13 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any
 
+from scanner.alerts import generate_alerts
 from scanner.conviction import conviction_scores
+from scanner.disagreement import analyze_disagreement, disagreement_summary_phrase
+from scanner.filters import evaluate_hard_filter
+from scanner.peers import apply_peer_context
+from scanner.spam_detection import analyze_spam
+from scanner.watch_reasons import build_watch_reasons
 from scanner.history import (
     attention_acceleration_score,
     build_historical_trends,
@@ -275,6 +281,7 @@ def aggregate_posts(
                     "recency_weight": round(weight, 2),
                     "post_type": post_type,
                     "subreddit_weight": round(subreddit_weight(subreddit), 2),
+                    "author": author or None,
                 }
             )
     return aggregates
@@ -457,19 +464,25 @@ def signal_confidence_score(
     unique_users: float,
     catalyst_confidence: float,
     narrative_confidence_score: float = 0.0,
+    disagreement_score: float = 0.0,
+    spam_composite_score: float = 0.0,
 ) -> float:
     """Combine signal quality inputs into a 0-1 confidence score."""
 
     low_pump = low_pump_risk_score(pump_risk)
+    consensus_factor = max(0.0, 1.0 - disagreement_score * 0.35)
+    spam_penalty = min(0.12, spam_composite_score * 0.12)
     raw = (
-        0.12 * subreddit_spread
-        + 0.17 * discussion_quality
-        + 0.13 * analyst_target
-        + 0.16 * market_confirmation
-        + 0.13 * low_pump
-        + 0.11 * unique_users
-        + 0.10 * catalyst_confidence
-        + 0.08 * narrative_confidence_score
+        0.11 * subreddit_spread
+        + 0.16 * discussion_quality
+        + 0.12 * analyst_target
+        + 0.15 * market_confirmation
+        + 0.12 * low_pump
+        + 0.10 * unique_users
+        + 0.09 * catalyst_confidence
+        + 0.07 * narrative_confidence_score
+        + 0.08 * consensus_factor
+        - spam_penalty
     )
     return round(max(0.0, min(1.0, raw)), 4)
 
@@ -546,9 +559,11 @@ def pump_risk_details(
     market_data: MarketData,
     market_score: float,
     discussion_quality: float = 0.0,
+    spam_metrics: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Score low-quality speculative activity, not volatility or size alone."""
 
+    spam_metrics = spam_metrics or {}
     components: list[float] = []
     reasons: list[str] = []
 
@@ -595,6 +610,13 @@ def pump_risk_details(
         components.append(0.4)
         reasons.append("Ticker appears only in low-quality one-off contexts.")
 
+    spam_composite = float(spam_metrics.get("spam_composite_score") or 0)
+    if spam_composite >= 0.35:
+        components.append(min(1.0, spam_composite))
+        spam_reason = str(spam_metrics.get("spam_risk_explanation") or "").strip()
+        if spam_reason:
+            reasons.append(spam_reason)
+
     score = sum(components) / len(components) if components else 0.0
     return {
         "pump_risk_score": round(max(0.0, min(1.0, score)), 4),
@@ -607,6 +629,7 @@ def score_breakdown(
     market_data: MarketData,
     baseline: dict[str, float] | None = None,
     mentions_7d: list[float] | None = None,
+    spam_metrics: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Calculate component scores used to produce final_score."""
 
@@ -623,7 +646,13 @@ def score_breakdown(
     market_score = market_confirmation_score(market_data)
     spread_score = subreddit_spread_score(aggregate.unique_subreddits)
     discussion_quality = discussion_quality_score(aggregate)
-    pump = pump_risk_details(aggregate, market_data, market_score, discussion_quality)
+    pump = pump_risk_details(
+        aggregate,
+        market_data,
+        market_score,
+        discussion_quality,
+        spam_metrics=spam_metrics,
+    )
     pump_penalty = pump["pump_risk_score"] * 0.20
 
     raw_score = (
@@ -776,6 +805,7 @@ def build_summary(
     analyst_target_upside_pct: float | None = None,
     has_ai: bool = False,
     narrative: dict[str, Any] | None = None,
+    disagreement_phrase: str = "",
 ) -> str:
     """Produce a narrative-aware summary for a ranked ticker."""
 
@@ -814,8 +844,9 @@ def build_summary(
             )
 
     narrative = narrative or {}
+    mixed = f" {disagreement_phrase}" if disagreement_phrase else ""
     if narrative.get("primary_narrative") and narrative.get("primary_narrative") != FALLBACK_NARRATIVE:
-        return build_narrative_summary(
+        text = build_narrative_summary(
             aggregate.ticker,
             narrative,
             attention_phrase=accel_phrase,
@@ -823,12 +854,13 @@ def build_summary(
             market_phrase=market_phrase,
             street_phrase=street_phrase,
         )
+        return f"{text}{mixed}".strip()
 
     catalyst = catalyst_type or aggregate.dominant_post_type or "Other"
     driver = "earnings and guidance" if catalyst == "Earnings" else f"{catalyst.lower()} discussion"
     return (
         f"{aggregate.ticker} discussion {accel_phrase} as users focused on {driver}, {quality_phrase}. "
-        f"{market_phrase}{street_phrase}"
+        f"{market_phrase}{street_phrase}{mixed}"
     ).strip()
 
 
@@ -856,6 +888,312 @@ def _mentions_series_for_ticker(
     return series
 
 
+def _build_result_row(
+    ticker: str,
+    aggregate: TickerAggregate,
+    market_data: MarketData,
+    *,
+    generated_at: str,
+    baselines: dict[str, dict[str, float]],
+    history_snapshots: list[tuple[str, list[dict[str, Any]]]] | None,
+) -> dict[str, Any]:
+    """Build a full scanner result row before hard-filtering and ranking."""
+
+    baseline = baselines.get(ticker, {})
+    seven_day_avg_mentions = float(baseline.get("seven_day_avg_mentions", 0.0) or 0.0)
+    mentions_7d = (
+        _mentions_series_for_ticker(ticker, history_snapshots, aggregate.mention_count)
+        if history_snapshots
+        else None
+    )
+    details = risk_details(market_data)
+    risk_flag = str(details["risk_flag"])
+    spam_metrics = analyze_spam(aggregate)
+    breakdown = score_breakdown(
+        aggregate,
+        market_data,
+        baseline,
+        mentions_7d=mentions_7d,
+        spam_metrics=spam_metrics,
+    )
+    attention_acceleration = float(
+        breakdown.get("attention_acceleration")
+        or (aggregate.mention_count / max(seven_day_avg_mentions, 1))
+    )
+    market_score = float(breakdown["market_confirmation_score"])
+    spread_score = float(breakdown["subreddit_spread_score"])
+    subreddit_metrics = compute_subreddit_metrics(aggregate.sources)
+    disagreement = analyze_disagreement(aggregate)
+    narrative = extract_ticker_narrative(
+        ticker,
+        aggregate.sources,
+        post_types=aggregate.post_types,
+        unique_subreddits=aggregate.unique_subreddits,
+    )
+    discussion_quality = discussion_quality_score(
+        aggregate,
+        subreddit_metrics=subreddit_metrics,
+        narrative_confidence_score=float(narrative.get("narrative_confidence_score") or 0.0),
+    )
+    pump = pump_risk_details(
+        aggregate,
+        market_data,
+        market_score,
+        discussion_quality,
+        spam_metrics=spam_metrics,
+    )
+    analyst_target = analyst_target_score(aggregate)
+    catalyst_confidence = catalyst_confidence_score(aggregate)
+    unique_users = unique_users_score(aggregate)
+    confidence_score = signal_confidence_score(
+        subreddit_spread=spread_score,
+        discussion_quality=discussion_quality,
+        analyst_target=analyst_target,
+        market_confirmation=market_score,
+        pump_risk=pump["pump_risk_score"],
+        unique_users=unique_users,
+        catalyst_confidence=catalyst_confidence,
+        narrative_confidence_score=float(narrative.get("narrative_confidence_score") or 0.0),
+        disagreement_score=float(disagreement.get("disagreement_score") or 0.0),
+        spam_composite_score=float(spam_metrics.get("spam_composite_score") or 0.0),
+    )
+    confidence_label = signal_confidence_label(confidence_score)
+    recommendation = recommendation_type(
+        breakdown["final_score"],
+        pump["pump_risk_score"],
+        attention_acceleration,
+        aggregate.dominant_post_type,
+        market_score,
+        aggregate.bullish_conviction_score,
+        bearish_score=aggregate.bearish_conviction_score,
+        avg_sentiment=aggregate.avg_sentiment,
+        discussion_quality=discussion_quality,
+        analyst_target=analyst_target,
+        catalyst_confidence=catalyst_confidence,
+        acceleration_score=float(breakdown["attention_acceleration_score"]),
+        has_ai=aggregate_has_ai_catalyst(aggregate),
+        hype_count=aggregate.hype_count,
+        latest_price=market_data.latest_price,
+        avg_volume=market_data.avg_volume,
+    )
+    top_sources = sorted(
+        aggregate.sources,
+        key=lambda source: (float(source.get("recency_weight") or 0), int(source.get("score") or 0)),
+        reverse=True,
+    )[:3]
+    top_sources = [
+        {
+            "subreddit": source.get("subreddit"),
+            "title": source.get("title"),
+            "permalink": source.get("permalink"),
+            "created_utc": source.get("created_utc"),
+            "recency_weight": source.get("recency_weight"),
+            "post_type": source.get("post_type"),
+        }
+        for source in top_sources
+    ]
+
+    if history_snapshots:
+        historical_trends = build_historical_trends(
+            ticker,
+            history_snapshots,
+            current_mentions=float(aggregate.mention_count),
+            current_sentiment=float(aggregate.avg_sentiment),
+            current_score=float(breakdown["final_score"]),
+            current_analyst_target=float(analyst_target),
+        )
+    else:
+        historical_trends = {
+            "mentions_7d": [0.0] * 6 + [float(aggregate.mention_count)],
+            "sentiment_7d": [0.0] * 6 + [float(aggregate.avg_sentiment)],
+            "score_7d": [0.0] * 6 + [float(breakdown["final_score"])],
+            "analyst_target_upside_7d": [0.0] * 6 + [float(analyst_target)],
+        }
+    sparklines = build_sparkline_payload(historical_trends)
+    catalyst_type = catalyst_type_label(aggregate.dominant_post_type, catalyst_confidence)
+    disagreement_phrase = disagreement_summary_phrase(
+        consensus_label=str(disagreement.get("consensus_label") or ""),
+        bullish_claims=narrative.get("bullish_claims"),
+        bearish_claims=narrative.get("bearish_claims"),
+        bullish_themes=narrative.get("bullish_themes"),
+        bearish_themes=narrative.get("bearish_themes"),
+    )
+    price = market_data.latest_price
+    under_15 = price is not None and float(price) < 15
+
+    row: dict[str, Any] = {
+        "ticker": ticker,
+        "final_score": breakdown["final_score"],
+        "signal_confidence_score": confidence_score,
+        "signal_confidence_label": confidence_label,
+        "recommendation_type": recommendation,
+        "discussion_quality_score": discussion_quality,
+        "analyst_target_score": analyst_target,
+        "catalyst_confidence_score": catalyst_confidence,
+        "unique_users_score": unique_users,
+        "unique_users": aggregate.unique_users,
+        "catalyst_type": catalyst_type,
+        "subreddit_groups_detected": subreddit_metrics.get("subreddit_groups_detected", []),
+        "top_signal_subreddits": subreddit_metrics.get("top_signal_subreddits", []),
+        "noisy_subreddit_exposure": subreddit_metrics.get("noisy_subreddit_exposure", 0.0),
+        "subreddit_weighted_score": subreddit_metrics.get("subreddit_weighted_score", 0.0),
+        "duplicate_content_score": spam_metrics.get("duplicate_content_score"),
+        "spam_cluster_score": spam_metrics.get("spam_cluster_score"),
+        "repeated_ticker_score": spam_metrics.get("repeated_ticker_score"),
+        "spam_risk_explanation": spam_metrics.get("spam_risk_explanation"),
+        "bullish_evidence_count": disagreement.get("bullish_evidence_count"),
+        "bearish_evidence_count": disagreement.get("bearish_evidence_count"),
+        "disagreement_score": disagreement.get("disagreement_score"),
+        "consensus_label": disagreement.get("consensus_label"),
+        "primary_narrative": narrative.get("primary_narrative"),
+        "primary_claim": narrative.get("primary_claim"),
+        "bullish_themes": narrative.get("bullish_themes", []),
+        "bearish_themes": narrative.get("bearish_themes", []),
+        "neutral_themes": narrative.get("neutral_themes", []),
+        "bullish_claims": narrative.get("bullish_claims", []),
+        "bearish_claims": narrative.get("bearish_claims", []),
+        "claims": narrative.get("claims", []),
+        "ma_direction": narrative.get("ma_direction"),
+        "narrative_confidence": narrative.get("narrative_confidence"),
+        "narrative_confidence_score": narrative.get("narrative_confidence_score"),
+        "narrative_keywords": narrative.get("narrative_keywords", []),
+        "narrative_sources_count": narrative.get("narrative_sources_count", 0),
+        "evidence_snippets": narrative.get("evidence_snippets", []),
+        "evidence_source_titles": narrative.get("evidence_source_titles", []),
+        "evidence_subreddits": narrative.get("evidence_subreddits", []),
+        "historical_trends": historical_trends,
+        "sparklines": sparklines,
+        "trend_dates": [day for day, _rows in history_snapshots] if history_snapshots else [],
+        "risk_flag": risk_flag,
+        "risk_explanation": pump["risk_explanation"],
+        "mention_count": aggregate.mention_count,
+        "weighted_mention_count": round(aggregate.weighted_mention_count, 2),
+        "unique_posts": aggregate.unique_posts,
+        "unique_subreddits": aggregate.unique_subreddits,
+        "weighted_unique_posts": round(aggregate.weighted_unique_posts, 2),
+        "seven_day_avg_mentions": round(seven_day_avg_mentions, 4),
+        "attention_acceleration": round(attention_acceleration, 4),
+        "avg_sentiment": aggregate.avg_sentiment,
+        "bullish_conviction_score": aggregate.bullish_conviction_score,
+        "bearish_conviction_score": aggregate.bearish_conviction_score,
+        "net_conviction_score": aggregate.net_conviction_score,
+        "market_confirmation_score": market_score,
+        "pump_risk_score": pump["pump_risk_score"],
+        "latest_price": market_data.latest_price,
+        "price_at_signal": market_data.latest_price,
+        "signal_score_at_signal": breakdown["final_score"],
+        "under_15_flag": under_15,
+        "market_cap": market_data.market_cap,
+        "avg_volume": market_data.avg_volume,
+        "one_day_return": market_data.one_day_return,
+        "five_day_return": market_data.five_day_return,
+        "relative_volume": market_data.relative_volume,
+        "above_20_day_high": market_data.above_20_day_high,
+        "analyst_target_mean": market_data.analyst_target_mean,
+        "analyst_target_high": market_data.analyst_target_high,
+        "analyst_target_low": market_data.analyst_target_low,
+        "analyst_target_upside_pct": market_data.analyst_target_upside_pct,
+        "dominant_post_type": aggregate.dominant_post_type,
+        "subreddit_spread_score": spread_score,
+        "signal_summaries": build_signal_summaries(
+            attention_acceleration_score=float(breakdown["attention_acceleration_score"]),
+            discussion_quality=discussion_quality,
+            market_confirmation=market_score,
+            pump_risk=pump["pump_risk_score"],
+            analyst_target_upside_pct=market_data.analyst_target_upside_pct,
+            reddit_analyst_language=analyst_target,
+        ),
+        "post_type_weight_avg": aggregate.post_type_weight_avg,
+        "risk_reasons": details["risk_reasons"],
+        "risk_thresholds": details["risk_thresholds"],
+        "score_breakdown": breakdown,
+        "summary": build_summary(
+            aggregate,
+            recommendation,
+            attention_acceleration,
+            pump["pump_risk_score"],
+            catalyst_type=catalyst_type,
+            discussion_quality=discussion_quality,
+            market_score=market_score,
+            analyst_target_upside_pct=market_data.analyst_target_upside_pct,
+            has_ai=aggregate_has_ai_catalyst(aggregate),
+            narrative=narrative,
+            disagreement_phrase=disagreement_phrase,
+        ),
+        "top_sources": top_sources,
+        "generated_at": generated_at,
+        "excluded": False,
+        "exclusion_reason": None,
+    }
+    watch_reason, caution_reason = build_watch_reasons(row)
+    row["watch_reason"] = watch_reason
+    row["caution_reason"] = caution_reason
+    alert_payload = generate_alerts(row, history_snapshots=history_snapshots)
+    row["alerts"] = alert_payload.get("alerts", [])
+    row["alert_level"] = alert_payload.get("alert_level", "NONE")
+    return row
+
+
+def rank_tickers_with_exclusions(
+    aggregates: dict[str, TickerAggregate],
+    market_data_by_ticker: dict[str, MarketData],
+    limit: int = 15,
+    generated_at: str | None = None,
+    baselines: dict[str, dict[str, float]] | None = None,
+    history_snapshots: list[tuple[str, list[dict[str, Any]]]] | None = None,
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Rank tickers and return (ranked_rows, excluded_rows)."""
+
+    generated_at = generated_at or datetime.now(timezone.utc).isoformat()
+    baselines = baselines or {}
+    candidates: list[dict[str, Any]] = []
+    excluded: list[dict[str, Any]] = []
+
+    for ticker, aggregate in aggregates.items():
+        market_data = market_data_by_ticker.get(ticker, MarketData(valid=False))
+        if not market_data.valid:
+            excluded.append(
+                {
+                    "ticker": ticker,
+                    "excluded": True,
+                    "exclusion_reason": "Invalid or missing market data.",
+                    "generated_at": generated_at,
+                }
+            )
+            continue
+
+        row = _build_result_row(
+            ticker,
+            aggregate,
+            market_data,
+            generated_at=generated_at,
+            baselines=baselines,
+            history_snapshots=history_snapshots,
+        )
+        spam_metrics = {
+            "spam_cluster_score": row.get("spam_cluster_score"),
+        }
+        should_exclude, reason = evaluate_hard_filter(
+            ticker,
+            aggregate,
+            market_data,
+            spam_metrics=spam_metrics,
+            pump_risk_score=float(row.get("pump_risk_score") or 0),
+        )
+        if should_exclude:
+            row["excluded"] = True
+            row["exclusion_reason"] = reason
+            excluded.append(row)
+            continue
+        candidates.append(row)
+
+    candidates.sort(key=lambda item: float(item.get("final_score") or 0), reverse=True)
+    ranked = apply_peer_context(candidates[:limit])
+    for rank, row in enumerate(ranked, start=1):
+        row["rank"] = rank
+    return ranked, excluded
+
+
 def rank_tickers(
     aggregates: dict[str, TickerAggregate],
     market_data_by_ticker: dict[str, MarketData],
@@ -866,207 +1204,12 @@ def rank_tickers(
 ) -> list[dict[str, Any]]:
     """Rank valid tickers and return JSON-serializable result rows."""
 
-    generated_at = generated_at or datetime.now(timezone.utc).isoformat()
-    baselines = baselines or {}
-    rows: list[dict[str, Any]] = []
-
-    for ticker, aggregate in aggregates.items():
-        market_data = market_data_by_ticker.get(ticker, MarketData(valid=False))
-        if not market_data.valid:
-            continue
-
-        baseline = baselines.get(ticker, {})
-        seven_day_avg_mentions = float(baseline.get("seven_day_avg_mentions", 0.0) or 0.0)
-        mentions_7d = (
-            _mentions_series_for_ticker(ticker, history_snapshots, aggregate.mention_count)
-            if history_snapshots
-            else None
-        )
-        details = risk_details(market_data)
-        risk_flag = str(details["risk_flag"])
-        breakdown = score_breakdown(aggregate, market_data, baseline, mentions_7d=mentions_7d)
-        attention_acceleration = float(
-            breakdown.get("attention_acceleration")
-            or (aggregate.mention_count / max(seven_day_avg_mentions, 1))
-        )
-        market_score = float(breakdown["market_confirmation_score"])
-        spread_score = float(breakdown["subreddit_spread_score"])
-        subreddit_metrics = compute_subreddit_metrics(aggregate.sources)
-        narrative = extract_ticker_narrative(
-            ticker,
-            aggregate.sources,
-            post_types=aggregate.post_types,
-            unique_subreddits=aggregate.unique_subreddits,
-        )
-        discussion_quality = discussion_quality_score(
-            aggregate,
-            subreddit_metrics=subreddit_metrics,
-            narrative_confidence_score=float(narrative.get("narrative_confidence_score") or 0.0),
-        )
-        pump = pump_risk_details(aggregate, market_data, market_score, discussion_quality)
-        analyst_target = analyst_target_score(aggregate)
-        catalyst_confidence = catalyst_confidence_score(aggregate)
-        unique_users = unique_users_score(aggregate)
-        confidence_score = signal_confidence_score(
-            subreddit_spread=spread_score,
-            discussion_quality=discussion_quality,
-            analyst_target=analyst_target,
-            market_confirmation=market_score,
-            pump_risk=pump["pump_risk_score"],
-            unique_users=unique_users,
-            catalyst_confidence=catalyst_confidence,
-            narrative_confidence_score=float(narrative.get("narrative_confidence_score") or 0.0),
-        )
-        confidence_label = signal_confidence_label(confidence_score)
-        recommendation = recommendation_type(
-            breakdown["final_score"],
-            pump["pump_risk_score"],
-            attention_acceleration,
-            aggregate.dominant_post_type,
-            market_score,
-            aggregate.bullish_conviction_score,
-            bearish_score=aggregate.bearish_conviction_score,
-            avg_sentiment=aggregate.avg_sentiment,
-            discussion_quality=discussion_quality,
-            analyst_target=analyst_target,
-            catalyst_confidence=catalyst_confidence,
-            acceleration_score=float(breakdown["attention_acceleration_score"]),
-            has_ai=aggregate_has_ai_catalyst(aggregate),
-            hype_count=aggregate.hype_count,
-            latest_price=market_data.latest_price,
-            avg_volume=market_data.avg_volume,
-        )
-        top_sources = sorted(
-            aggregate.sources,
-            key=lambda source: (float(source.get("recency_weight") or 0), int(source.get("score") or 0)),
-            reverse=True,
-        )[:3]
-        top_sources = [
-            {
-                "subreddit": source.get("subreddit"),
-                "title": source.get("title"),
-                "permalink": source.get("permalink"),
-                "created_utc": source.get("created_utc"),
-                "recency_weight": source.get("recency_weight"),
-                "post_type": source.get("post_type"),
-            }
-            for source in top_sources
-        ]
-
-        if history_snapshots:
-            historical_trends = build_historical_trends(
-                ticker,
-                history_snapshots,
-                current_mentions=float(aggregate.mention_count),
-                current_sentiment=float(aggregate.avg_sentiment),
-                current_score=float(breakdown["final_score"]),
-                current_analyst_target=float(analyst_target),
-            )
-        else:
-            historical_trends = {
-                "mentions_7d": [0.0] * 6 + [float(aggregate.mention_count)],
-                "sentiment_7d": [0.0] * 6 + [float(aggregate.avg_sentiment)],
-                "score_7d": [0.0] * 6 + [float(breakdown["final_score"])],
-                "analyst_target_upside_7d": [0.0] * 6 + [float(analyst_target)],
-            }
-        sparklines = build_sparkline_payload(historical_trends)
-        catalyst_type = catalyst_type_label(aggregate.dominant_post_type, catalyst_confidence)
-
-        rows.append(
-            {
-                "ticker": ticker,
-                "final_score": breakdown["final_score"],
-                "signal_confidence_score": confidence_score,
-                "signal_confidence_label": confidence_label,
-                "recommendation_type": recommendation,
-                "discussion_quality_score": discussion_quality,
-                "analyst_target_score": analyst_target,
-                "catalyst_confidence_score": catalyst_confidence,
-                "unique_users_score": unique_users,
-                "unique_users": aggregate.unique_users,
-                "catalyst_type": catalyst_type,
-                "subreddit_groups_detected": subreddit_metrics.get("subreddit_groups_detected", []),
-                "top_signal_subreddits": subreddit_metrics.get("top_signal_subreddits", []),
-                "noisy_subreddit_exposure": subreddit_metrics.get("noisy_subreddit_exposure", 0.0),
-                "subreddit_weighted_score": subreddit_metrics.get("subreddit_weighted_score", 0.0),
-                "primary_narrative": narrative.get("primary_narrative"),
-                "primary_claim": narrative.get("primary_claim"),
-                "bullish_themes": narrative.get("bullish_themes", []),
-                "bearish_themes": narrative.get("bearish_themes", []),
-                "neutral_themes": narrative.get("neutral_themes", []),
-                "bullish_claims": narrative.get("bullish_claims", []),
-                "bearish_claims": narrative.get("bearish_claims", []),
-                "claims": narrative.get("claims", []),
-                "ma_direction": narrative.get("ma_direction"),
-                "narrative_confidence": narrative.get("narrative_confidence"),
-                "narrative_confidence_score": narrative.get("narrative_confidence_score"),
-                "narrative_keywords": narrative.get("narrative_keywords", []),
-                "narrative_sources_count": narrative.get("narrative_sources_count", 0),
-                "evidence_snippets": narrative.get("evidence_snippets", []),
-                "evidence_source_titles": narrative.get("evidence_source_titles", []),
-                "evidence_subreddits": narrative.get("evidence_subreddits", []),
-                "historical_trends": historical_trends,
-                "sparklines": sparklines,
-                "trend_dates": [day for day, _rows in history_snapshots] if history_snapshots else [],
-                "risk_flag": risk_flag,
-                "risk_explanation": pump["risk_explanation"],
-                "mention_count": aggregate.mention_count,
-                "weighted_mention_count": round(aggregate.weighted_mention_count, 2),
-                "unique_posts": aggregate.unique_posts,
-                "unique_subreddits": aggregate.unique_subreddits,
-                "weighted_unique_posts": round(aggregate.weighted_unique_posts, 2),
-                "seven_day_avg_mentions": round(seven_day_avg_mentions, 4),
-                "attention_acceleration": round(attention_acceleration, 4),
-                "avg_sentiment": aggregate.avg_sentiment,
-                "bullish_conviction_score": aggregate.bullish_conviction_score,
-                "bearish_conviction_score": aggregate.bearish_conviction_score,
-                "net_conviction_score": aggregate.net_conviction_score,
-                "market_confirmation_score": market_score,
-                "pump_risk_score": pump["pump_risk_score"],
-                "latest_price": market_data.latest_price,
-                "market_cap": market_data.market_cap,
-                "avg_volume": market_data.avg_volume,
-                "one_day_return": market_data.one_day_return,
-                "five_day_return": market_data.five_day_return,
-                "relative_volume": market_data.relative_volume,
-                "above_20_day_high": market_data.above_20_day_high,
-                "analyst_target_mean": market_data.analyst_target_mean,
-                "analyst_target_high": market_data.analyst_target_high,
-                "analyst_target_low": market_data.analyst_target_low,
-                "analyst_target_upside_pct": market_data.analyst_target_upside_pct,
-                "dominant_post_type": aggregate.dominant_post_type,
-                "subreddit_spread_score": spread_score,
-                "signal_summaries": build_signal_summaries(
-                    attention_acceleration_score=float(breakdown["attention_acceleration_score"]),
-                    discussion_quality=discussion_quality,
-                    market_confirmation=market_score,
-                    pump_risk=pump["pump_risk_score"],
-                    analyst_target_upside_pct=market_data.analyst_target_upside_pct,
-                    reddit_analyst_language=analyst_target,
-                ),
-                "post_type_weight_avg": aggregate.post_type_weight_avg,
-                "risk_reasons": details["risk_reasons"],
-                "risk_thresholds": details["risk_thresholds"],
-                "score_breakdown": breakdown,
-                "summary": build_summary(
-                    aggregate,
-                    recommendation,
-                    attention_acceleration,
-                    pump["pump_risk_score"],
-                    catalyst_type=catalyst_type,
-                    discussion_quality=discussion_quality,
-                    market_score=market_score,
-                    analyst_target_upside_pct=market_data.analyst_target_upside_pct,
-                    has_ai=aggregate_has_ai_catalyst(aggregate),
-                    narrative=narrative,
-                ),
-                "top_sources": top_sources,
-                "generated_at": generated_at,
-            }
-        )
-
-    rows.sort(key=lambda row: row["final_score"], reverse=True)
-    for rank, row in enumerate(rows[:limit], start=1):
-        row["rank"] = rank
-
-    return rows[:limit]
+    ranked, _excluded = rank_tickers_with_exclusions(
+        aggregates,
+        market_data_by_ticker,
+        limit=limit,
+        generated_at=generated_at,
+        baselines=baselines,
+        history_snapshots=history_snapshots,
+    )
+    return ranked

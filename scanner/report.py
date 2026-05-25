@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from html import escape
 from pathlib import Path
 from typing import Any
@@ -399,6 +400,59 @@ def _evidence_html(row: dict[str, Any]) -> str:
       """
 
 
+def _alerts_html(row: dict[str, Any]) -> str:
+    alerts = row.get("alerts") or []
+    level = str(row.get("alert_level") or "NONE")
+    if not alerts or level == "NONE":
+        return ""
+    items = "".join(f"<span class='alert-chip'>{escape(str(alert))}</span>" for alert in alerts[:3])
+    return f'<div class="alert-row" data-level="{escape(level)}">{items}</div>'
+
+
+def _watch_context_html(row: dict[str, Any]) -> str:
+    watch = escape(str(row.get("watch_reason") or ""))
+    caution = escape(str(row.get("caution_reason") or ""))
+    peer = row.get("peer_context_summary")
+    consensus = escape(str(row.get("consensus_label") or ""))
+    peer_html = ""
+    if peer:
+        peer_html = f'<p class="peer-context"><strong>Peer context:</strong> {escape(str(peer))}</p>'
+    return f"""
+      <div class="watch-context">
+        <p><strong>Watch reason:</strong> {watch}</p>
+        <p class="caution-line"><strong>Caution:</strong> {caution}</p>
+        {f'<p class="consensus-line"><strong>Consensus:</strong> {consensus}</p>' if consensus else ''}
+        {peer_html}
+      </div>
+    """
+
+
+def _backtest_summary_html(summary: dict[str, Any] | None) -> str:
+    if not summary:
+        return ""
+    message = escape(str(summary.get("message") or ""))
+    completed = summary.get("total_completed_signals", 0)
+    pending = summary.get("total_pending_signals", 0)
+    avg7 = summary.get("avg_7d_return")
+    win7 = summary.get("win_rate_7d")
+    avg7_text = _format_percent(avg7, signed=True) if avg7 is not None else "n/a"
+    win7_text = _format_percent(win7) if win7 is not None else "n/a"
+    return f"""
+      <section class="backtest-panel">
+        <h2>Forward backtest (building history)</h2>
+        <p class="section-subtitle">
+          Completed signals: {escape(str(completed))} · Pending: {escape(str(pending))} ·
+          Avg 7D return: {escape(avg7_text)} · 7D win rate: {escape(win7_text)}
+        </p>
+        {f'<p class="muted">{message}</p>' if message else ''}
+        <details class="nested-details">
+          <summary>Backtest breakdown</summary>
+          <pre class="backtest-json">{escape(json.dumps(summary, indent=2)[:4000])}</pre>
+        </details>
+      </section>
+    """
+
+
 def _narrative_html(row: dict[str, Any]) -> str:
     primary = escape(format_narrative(row))
     bullish = _claims_list_html(
@@ -540,7 +594,9 @@ def _card_html(row: dict[str, Any], *, price_chip: str | None = None) -> str:
         </div>
 
         <p class="meta-line">{_meta_line(row)}</p>
+        {_alerts_html(row)}
         <div class="analyst-row">{_analyst_target_html(row)}</div>
+        {_watch_context_html(row)}
         <p class="summary">{summary}</p>
         {_narrative_html(row)}
 
@@ -599,10 +655,15 @@ def _section_html(
     """
 
 
-def render_results_html(results: list[dict[str, Any]]) -> str:
+def render_results_html(
+    results: list[dict[str, Any]],
+    *,
+    backtest_summary: dict[str, Any] | None = None,
+) -> str:
     """Render ranked scanner results as a polished market-intelligence dashboard."""
 
     generated_at = results[0].get("generated_at") if results else "No scan results yet"
+    backtest_section = _backtest_summary_html(backtest_summary)
     general_rows = get_general_signals(results)
     small_rows = get_small_stock_signals(results)
     general_section = _section_html(
@@ -817,6 +878,48 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
       font-size: 14px;
       color: var(--muted);
     }}
+    .watch-context {{
+      margin: 0 0 14px;
+      font-size: 14px;
+      line-height: 1.55;
+    }}
+    .watch-context p {{ margin: 0 0 6px; }}
+    .caution-line {{ color: var(--muted); }}
+    .consensus-line, .peer-context {{ color: var(--muted); font-size: 13px; }}
+    .alert-row {{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }}
+    .alert-chip {{
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+    }}
+    .alert-row[data-level="HIGH"] .alert-chip {{
+      color: var(--accent);
+      border-color: var(--accent-soft);
+      background: var(--accent-soft);
+    }}
+    .backtest-panel {{
+      margin-bottom: 36px;
+      padding: 18px 20px;
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--line);
+    }}
+    .backtest-panel h2 {{ margin: 0 0 8px; font-size: 20px; }}
+    .backtest-json {{
+      font-size: 12px;
+      overflow-x: auto;
+      color: var(--muted);
+      white-space: pre-wrap;
+    }}
     .signal-panel {{
       display: grid;
       gap: 8px;
@@ -932,6 +1035,7 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
       </div>
       <p class="disclaimer">Research/watchlist tool only. Not financial advice.</p>
     </header>
+    {backtest_section}
     {general_section}
     {small_section}
   </main>
@@ -940,9 +1044,16 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
 """
 
 
-def write_html_reports(results: list[dict[str, Any]], output_path: Path, history_dir: Path, run_date: str) -> None:
+def write_html_reports(
+    results: list[dict[str, Any]],
+    output_path: Path,
+    history_dir: Path,
+    run_date: str,
+    *,
+    backtest_summary: dict[str, Any] | None = None,
+) -> None:
     """Write current and historical HTML reports next to JSON outputs."""
 
-    html = render_results_html(results)
+    html = render_results_html(results, backtest_summary=backtest_summary)
     output_path.with_suffix(".html").write_text(html, encoding="utf-8")
     (history_dir / f"{run_date}.html").write_text(html, encoding="utf-8")
