@@ -1145,7 +1145,7 @@ def _build_result_row(
 def rank_tickers_with_exclusions(
     aggregates: dict[str, TickerAggregate],
     market_data_by_ticker: dict[str, MarketData],
-    limit: int = 15,
+    limit: int = 50,
     generated_at: str | None = None,
     baselines: dict[str, dict[str, float]] | None = None,
     history_snapshots: list[tuple[str, list[dict[str, Any]]]] | None = None,
@@ -1205,7 +1205,7 @@ def rank_tickers_with_exclusions(
 def rank_tickers(
     aggregates: dict[str, TickerAggregate],
     market_data_by_ticker: dict[str, MarketData],
-    limit: int = 15,
+    limit: int = 50,
     generated_at: str | None = None,
     baselines: dict[str, dict[str, float]] | None = None,
     history_snapshots: list[tuple[str, list[dict[str, Any]]]] | None = None,

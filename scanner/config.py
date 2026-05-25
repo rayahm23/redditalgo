@@ -67,6 +67,7 @@ class ScannerConfig:
     subreddits: tuple[str, ...] = SUBREDDITS
     posts_per_listing: int = 28
     top_comments_per_post: int = 8
+    ranked_output_limit: int = 50
     output_path: Path = Path("data/daily_results.json")
     history_dir: Path = Path("data/history")
     excluded_path: Path = Path("data/excluded_signals.json")
@@ -79,6 +80,8 @@ class ScannerConfig:
         """Load .env values for local runs and return a config object."""
 
         load_dotenv()
+        ranked_limit_raw = os.getenv("RANKED_OUTPUT_LIMIT")
+        ranked_output_limit = int(ranked_limit_raw) if ranked_limit_raw else 50
         return cls(
             reddit_client_id=os.getenv("REDDIT_CLIENT_ID"),
             reddit_client_secret=os.getenv("REDDIT_CLIENT_SECRET"),
@@ -87,6 +90,7 @@ class ScannerConfig:
             apify_token=os.getenv("APIFY_TOKEN"),
             apify_actor_id=os.getenv("APIFY_ACTOR_ID"),
             apify_input_json=os.getenv("APIFY_INPUT_JSON"),
+            ranked_output_limit=ranked_output_limit,
         )
 
     @property

@@ -49,7 +49,7 @@ REDDIT_USER_AGENT=reddit-alpha-scanner/0.1 by your_reddit_username
 
 ## Output
 
-The top 15 ranked tickers are written to:
+The top 50 ranked tickers (configurable via `ranked_output_limit` / `RANKED_OUTPUT_LIMIT`) are written to:
 
 - `data/daily_results.json`
 - `data/daily_results.html`
