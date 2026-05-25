@@ -165,6 +165,7 @@ def test_build_narrative_summary_uses_claims():
         },
         "bullish_claims": [{"short_label": "AI lending automation"}],
         "bearish_claims": [{"short_label": "valuation concern after rally"}],
+        "mna_detected": True,
         "ma_direction": "unclear",
     }
     text = build_narrative_summary(
