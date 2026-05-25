@@ -66,9 +66,15 @@ def _sample_row() -> dict:
                 "post_type": "Earnings",
             }
         ],
-        "primary_narrative": "Discussion focused on AMD's AI datacenter demand and earnings optimism.",
-        "bullish_themes": ["AI datacenter demand", "earnings optimism"],
-        "bearish_themes": ["valuation concerns"],
+        "primary_narrative": "Users linked AMD to AI accelerator demand and enterprise GPU adoption.",
+        "primary_claim": {
+            "claim_text": "Users linked AMD to AI accelerator demand and enterprise GPU adoption.",
+            "short_label": "AI GPU / datacenter demand",
+        },
+        "bullish_themes": ["AI GPU / datacenter demand", "earnings beat / guidance raise"],
+        "bearish_themes": ["valuation concern after rally"],
+        "bullish_claims": [{"short_label": "AI GPU / datacenter demand"}],
+        "evidence_snippets": ["AMD AI datacenter GPU demand accelerating"],
         "narrative_keywords": ["earnings", "datacenter"],
         "generated_at": "2026-05-24T20:00:00+00:00",
     }
@@ -80,7 +86,8 @@ def test_render_results_html_polished_dashboard_layout():
     assert "General Signals" in html
     assert "Small Stocks Under $15" in html
     assert "Discussion Summary" in html
-    assert "Primary Narrative" in html
+    assert "Primary Claim" in html
+    assert "Bullish Claims" in html
     assert "Narrative keywords" not in html
     assert "AMD" in html
     assert "68" in html

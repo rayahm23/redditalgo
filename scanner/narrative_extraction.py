@@ -1,9 +1,9 @@
-"""Rule-based Reddit discussion narrative extraction per ticker."""
+"""Rule-based Reddit discussion narrative and claim extraction per ticker."""
 
 from __future__ import annotations
 
 import re
-from collections import Counter
+from collections import Counter, defaultdict
 from typing import Any
 
 FALLBACK_NARRATIVE = "Discussion was too limited or scattered to identify a clear narrative."
@@ -26,216 +26,207 @@ KNOWN_FINANCE_PHRASES: tuple[str, ...] = (
     "earnings guidance",
     "ai demand",
     "data center",
-    "data center growth",
     "short squeeze",
     "short interest",
-    "market share",
     "revenue growth",
     "analyst upgrade",
     "analyst downgrade",
-    "operating leverage",
     "price target",
-    "enterprise demand",
-    "gross margin",
-    "multiple expansion",
-    "relative strength",
-    "earnings beat",
-    "guidance raise",
-    "earnings optimism",
-    "enterprise ai",
-    "ai datacenter",
-    "ai growth",
-    "cash flow",
-    "operating margin",
-    "top line growth",
-    "fda approval",
-    "insider buying",
-    "insider selling",
-    "technical breakout",
-    "dilution risk",
-    "bankruptcy risk",
+    "loan growth",
+    "ai lending",
 )
 
 FINANCE_PHRASE_BOOST = 3
 
-PHRASE_CLUSTERS: tuple[dict[str, Any], ...] = (
-    {
-        "canonical": "AI/datacenter demand",
-        "patterns": (
-            "ai demand", "ai growth", "ai datacenter", "enterprise ai",
-            "data center", "data center growth", "datacenter", "gpu demand",
-            "generative ai", "inference demand",
-        ),
-    },
-    {
-        "canonical": "Earnings optimism",
-        "patterns": (
-            "earnings beat", "guidance raise", "strong earnings", "earnings guidance",
-            "earnings optimism", "eps beat", "beat estimates", "record revenue",
-        ),
-    },
-    {
-        "canonical": "Margin / cash flow strength",
-        "patterns": (
-            "margin expansion", "free cash flow", "cash flow", "gross margin",
-            "operating leverage", "operating margin",
-        ),
-    },
-    {
-        "canonical": "Short squeeze / interest",
-        "patterns": (
-            "short squeeze", "short interest", "covering shorts", "squeeze setup",
-        ),
-    },
-    {
-        "canonical": "Valuation / multiple debate",
-        "patterns": (
-            "valuation concerns", "multiple expansion", "overvalued", "rich multiple",
-            "priced in", "too expensive",
-        ),
-    },
-    {
-        "canonical": "Analyst / price target",
-        "patterns": (
-            "analyst upgrade", "analyst downgrade", "price target", "target raised",
-            "target cut", "outperform", "underperform",
-        ),
-    },
-    {
-        "canonical": "Revenue / market share",
-        "patterns": (
-            "revenue growth", "market share", "top line growth", "sales growth",
-            "enterprise demand",
-        ),
-    },
-)
+_TOKEN_RE = re.compile(r"[a-z][a-z0-9'-]{1,}")
+_TICKER_RE = re.compile(r"\$?([A-Z]{1,5})\b")
 
-THEME_RULES: tuple[dict[str, Any], ...] = (
+# --- AI subthemes: specific patterns only (no catch-all datacenter on vague "ai") ---
+
+AI_SUBTHEME_RULES: tuple[dict[str, Any], ...] = (
     {
-        "label": "AI datacenter demand",
+        "id": "ai_datacenter_gpu",
+        "claim_type": "AI / infrastructure",
+        "short_label": "AI GPU / datacenter demand",
         "polarity": "bullish",
         "keywords": (
-            " ai ",
-            "artificial intelligence",
-            "datacenter",
-            "data center",
-            "gpu",
-            "inference",
-            "generative ai",
-            "llm",
-            "nvda",
-            "ai demand",
-            "enterprise ai",
+            "datacenter", "data center", "gpu", "accelerator", "inference chip",
+            "enterprise gpu", "ai chip", "hbm", "nvlink", "server gpu",
+        ),
+        "supporting_terms": ("AI chip demand", "datacenter GPU", "enterprise GPU adoption"),
+        "claim_template": "Users linked {ticker} to AI accelerator demand and enterprise/datacenter GPU adoption.",
+    },
+    {
+        "id": "ai_lending",
+        "claim_type": "AI / business model",
+        "short_label": "AI lending automation",
+        "polarity": "bullish",
+        "keywords": (
+            "ai lending", "lending automation", "loan approval", "underwriting ai",
+            "fintech ai", "automated lending", "credit decision",
+        ),
+        "supporting_terms": ("AI lending", "automation", "loan approvals"),
+        "claim_template": (
+            "Users discussed {ticker} as a potential beneficiary of AI-driven lending automation and fintech efficiency."
         ),
     },
     {
-        "label": "earnings optimism",
+        "id": "ai_software",
+        "claim_type": "AI / business model",
+        "short_label": "AI software monetization",
         "polarity": "bullish",
-        "keywords": ("earnings beat", "earnings", "eps beat", "beat estimates", "record revenue"),
+        "keywords": (
+            "ai software", "saas ai", "copilot", "ai monetization", "subscription ai",
+            "genai product", "ai platform revenue",
+        ),
+        "supporting_terms": ("AI software", "monetization", "platform revenue"),
+        "claim_template": "Users tied {ticker} to AI software monetization and product adoption.",
     },
     {
-        "label": "guidance strength",
+        "id": "ai_capex",
+        "claim_type": "AI / infrastructure",
+        "short_label": "AI capex beneficiary",
         "polarity": "bullish",
-        "keywords": ("guidance raise", "raised guidance", "strong guidance", "guidance upgrade", "earnings guidance"),
+        "keywords": (
+            "ai capex", "capex cycle", "infrastructure spend", "cloud capex",
+            "ai infrastructure", "buildout beneficiary",
+        ),
+        "supporting_terms": ("AI capex", "infrastructure spend"),
+        "claim_template": "Users framed {ticker} as an AI infrastructure or capex-cycle beneficiary.",
     },
     {
-        "label": "revenue growth",
+        "id": "ai_productivity",
+        "claim_type": "AI / business model",
+        "short_label": "AI productivity / cost savings",
         "polarity": "bullish",
-        "keywords": ("revenue growth", "top-line growth", "sales growth", "growing revenue", "market share"),
+        "keywords": (
+            "cost cutting ai", "productivity ai", "automation savings", "efficiency gains ai",
+            "ai automation", "operating efficiency ai",
+        ),
+        "supporting_terms": ("AI productivity", "cost savings", "automation"),
+        "claim_template": "Users discussed {ticker} in the context of AI-driven productivity or cost efficiency.",
     },
     {
-        "label": "margin expansion",
-        "polarity": "bullish",
-        "keywords": ("margin expansion", "margin improvement", "higher margins", "gross margin"),
-    },
-    {
-        "label": "free cash flow",
-        "polarity": "bullish",
-        "keywords": ("free cash flow", "fcf", "cash generation"),
-    },
-    {
-        "label": "short squeeze",
-        "polarity": "bullish",
-        "keywords": ("short squeeze", "squeeze", "short interest", "covering shorts"),
-    },
-    {
-        "label": "FDA / biotech catalyst",
-        "polarity": "bullish",
-        "keywords": ("fda approval", "fda", "phase 3", "clinical trial", "biotech", "drug approval"),
-    },
-    {
-        "label": "acquisition / M&A",
-        "polarity": "bullish",
-        "keywords": ("acquisition", "merger", "buyout", "takeover", "m&a"),
-    },
-    {
-        "label": "product launch",
-        "polarity": "bullish",
-        "keywords": ("product launch", "new product", "launch event", "rollout"),
-    },
-    {
-        "label": "insider buying",
-        "polarity": "bullish",
-        "keywords": ("insider buying", "insider buy", "director buy"),
-    },
-    {
-        "label": "technical breakout",
-        "polarity": "bullish",
-        "keywords": ("breakout", "above resistance", "new high", "52-week high", "relative strength"),
-    },
-    {
-        "label": "analyst upgrade",
-        "polarity": "bullish",
-        "keywords": ("upgrade", "price target raised", "outperform", "overweight", "buy rating", "analyst upgrade"),
-    },
-    {
-        "label": "options activity",
+        "id": "ai_hype_vague",
+        "claim_type": "AI / business model",
+        "short_label": "AI mentioned (impact unclear)",
         "polarity": "neutral",
-        "keywords": ("unusual options", "options flow", "call volume", "put volume", "open interest"),
-    },
-    {
-        "label": "macro / Fed",
-        "polarity": "neutral",
-        "keywords": ("fed", "interest rates", "cpi", "inflation", "macro", "treasury yields"),
-    },
-    {
-        "label": "valuation concerns",
-        "polarity": "bearish",
-        "keywords": ("overvalued", "valuation", "too expensive", "priced in", "rich multiple", "multiple expansion"),
-    },
-    {
-        "label": "NVDA competition",
-        "polarity": "bearish",
-        "keywords": ("nvda competition", "competition from nvda", "nvidia competition", "competitor"),
-    },
-    {
-        "label": "dilution risk",
-        "polarity": "bearish",
-        "keywords": ("dilution", "secondary offering", "share offering", "atm offering"),
-    },
-    {
-        "label": "bankruptcy risk",
-        "polarity": "bearish",
-        "keywords": ("bankruptcy", "going concern", "liquidity crisis", "default risk"),
-    },
-    {
-        "label": "analyst downgrade",
-        "polarity": "bearish",
-        "keywords": ("downgrade", "price target cut", "underperform", "underweight", "sell rating", "analyst downgrade"),
-    },
-    {
-        "label": "insider selling",
-        "polarity": "bearish",
-        "keywords": ("insider selling", "insider sell", "executive sale"),
-    },
-    {
-        "label": "regulatory / legal issue",
-        "polarity": "bearish",
-        "keywords": ("sec investigation", "lawsuit", "regulatory", "antitrust", "subpoena"),
+        "keywords": (" ai ", "artificial intelligence", " ai play", " ai story"),
+        "supporting_terms": ("AI",),
+        "claim_template": "AI was mentioned around {ticker}, but the specific business impact was unclear.",
+        "requires_no_specific": True,
     },
 )
 
-_TOKEN_RE = re.compile(r"[a-z][a-z0-9'-]{1,}")
+MA_BUYER_PATTERNS = (
+    "acquiring", "acquires", " buys ", " bought ", "acquisition of", "takeover of",
+    "purchasing", "deal to buy", "to acquire", "will acquire", "plans to acquire",
+)
+MA_TARGET_PATTERNS = (
+    "being acquired", "buyout target", "takeover target", "getting bought",
+    "could be bought", "acquisition target", "takeover bid", "buyout rumor",
+    "potential target", "sale target",
+)
+MA_MERGER_PATTERNS = (
+    "merging with", "merger with", "merger between", "merge with", "all-stock merger",
+)
+MA_CONFIRMED_PATTERNS = (
+    "announced acquisition", "definitive agreement", "deal closed", "completed acquisition",
+    "signed merger", "approved merger", "confirmed acquisition",
+)
+MA_VAGUE_PATTERNS = (
+    " m&a ", " merger ", " acquisition ", " takeover ", " buyout ", " deal rumors",
+)
+
+OTHER_CLAIM_RULES: tuple[dict[str, Any], ...] = (
+    {
+        "id": "earnings_beat_guidance",
+        "claim_type": "Earnings / guidance",
+        "short_label": "earnings beat / guidance raise",
+        "polarity": "bullish",
+        "keywords": ("earnings beat", "beat estimates", "guidance raise", "raised guidance", "eps beat"),
+        "supporting_terms": ("earnings beat", "guidance raise"),
+        "claim_template": "Users highlighted {ticker} after an earnings beat or guidance raise.",
+    },
+    {
+        "id": "margin_expansion_earnings",
+        "claim_type": "Earnings / margins",
+        "short_label": "margin expansion after earnings",
+        "polarity": "bullish",
+        "keywords": ("margin expansion", "margin improvement", "higher margins", "gross margin up"),
+        "supporting_terms": ("margin expansion", "earnings"),
+        "claim_template": "Discussion emphasized margin expansion for {ticker} following recent results.",
+    },
+    {
+        "id": "revenue_loan_growth",
+        "claim_type": "Growth",
+        "short_label": "consumer loan / revenue growth",
+        "polarity": "bullish",
+        "keywords": (
+            "loan growth", "origination growth", "revenue growth", "member growth",
+            "deposit growth", "top-line growth",
+        ),
+        "supporting_terms": ("loan growth", "revenue growth"),
+        "claim_template": "Users pointed to loan or revenue growth as a driver for {ticker}.",
+    },
+    {
+        "id": "short_squeeze",
+        "claim_type": "Short interest",
+        "short_label": "short squeeze setup",
+        "polarity": "bullish",
+        "keywords": ("short squeeze", "high short interest", "covering shorts", "si%"),
+        "supporting_terms": ("short squeeze", "short interest"),
+        "claim_template": "Users discussed {ticker} as a potential short-squeeze or high short-interest setup.",
+    },
+    {
+        "id": "valuation_concern",
+        "claim_type": "Valuation",
+        "short_label": "valuation concern after rally",
+        "polarity": "bearish",
+        "keywords": (
+            "overvalued", "too expensive", "valuation concern", "priced in", "rich multiple",
+            "after rally", "too far too fast",
+        ),
+        "supporting_terms": ("valuation", "overvalued"),
+        "claim_template": "Bearish comments questioned {ticker}'s valuation or how much is already priced in.",
+    },
+    {
+        "id": "dilution",
+        "claim_type": "Capital structure",
+        "short_label": "dilution concern",
+        "polarity": "bearish",
+        "keywords": ("dilution", "secondary offering", "share offering", "atm offering", "stock offering"),
+        "supporting_terms": ("dilution", "offering"),
+        "claim_template": "Users raised dilution or secondary offering concerns for {ticker}.",
+    },
+    {
+        "id": "execution_risk",
+        "claim_type": "Execution",
+        "short_label": "execution risk",
+        "polarity": "bearish",
+        "keywords": ("execution risk", "missed targets", "guidance cut", "lowered guidance", "earnings miss"),
+        "supporting_terms": ("execution", "guidance cut"),
+        "claim_template": "Comments flagged execution risk or disappointing guidance for {ticker}.",
+    },
+    {
+        "id": "analyst_upgrade",
+        "claim_type": "Analyst",
+        "short_label": "analyst target upside",
+        "polarity": "bullish",
+        "keywords": ("price target raised", "analyst upgrade", "outperform", "overweight", "buy rating"),
+        "supporting_terms": ("upgrade", "price target"),
+        "claim_template": "Users cited analyst upgrades or higher price targets for {ticker}.",
+    },
+    {
+        "id": "fda_biotech",
+        "claim_type": "FDA / biotech",
+        "short_label": "FDA / trial catalyst",
+        "polarity": "bullish",
+        "keywords": ("fda approval", "phase 3", "clinical trial", "pdufa", "trial data"),
+        "supporting_terms": ("FDA", "trial"),
+        "claim_template": "Discussion centered on FDA or clinical-trial catalysts for {ticker}.",
+    },
+)
 
 
 def _normalize_text(*parts: Any) -> str:
@@ -254,37 +245,13 @@ def _tokenize(text: str) -> list[str]:
     return tokens
 
 
-def _cluster_phrase(phrase: str) -> str:
-    normalized = phrase.strip().lower()
-    for cluster in PHRASE_CLUSTERS:
-        for pattern in cluster["patterns"]:
-            if pattern in normalized or normalized in pattern:
-                return str(cluster["canonical"])
-    return phrase.strip().title() if len(phrase) > 3 else phrase
-
-
-def _extract_known_finance_phrases(text: str) -> Counter[str]:
-    counts: Counter[str] = Counter()
-    for phrase in KNOWN_FINANCE_PHRASES:
-        occurrences = text.count(phrase)
-        if occurrences:
-            counts[_cluster_phrase(phrase)] += occurrences * FINANCE_PHRASE_BOOST
-    return counts
-
-
-def _extract_ngrams(tokens: list[str], n: int) -> Counter[str]:
-    counts: Counter[str] = Counter()
-    if len(tokens) < n:
-        return counts
-    for index in range(len(tokens) - n + 1):
-        window = tokens[index : index + n]
-        if any(token in CUSTOM_STOPWORDS for token in window):
-            continue
-        phrase = " ".join(window)
-        if all(len(part) <= 2 for part in window):
-            continue
-        counts[phrase] += 1 + (0.5 if n == 3 else 0.0)
-    return counts
+def _is_low_value_phrase(phrase: str) -> bool:
+    words = phrase.lower().split()
+    if not words:
+        return True
+    if len(words) == 1 and words[0] in CUSTOM_STOPWORDS:
+        return True
+    return all(word in CUSTOM_STOPWORDS for word in words)
 
 
 def extract_finance_phrases(text: str, *, ticker: str = "") -> list[str]:
@@ -293,43 +260,15 @@ def extract_finance_phrases(text: str, *, ticker: str = "") -> list[str]:
     normalized = _normalize_text(text)
     ticker_lower = ticker.lower()
     phrase_counts: Counter[str] = Counter()
-    phrase_counts.update(_extract_known_finance_phrases(normalized))
-
+    for phrase in KNOWN_FINANCE_PHRASES:
+        if phrase in normalized:
+            phrase_counts[phrase] += normalized.count(phrase) * FINANCE_PHRASE_BOOST
     tokens = [token for token in _tokenize(normalized) if token != ticker_lower]
-    for n in (3, 2):
-        for phrase, count in _extract_ngrams(tokens, n).items():
-            if any(stop in phrase.split() for stop in CUSTOM_STOPWORDS):
-                continue
-            if phrase in KNOWN_FINANCE_PHRASES:
-                phrase_counts[_cluster_phrase(phrase)] += count * FINANCE_PHRASE_BOOST
-            else:
-                phrase_counts[_cluster_phrase(phrase)] += count
-
-    ranked = [
-        phrase
-        for phrase, _ in phrase_counts.most_common()
-        if phrase and not _is_low_value_phrase(phrase)
-    ]
-    return ranked[:8]
-
-
-def _is_low_value_phrase(phrase: str) -> bool:
-    words = phrase.lower().split()
-    if not words:
-        return True
-    if len(words) == 1 and words[0] in CUSTOM_STOPWORDS:
-        return True
-    if all(word in CUSTOM_STOPWORDS for word in words):
-        return True
-    return False
-
-
-def _theme_hits(text: str) -> Counter[str]:
-    hits: Counter[str] = Counter()
-    for rule in THEME_RULES:
-        if any(keyword in text for keyword in rule["keywords"]):
-            hits[rule["label"]] += 1
-    return hits
+    for index in range(len(tokens) - 1):
+        bigram = f"{tokens[index]} {tokens[index + 1]}"
+        if not _is_low_value_phrase(bigram):
+            phrase_counts[bigram] += 1
+    return [phrase for phrase, _ in phrase_counts.most_common(8) if not _is_low_value_phrase(phrase)]
 
 
 def _collect_source_text(source: dict[str, Any]) -> str:
@@ -340,51 +279,328 @@ def _collect_source_text(source: dict[str, Any]) -> str:
     )
 
 
-def _themes_by_polarity(theme_counts: Counter[str]) -> dict[str, list[str]]:
-    label_to_polarity = {rule["label"]: rule["polarity"] for rule in THEME_RULES}
-    grouped: dict[str, list[str]] = {"bullish": [], "bearish": [], "neutral": []}
-    for label, _count in theme_counts.most_common():
-        polarity = label_to_polarity.get(label, "neutral")
-        grouped[polarity].append(label)
-    return grouped
+def _snippet(text: str, *, max_len: int = 140) -> str:
+    cleaned = re.sub(r"\s+", " ", str(text or "").strip())
+    if len(cleaned) <= max_len:
+        return cleaned
+    return cleaned[: max_len - 3].rstrip() + "..."
 
 
-def _narrative_confidence(
+def _confidence_label(score: float) -> str:
+    if score >= 0.65:
+        return "High"
+    if score >= 0.4:
+        return "Medium"
+    return "Low"
+
+
+def _phrase_negated(text: str, phrase: str) -> bool:
+    """True when phrase appears after a simple negation (not / isn't / no)."""
+
+    for match in re.finditer(re.escape(phrase), text):
+        start = match.start()
+        window = text[max(0, start - 12) : start]
+        if re.search(r"\b(not|no|isn't|isnt|aren't|arent|without)\b", window):
+            return True
+    return False
+
+
+def detect_ma_directionality(text: str, ticker: str) -> str:
+    """
+    Return M&A direction: acquirer, target, merger, confirmed, vague, unclear, or none.
+    """
+
+    normalized = _normalize_text(text)
+    if not any(pattern in normalized for pattern in MA_VAGUE_PATTERNS + MA_BUYER_PATTERNS + MA_TARGET_PATTERNS):
+        return "none"
+
+    ticker_lower = ticker.lower()
+    ticker_present = ticker_lower in normalized or f"${ticker_lower}" in normalized
+    if not ticker_present:
+        return "none"
+
+    if any(p in normalized for p in MA_CONFIRMED_PATTERNS):
+        if any(p in normalized for p in MA_BUYER_PATTERNS):
+            return "confirmed_acquirer" if ticker_present else "confirmed"
+        if any(p in normalized for p in MA_TARGET_PATTERNS):
+            return "confirmed_target" if ticker_present else "confirmed"
+        return "confirmed"
+
+    buyer_hits = sum(1 for p in MA_BUYER_PATTERNS if p in normalized)
+    target_hits = sum(1 for p in MA_TARGET_PATTERNS if p in normalized)
+    merger_hits = sum(1 for p in MA_MERGER_PATTERNS if p in normalized)
+
+    if merger_hits and ticker_present:
+        return "merger_partner"
+    if buyer_hits > target_hits and buyer_hits > 0:
+        return "acquirer" if ticker_present else "acquirer_context"
+    if target_hits > buyer_hits and target_hits > 0:
+        return "target" if ticker_present else "target_context"
+    if buyer_hits and target_hits:
+        return "unclear"
+    if any(p in normalized for p in MA_VAGUE_PATTERNS):
+        return "vague" if ticker_present else "vague_context"
+    return "unclear"
+
+
+def _ma_claim_from_direction(ticker: str, direction: str) -> dict[str, Any] | None:
+    mapping = {
+        "acquirer": (
+            "M&A / corporate",
+            "possible acquirer speculation",
+            "bullish",
+            "beneficiary",
+            f"Users speculated that {ticker} may acquire another company.",
+        ),
+        "target": (
+            "M&A / corporate",
+            "buyout target rumor",
+            "bullish",
+            "target",
+            f"Users speculated that {ticker} could be an acquisition target.",
+        ),
+        "merger_partner": (
+            "M&A / corporate",
+            "merger partner speculation",
+            "neutral",
+            "merger",
+            f"Users discussed a potential merger involving {ticker}.",
+        ),
+        "confirmed_acquirer": (
+            "M&A / corporate",
+            "confirmed acquirer",
+            "bullish",
+            "confirmed_buyer",
+            f"Users discussed a confirmed or announced acquisition where {ticker} is the buyer.",
+        ),
+        "confirmed_target": (
+            "M&A / corporate",
+            "confirmed acquisition target",
+            "bullish",
+            "confirmed_target",
+            f"Users discussed a confirmed acquisition involving {ticker} as the target.",
+        ),
+        "confirmed": (
+            "M&A / corporate",
+            "confirmed M&A deal",
+            "bullish",
+            "confirmed",
+            f"Users discussed a confirmed acquisition involving {ticker}.",
+        ),
+        "vague": (
+            "M&A / corporate",
+            "M&A language (direction unclear)",
+            "neutral",
+            "unclear",
+            "M&A terms appeared, but the discussion did not clearly establish whether "
+            f"{ticker} is buyer or target.",
+        ),
+        "unclear": (
+            "M&A / corporate",
+            "M&A language (direction unclear)",
+            "neutral",
+            "unclear",
+            "M&A language appeared, but direction was unclear.",
+        ),
+    }
+    if direction not in mapping:
+        return None
+    claim_type, short_label, polarity, directionality, claim_text = mapping[direction]
+    return {
+        "claim_id": f"ma_{direction}",
+        "claim_text": claim_text,
+        "claim_type": claim_type,
+        "directionality": directionality,
+        "short_label": short_label,
+        "polarity": polarity,
+        "supporting_terms": ["M&A", "acquisition"],
+    }
+
+
+def _detect_ai_subtheme(text: str, *, specific_ids: set[str]) -> dict[str, Any] | None:
+    """Pick the most specific AI subtheme supported by text."""
+
+    best: dict[str, Any] | None = None
+    best_score = 0
+    for rule in AI_SUBTHEME_RULES:
+        if rule.get("requires_no_specific") and specific_ids - {"ai_hype_vague"}:
+            continue
+        if rule["id"] == "ai_datacenter_gpu" and _phrase_negated(text, "datacenter"):
+            continue
+        hits = sum(1 for keyword in rule["keywords"] if keyword in text and not _phrase_negated(text, keyword.strip()))
+        if hits > best_score:
+            best_score = hits
+            best = rule
+    if best_score == 0:
+        return None
+    return best
+
+
+def _rule_matches(text: str, rule: dict[str, Any]) -> bool:
+    for keyword in rule["keywords"]:
+        if keyword in text and not _phrase_negated(text, keyword.strip()):
+            return True
+    return False
+
+
+def _claim_from_rule(ticker: str, rule: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "claim_id": rule["id"],
+        "claim_text": rule["claim_template"].format(ticker=ticker),
+        "claim_type": rule["claim_type"],
+        "directionality": rule.get("directionality", "neutral"),
+        "short_label": rule["short_label"],
+        "polarity": rule["polarity"],
+        "supporting_terms": list(rule.get("supporting_terms", ())),
+    }
+
+
+def _detect_claims_for_source(ticker: str, source: dict[str, Any]) -> list[dict[str, Any]]:
+    text = _collect_source_text(source)
+    claims: list[dict[str, Any]] = []
+    specific_ai_ids: set[str] = set()
+
+    for rule in AI_SUBTHEME_RULES:
+        if rule.get("requires_no_specific"):
+            continue
+        if rule["id"] == "ai_datacenter_gpu" and _phrase_negated(text, "datacenter"):
+            continue
+        if _rule_matches(text, rule):
+            specific_ai_ids.add(rule["id"])
+
+    ai_rule = _detect_ai_subtheme(text, specific_ids=specific_ai_ids)
+    if ai_rule:
+        claims.append(_claim_from_rule(ticker, ai_rule))
+
+    ma_dir = detect_ma_directionality(text, ticker)
+    ma_claim = _ma_claim_from_direction(ticker, ma_dir)
+    if ma_claim:
+        claims.append(ma_claim)
+
+    for rule in OTHER_CLAIM_RULES:
+        if _rule_matches(text, rule):
+            claims.append(_claim_from_rule(ticker, rule))
+
+    return claims
+
+
+def _aggregate_claims(
+    ticker: str,
+    sources: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Merge per-source claim hits with evidence and confidence."""
+
+    buckets: dict[str, dict[str, Any]] = defaultdict(
+        lambda: {
+            "source_indices": set(),
+            "subreddits": set(),
+            "snippets": [],
+            "titles": [],
+            "supporting_terms": Counter(),
+        }
+    )
+
+    for index, source in enumerate(sources):
+        subreddit = str(source.get("subreddit") or "unknown")
+        title = str(source.get("title") or "").strip()
+        snippet = _snippet(title) or _snippet(source.get("comments_excerpt") or source.get("selftext"))
+        for claim in _detect_claims_for_source(ticker, source):
+            key = claim["claim_id"]
+            bucket = buckets[key]
+            bucket.setdefault("claim", claim)
+            bucket["source_indices"].add(index)
+            bucket["subreddits"].add(subreddit)
+            if snippet and snippet not in bucket["snippets"]:
+                bucket["snippets"].append(snippet)
+            if title and title not in bucket["titles"]:
+                bucket["titles"].append(title)
+            for term in claim.get("supporting_terms", []):
+                bucket["supporting_terms"][term] += 1
+
+    aggregated: list[dict[str, Any]] = []
+    for key, bucket in buckets.items():
+        base = dict(bucket["claim"])
+        source_count = len(bucket["source_indices"])
+        subreddit_count = len(bucket["subreddits"])
+        directionality = base.get("directionality", "neutral")
+        direction_clear = directionality not in {"unclear", "neutral", "vague"}
+
+        score = 0.2
+        score += min(0.35, source_count / 8)
+        score += min(0.2, subreddit_count / 4 * 0.2)
+        score += 0.1 if len(bucket["supporting_terms"]) >= 2 else 0.0
+        if direction_clear:
+            score += 0.12
+        if base.get("claim_id") == "ai_hype_vague":
+            score -= 0.15
+        if "unclear" in str(base.get("claim_id", "")):
+            score -= 0.1
+        score = max(0.0, min(1.0, round(score, 4)))
+
+        aggregated.append({
+            **base,
+            "source_count": source_count,
+            "subreddit_count": subreddit_count,
+            "confidence_score": score,
+            "confidence_label": _confidence_label(score),
+            "supporting_terms": [t for t, _ in bucket["supporting_terms"].most_common(5)],
+            "evidence_snippets": bucket["snippets"][:3],
+            "evidence_source_titles": bucket["titles"][:3],
+            "evidence_subreddits": sorted(bucket["subreddits"])[:3],
+        })
+
+    aggregated.sort(key=lambda item: item["confidence_score"], reverse=True)
+    return aggregated
+
+
+def _ma_direction_summary(claims: list[dict[str, Any]]) -> str | None:
+    ma_claims = [c for c in claims if c.get("claim_type") == "M&A / corporate"]
+    if not ma_claims:
+        return None
+    directions = {c.get("directionality") for c in ma_claims}
+    labels = []
+    if "beneficiary" in directions or "confirmed_buyer" in directions or "acquirer" in directions:
+        labels.append("possible acquirer")
+    if "target" in directions or "confirmed_target" in directions:
+        labels.append("possible target")
+    if "merger" in directions:
+        labels.append("merger partner")
+    if "unclear" in directions or not labels:
+        labels.append("unclear")
+    return " / ".join(dict.fromkeys(labels))
+
+
+def _compose_primary_claim(ticker: str, claims: list[dict[str, Any]]) -> dict[str, Any] | None:
+    if not claims:
+        return None
+    # Prefer highest-confidence non-vague AI over generic hype
+    for claim in claims:
+        if claim.get("claim_id") != "ai_hype_vague":
+            return claim
+    return claims[0]
+
+
+def _narrative_confidence_from_claims(
+    claims: list[dict[str, Any]],
     *,
     source_count: int,
     unique_subreddits: int,
-    theme_hits: int,
     meme_share: float,
 ) -> tuple[str, float]:
-    if source_count < 2 or theme_hits == 0:
-        return "LOW", 0.25
-    score = 0.25
-    score += min(0.25, source_count / 12)
-    score += min(0.2, unique_subreddits / 5 * 0.2)
-    score += min(0.25, theme_hits / 6)
+    if not claims or source_count < 1:
+        return "LOW", 0.0
+    top = claims[0]["confidence_score"]
+    score = top * 0.6 + min(0.25, source_count / 12) + min(0.15, unique_subreddits / 5 * 0.15)
     if meme_share >= 0.5:
-        score -= 0.2
-    if unique_subreddits >= 2 and theme_hits >= 2:
-        score += 0.1
-    score = max(0.0, min(1.0, score))
+        score -= 0.15
+    if any(c.get("claim_id") == "ai_hype_vague" for c in claims[:2]):
+        score -= 0.08
+    score = max(0.0, min(1.0, round(score, 4)))
     if score >= 0.65:
-        return "HIGH", round(score, 4)
+        return "HIGH", score
     if score >= 0.4:
-        return "MEDIUM", round(score, 4)
-    return "LOW", round(score, 4)
-
-
-def _compose_primary_narrative(ticker: str, bullish: list[str], bearish: list[str], neutral: list[str]) -> str:
-    if not bullish and not bearish and not neutral:
-        return FALLBACK_NARRATIVE
-
-    focus_parts: list[str] = []
-    if bullish:
-        focus_parts.append(", ".join(bullish[:3]))
-    if bearish:
-        focus_parts.append("concerns around " + ", ".join(bearish[:2]))
-    focus = "; ".join(focus_parts)
-    return f"Discussion focused on {ticker}'s {focus}."
+        return "MEDIUM", score
+    return "LOW", score
 
 
 def extract_ticker_narrative(
@@ -394,59 +610,84 @@ def extract_ticker_narrative(
     post_types: list[str] | None = None,
     unique_subreddits: int = 0,
 ) -> dict[str, Any]:
-    """Extract narrative themes and confidence from ticker-related Reddit text."""
+    """Extract ticker-specific claims and narrative confidence from Reddit text."""
+
+    empty = {
+        "primary_narrative": FALLBACK_NARRATIVE,
+        "primary_claim": None,
+        "bullish_themes": [],
+        "bearish_themes": [],
+        "neutral_themes": [],
+        "bullish_claims": [],
+        "bearish_claims": [],
+        "claims": [],
+        "ma_direction": None,
+        "narrative_confidence": "LOW",
+        "narrative_confidence_score": 0.0,
+        "narrative_keywords": [],
+        "narrative_sources_count": 0,
+        "evidence_snippets": [],
+        "evidence_source_titles": [],
+        "evidence_subreddits": [],
+    }
 
     if not sources:
-        return {
-            "primary_narrative": FALLBACK_NARRATIVE,
-            "bullish_themes": [],
-            "bearish_themes": [],
-            "neutral_themes": [],
-            "narrative_confidence": "LOW",
-            "narrative_confidence_score": 0.0,
-            "narrative_keywords": [],
-            "narrative_sources_count": 0,
-        }
+        return empty
 
-    theme_counts: Counter[str] = Counter()
-    phrase_counts: Counter[str] = Counter()
-    combined_text = ""
+    claims = _aggregate_claims(ticker, sources)
+    if not claims:
+        combined = "".join(_collect_source_text(s) for s in sources)
+        keywords = extract_finance_phrases(combined, ticker=ticker)
+        return {**empty, "narrative_keywords": keywords, "narrative_sources_count": len(sources)}
 
-    for source in sources:
-        text = _collect_source_text(source)
-        combined_text += text
-        theme_counts.update(_theme_hits(text))
-        for phrase in extract_finance_phrases(text, ticker=ticker):
-            phrase_counts[phrase] += 1
+    primary = _compose_primary_claim(ticker, claims)
+    primary_claim = dict(primary) if primary else None
+    primary_narrative = primary["claim_text"] if primary else FALLBACK_NARRATIVE
 
-    grouped = _themes_by_polarity(theme_counts)
+    bullish_claims = [c for c in claims if c.get("polarity") == "bullish"]
+    bearish_claims = [c for c in claims if c.get("polarity") == "bearish"]
+    neutral_claims = [c for c in claims if c.get("polarity") == "neutral"]
+
+    bullish_themes = [c["short_label"] for c in bullish_claims[:4]]
+    bearish_themes = [c["short_label"] for c in bearish_claims[:3]]
+    neutral_themes = [c["short_label"] for c in neutral_claims[:3]]
+
     post_types = post_types or []
     meme_share = 0.0
     if post_types:
         meme_share = sum(1 for item in post_types if item in {"Meme", "YOLO"}) / len(post_types)
 
-    label, confidence_score = _narrative_confidence(
+    conf_label, conf_score = _narrative_confidence_from_claims(
+        claims,
         source_count=len(sources),
         unique_subreddits=unique_subreddits,
-        theme_hits=sum(theme_counts.values()),
         meme_share=meme_share,
     )
 
-    keywords = [phrase for phrase, _ in phrase_counts.most_common(8) if not _is_low_value_phrase(phrase)]
-    if not keywords:
-        keywords = extract_finance_phrases(combined_text, ticker=ticker)[:6]
+    combined = "".join(_collect_source_text(s) for s in sources)
+    keywords = extract_finance_phrases(combined, ticker=ticker)
+
+    evidence_snippets = primary.get("evidence_snippets", []) if primary else []
+    evidence_titles = primary.get("evidence_source_titles", []) if primary else []
+    evidence_subs = primary.get("evidence_subreddits", []) if primary else []
 
     return {
-        "primary_narrative": _compose_primary_narrative(
-            ticker, grouped["bullish"], grouped["bearish"], grouped["neutral"]
-        ),
-        "bullish_themes": grouped["bullish"][:4],
-        "bearish_themes": grouped["bearish"][:3],
-        "neutral_themes": grouped["neutral"][:3],
-        "narrative_confidence": label,
-        "narrative_confidence_score": confidence_score,
+        "primary_narrative": primary_narrative,
+        "primary_claim": primary_claim,
+        "bullish_themes": bullish_themes,
+        "bearish_themes": bearish_themes,
+        "neutral_themes": neutral_themes,
+        "bullish_claims": bullish_claims[:4],
+        "bearish_claims": bearish_claims[:3],
+        "claims": claims,
+        "ma_direction": _ma_direction_summary(claims),
+        "narrative_confidence": conf_label,
+        "narrative_confidence_score": conf_score,
         "narrative_keywords": keywords,
         "narrative_sources_count": len(sources),
+        "evidence_snippets": evidence_snippets,
+        "evidence_source_titles": evidence_titles,
+        "evidence_subreddits": evidence_subs,
     }
 
 
@@ -459,22 +700,46 @@ def build_narrative_summary(
     market_phrase: str,
     street_phrase: str = "",
 ) -> str:
-    """Combine narrative extraction with attention and market context."""
+    """Combine extracted claims with attention and market context."""
 
-    primary = str(narrative.get("primary_narrative") or FALLBACK_NARRATIVE)
-    if primary == FALLBACK_NARRATIVE:
+    primary = narrative.get("primary_claim") or {}
+    primary_text = str(
+        primary.get("claim_text") or narrative.get("primary_narrative") or FALLBACK_NARRATIVE
+    )
+    if primary_text == FALLBACK_NARRATIVE:
         return (
-            f"{ticker} mention activity {attention_phrase}, but {primary.lower()} "
+            f"{ticker} mention activity {attention_phrase}, but {primary_text.lower()} "
             f"{quality_phrase} {market_phrase}{street_phrase}"
         ).strip()
 
-    bullish = narrative.get("bullish_themes") or []
-    focus = ", ".join(bullish[:3]) if bullish else "several overlapping themes"
-    bearish = narrative.get("bearish_themes") or []
+    focus = primary_text
+    if focus.lower().startswith("users "):
+        focus_clause = focus[6:].rstrip(".")
+    else:
+        focus_clause = focus.rstrip(".")
+
+    ma_direction = narrative.get("ma_direction")
+    ma_note = ""
+    if ma_direction:
+        ma_note = (
+            f" Some comments referenced M&A ({ma_direction}); treat that as weaker evidence "
+            "unless direction is confirmed."
+        )
+        if "unclear" in ma_direction:
+            ma_note = (
+                " Some comments referenced M&A, but the direction was unclear, "
+                "so this should be treated as weak evidence."
+            )
+
+    bearish = narrative.get("bearish_claims") or narrative.get("bearish_themes") or []
     caution = ""
     if bearish:
-        caution = f" Bearish pushback included {', '.join(bearish[:2])}."
+        labels = [
+            b.get("short_label") if isinstance(b, dict) else str(b) for b in bearish[:2]
+        ]
+        caution = f" Bearish pushback focused on {', '.join(labels)}."
+
     return (
-        f"{ticker} discussion {attention_phrase} as users focused on {focus}, {quality_phrase}. "
-        f"{market_phrase}{street_phrase}{caution}"
+        f"{ticker} discussion {attention_phrase} as users debated {focus_clause}, {quality_phrase}."
+        f"{ma_note} {market_phrase}{street_phrase}{caution}"
     ).strip()
