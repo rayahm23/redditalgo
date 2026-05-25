@@ -222,20 +222,23 @@ Exported fields include `subreddit_groups_detected`, `top_signal_subreddits`, `n
 
 If a subreddit is private, banned, or unavailable, the fetch step skips it and continues.
 
-## Narrative extraction
+## Narrative extraction & claims
 
-`scanner/narrative_extraction.py` summarizes **what users are discussing**, not just that mentions rose.
+`scanner/narrative_extraction.py` extracts **ticker-specific claims** from post titles, bodies, and comment excerpts—not broad theme buckets.
 
-Each ticker exports:
+Each claim includes `claim_text`, `claim_type`, `directionality`, `supporting_terms`, `source_count`, `subreddit_count`, `confidence_score`, `confidence_label`, and up to three `evidence_snippets`.
 
-- `primary_narrative`
-- `bullish_themes`, `bearish_themes`, `neutral_themes`
-- `narrative_confidence` / `narrative_confidence_score`
-- `narrative_keywords` (finance-aware phrases such as bigrams/trigrams and known terms like `free cash flow`; generic stopwords are filtered)
+Examples:
 
-Keyword extraction prioritizes finance phrases and clusters similar wording (for example AI demand + data center growth → `AI/datacenter demand`). The HTML dashboard shows **Primary Narrative** and bullish/bearish themes only—not raw keyword lists.
+- **AI specificity:** AMD → GPU/datacenter adoption; SOFI → AI lending automation (not generic “AI datacenter demand” on every AI mention).
+- **M&A directionality:** acquirer vs target vs merger vs confirmed deal vs unclear (no invented buyer/target when text is vague).
+- **Fallbacks:** “AI was mentioned, but the specific business impact was unclear.” / “M&A language appeared, but direction was unclear.”
 
-Summaries in JSON/HTML use these themes when confidence is sufficient. Rule-based theme matching has limitations: sarcasm, typos, and sparse samples can produce `LOW` confidence or the fallback message:
+Exported fields include `primary_claim`, `claims`, `bullish_claims`, `bearish_claims`, `ma_direction`, plus legacy `primary_narrative` / `bullish_themes` for compatibility.
+
+The HTML dashboard shows **Primary Claim**, **Supporting Evidence**, **Bullish/Bearish Claims**, and an M&A direction line when relevant.
+
+Summaries use claim text. Rule-based matching has limitations: sarcasm, typos, and sparse samples can produce `LOW` confidence or the fallback message:
 
 `Discussion was too limited or scattered to identify a clear narrative.`
 
@@ -295,12 +298,14 @@ It reads `data/history/*.json`, fetches forward prices with yfinance, and writes
 
 ## Dashboard / GitHub Pages
 
-The static HTML report at `data/daily_results.html` (also deployed via GitHub Pages) includes:
+The static HTML report at `data/daily_results.html` (also deployed via GitHub Pages) is split into two sections:
 
-- ranked cards with score, recommendation, and risk
-- chips for analyst upside, confidence level (`LOW` / `MEDIUM` / `HIGH`), and catalyst type
-- inline 7-day sparklines for mentions, sentiment, score, and analyst upside
-- expandable score breakdown, risk notes, and Reddit source links
+1. **General Signals** — top 10 tickers by `final_score` across all prices
+2. **Small Stocks Under $15** — top 10 tickers with `latest_price < 15` (a ticker can appear in both)
+
+Helper functions in `scanner/report.py`: `get_general_signals()`, `get_small_stock_signals()`, `format_analyst_target()`, `format_narrative()`.
+
+Each card includes score, recommendation, confidence, risk (only when pump/liquidity/quality justify it), street target upside, **Discussion Summary** (primary narrative + themes), key metrics, and expandable telemetry.
 
 A separate Vercel dashboard can still read `data/daily_results.json` directly and bind the `sparklines` arrays to chart components.
 

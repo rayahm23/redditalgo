@@ -57,8 +57,11 @@ def format_analyst_target(result: dict[str, Any]) -> str:
 
 
 def format_narrative(result: dict[str, Any]) -> str:
-    """Primary narrative text with safe fallback."""
+    """Primary claim text with safe fallback."""
 
+    primary_claim = result.get("primary_claim") or {}
+    if isinstance(primary_claim, dict) and primary_claim.get("claim_text"):
+        return str(primary_claim["claim_text"])
     return str(result.get("primary_narrative") or "No clear narrative identified.")
 
 
@@ -366,21 +369,66 @@ def _theme_list_html(themes: list[Any], empty: str = "None identified") -> str:
     return "".join(f"<li>{escape(str(theme))}</li>" for theme in themes[:4])
 
 
+def _claims_list_html(claims: list[Any], *, empty: str) -> str:
+    if not claims:
+        return f"<li>{escape(empty)}</li>"
+    items = []
+    for claim in claims[:4]:
+        if isinstance(claim, dict):
+            label = str(claim.get("short_label") or claim.get("claim_text") or "")
+        else:
+            label = str(claim)
+        if label:
+            items.append(f"<li>{escape(label)}</li>")
+    return "".join(items) or f"<li>{escape(empty)}</li>"
+
+
+def _evidence_html(row: dict[str, Any]) -> str:
+    snippets = row.get("evidence_snippets") or []
+    primary = row.get("primary_claim") or {}
+    if isinstance(primary, dict):
+        snippets = snippets or primary.get("evidence_snippets") or []
+    if not snippets:
+        return ""
+    items = "".join(f"<li>{escape(str(snippet))}</li>" for snippet in snippets[:3])
+    return f"""
+        <div class="evidence-block">
+          <h4>Supporting Evidence</h4>
+          <ul class="evidence-list">{items}</ul>
+        </div>
+      """
+
+
 def _narrative_html(row: dict[str, Any]) -> str:
     primary = escape(format_narrative(row))
-    bullish = _theme_list_html(row.get("bullish_themes") or [])
-    bearish = _theme_list_html(row.get("bearish_themes") or [], empty="No major bearish themes")
+    bullish = _claims_list_html(
+        row.get("bullish_claims") or row.get("bullish_themes") or [],
+        empty="No bullish claims identified",
+    )
+    bearish = _claims_list_html(
+        row.get("bearish_claims") or row.get("bearish_themes") or [],
+        empty="No major bearish claims",
+    )
+    ma_direction = row.get("ma_direction")
+    ma_html = ""
+    if ma_direction:
+        ma_html = (
+            f'<p class="ma-direction"><strong>M&A direction:</strong> {escape(str(ma_direction))}</p>'
+        )
+    evidence = _evidence_html(row)
     return f"""
       <section class="narrative-panel">
         <h3>Discussion Summary</h3>
-        <p class="primary-narrative"><strong>Primary Narrative:</strong> {primary}</p>
+        <p class="primary-narrative"><strong>Primary Claim:</strong> {primary}</p>
+        {evidence}
+        {ma_html}
         <div class="theme-columns">
           <div>
-            <h4>Bullish Themes</h4>
+            <h4>Bullish Claims</h4>
             <ul>{bullish}</ul>
           </div>
           <div>
-            <h4>Bearish Themes</h4>
+            <h4>Bearish Claims</h4>
             <ul>{bearish}</ul>
           </div>
         </div>
@@ -747,6 +795,27 @@ def render_results_html(results: list[dict[str, Any]]) -> str:
     .theme-columns ul {{
       margin: 0;
       padding-left: 18px;
+    }}
+    .evidence-block {{
+      margin: 0 0 14px;
+      font-size: 14px;
+    }}
+    .evidence-block h4 {{
+      margin: 0 0 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }}
+    .evidence-list {{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }}
+    .ma-direction {{
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: var(--muted);
     }}
     .signal-panel {{
       display: grid;
