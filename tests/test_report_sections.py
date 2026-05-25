@@ -51,21 +51,32 @@ def test_get_small_stock_signals_skips_invalid_price():
     assert small[0]["ticker"] == "GOOD"
 
 
-def test_render_results_html_two_sections_and_no_keyword_list():
+def test_render_results_html_tabbed_layout_and_no_keyword_list():
     rows = [
         _row("BIG", 95, 120),
         _row("SMALL", 88, 9.5),
     ]
     rows[0].update({"analyst_target_mean": 140.0, "analyst_target_upside_pct": 0.16})
     html = render_results_html(rows)
-    assert "General Signals" in html
-    assert "Small Stocks Under $15" in html
+    assert 'role="tablist"' in html
+    assert "General Signals (2)" in html
+    assert "Under $15 Signals (1)" in html
+    assert 'data-panel="general"' in html
+    assert 'data-panel="under15"' in html
+    assert 'id="panel-under15"' in html and "hidden" in html
     assert "Highest-quality Reddit-driven watchlist ideas" in html
     assert "Lower-priced, higher-upside names" in html
-    assert "Under $15" in html
     assert "Narrative keywords" not in html
-    assert html.count("BIG") >= 1
+    assert "BIG" in html
     assert "SMALL" in html
+    assert html.index("panel-general") < html.index("panel-under15")
+
+
+def test_render_results_html_under15_empty_state():
+    rows = [_row("BIG", 95, 120)]
+    html = render_results_html(rows)
+    assert "Under $15 Signals (0)" in html
+    assert "No under-$15 signals found" in html
 
 
 def test_format_helpers():

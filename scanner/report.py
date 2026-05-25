@@ -41,6 +41,17 @@ def get_small_stock_signals(
     return [_with_section_rank(row, index) for index, row in enumerate(ranked[:limit], start=1)]
 
 
+def get_under_15_signals(
+    results: list[dict[str, Any]],
+    *,
+    limit: int = SMALL_STOCK_LIMIT,
+    price_lt: float = SMALL_STOCK_PRICE_LT,
+) -> list[dict[str, Any]]:
+    """Alias for under-$15 watchlist rows (same logic as get_small_stock_signals)."""
+
+    return get_small_stock_signals(results, limit=limit, price_lt=price_lt)
+
+
 def _with_section_rank(row: dict[str, Any], rank: int) -> dict[str, Any]:
     return {**row, "rank": rank}
 
@@ -633,25 +644,106 @@ def _card_html(row: dict[str, Any], *, price_chip: str | None = None) -> str:
     """
 
 
-def _section_html(
-    *,
-    section_id: str,
-    title: str,
-    subtitle: str,
+def _cards_grid_html(
     rows: list[dict[str, Any]],
+    *,
     price_chip: str | None = None,
+    empty_message: str = "No tickers in this section for the current scan.",
 ) -> str:
-    cards = "".join(_card_html(row, price_chip=price_chip) for row in rows)
-    if not cards:
-        cards = '<div class="empty">No tickers in this section for the current scan.</div>'
+    if not rows:
+        return f'<div class="empty">{escape(empty_message)}</div>'
+    return "".join(_card_html(row, price_chip=price_chip) for row in rows)
+
+
+def _tabbed_signals_html(
+    general_rows: list[dict[str, Any]],
+    under15_rows: list[dict[str, Any]],
+) -> str:
+    general_count = len(general_rows)
+    under15_count = len(under15_rows)
+    general_cards = _cards_grid_html(general_rows)
+    under15_cards = _cards_grid_html(
+        under15_rows,
+        price_chip="Under $15",
+        empty_message="No under-$15 signals found in today's scan.",
+    )
+
     return f"""
-    <section class="dashboard-section" id="{escape(section_id)}">
-      <div class="section-header">
-        <h2>{escape(title)}</h2>
-        <p class="section-subtitle">{escape(subtitle)}</p>
+    <section class="signals-shell">
+      <nav class="signal-tabs" role="tablist" aria-label="Signal groups">
+        <button
+          type="button"
+          class="signal-tab is-active"
+          role="tab"
+          id="tab-general"
+          aria-selected="true"
+          aria-controls="panel-general"
+          data-tab="general"
+        >
+          General Signals ({general_count})
+        </button>
+        <button
+          type="button"
+          class="signal-tab"
+          role="tab"
+          id="tab-under15"
+          aria-selected="false"
+          aria-controls="panel-under15"
+          data-tab="under15"
+        >
+          Under $15 Signals ({under15_count})
+        </button>
+      </nav>
+
+      <div
+        id="panel-general"
+        class="tab-panel is-active"
+        role="tabpanel"
+        aria-labelledby="tab-general"
+        data-panel="general"
+      >
+        <p class="section-subtitle">
+          Highest-quality Reddit-driven watchlist ideas across all price ranges.
+        </p>
+        <div class="grid">{general_cards}</div>
       </div>
-      <div class="grid">{cards}</div>
+
+      <div
+        id="panel-under15"
+        class="tab-panel"
+        role="tabpanel"
+        aria-labelledby="tab-under15"
+        data-panel="under15"
+        hidden
+      >
+        <p class="section-subtitle">
+          Lower-priced, higher-upside names with Reddit traction. These may be more volatile,
+          so review liquidity and risk carefully.
+        </p>
+        <div class="grid">{under15_cards}</div>
+      </div>
     </section>
+    <script>
+      (function () {{
+        const tabs = document.querySelectorAll(".signal-tab");
+        const panels = document.querySelectorAll(".tab-panel");
+        tabs.forEach((tab) => {{
+          tab.addEventListener("click", () => {{
+            const target = tab.getAttribute("data-tab");
+            tabs.forEach((item) => {{
+              const active = item === tab;
+              item.classList.toggle("is-active", active);
+              item.setAttribute("aria-selected", active ? "true" : "false");
+            }});
+            panels.forEach((panel) => {{
+              const show = panel.getAttribute("data-panel") === target;
+              panel.classList.toggle("is-active", show);
+              panel.hidden = !show;
+            }});
+          }});
+        }});
+      }})();
+    </script>
     """
 
 
@@ -665,23 +757,8 @@ def render_results_html(
     generated_at = results[0].get("generated_at") if results else "No scan results yet"
     backtest_section = _backtest_summary_html(backtest_summary)
     general_rows = get_general_signals(results)
-    small_rows = get_small_stock_signals(results)
-    general_section = _section_html(
-        section_id="general-signals",
-        title="General Signals",
-        subtitle="Highest-quality Reddit-driven watchlist ideas across all price ranges.",
-        rows=general_rows,
-    )
-    small_section = _section_html(
-        section_id="small-stocks",
-        title="Small Stocks Under $15",
-        subtitle=(
-            "Lower-priced, higher-upside names with Reddit traction. "
-            "These may be more volatile, so review liquidity and risk carefully."
-        ),
-        rows=small_rows,
-        price_chip="Under $15",
-    )
+    under15_rows = get_under_15_signals(results)
+    signals_section = _tabbed_signals_html(general_rows, under15_rows)
 
     return f"""<!doctype html>
 <html lang="en">
@@ -732,16 +809,48 @@ def render_results_html(
     .wrap {{ max-width: 980px; margin: 0 auto; padding: 40px 20px 56px; }}
     header h1 {{ margin: 0 0 6px; font-size: clamp(28px, 4vw, 36px); font-weight: 650; letter-spacing: -0.02em; }}
     .meta, .disclaimer, .muted {{ color: var(--muted); font-size: 14px; }}
-    .dashboard-section {{ margin-bottom: 48px; }}
-    .section-header {{ margin-bottom: 22px; }}
-    .section-header h2 {{
-      margin: 0 0 8px;
-      font-size: clamp(22px, 3vw, 28px);
-      font-weight: 650;
-      letter-spacing: -0.02em;
+    .signals-shell {{ margin-bottom: 32px; }}
+    .signal-tabs {{
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 5px;
+      margin-bottom: 22px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      box-shadow: 0 4px 14px rgba(16, 24, 40, 0.04);
     }}
-    .section-subtitle {{
-      margin: 0;
+    .signal-tab {{
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }}
+    .signal-tab:hover {{
+      color: var(--text);
+      background: var(--bg);
+    }}
+    .signal-tab.is-active {{
+      color: var(--text);
+      background: var(--accent-soft);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }}
+    .signal-tab:focus-visible {{
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }}
+    .tab-panel {{ display: none; }}
+    .tab-panel.is-active {{ display: block; }}
+    .tab-panel .section-subtitle {{
+      margin: 0 0 20px;
       color: var(--muted);
       font-size: 15px;
       max-width: 72ch;
@@ -1036,8 +1145,7 @@ def render_results_html(
       <p class="disclaimer">Research/watchlist tool only. Not financial advice.</p>
     </header>
     {backtest_section}
-    {general_section}
-    {small_section}
+    {signals_section}
   </main>
 </body>
 </html>
