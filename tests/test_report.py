@@ -84,7 +84,8 @@ def test_render_results_html_polished_dashboard_layout():
     html = render_results_html([_sample_row()])
 
     assert "General Signals" in html
-    assert "Small Stocks Under $15" in html
+    assert "Under $15 Signals" in html
+    assert 'class="signal-tabs"' in html
     assert "Discussion Summary" in html
     assert "Primary Claim" in html
     assert "Bullish Claims" in html
