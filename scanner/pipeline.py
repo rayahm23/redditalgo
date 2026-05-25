@@ -7,15 +7,24 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from scanner.apify_client import fetch_apify_posts
+from scanner.backtest import run_backtest
 from scanner.config import ScannerConfig
 from scanner.history import calculate_historical_baselines, load_history_snapshots, load_recent_history
 from scanner.market_data import get_market_data_for_tickers
 from scanner.reddit_client import fetch_reddit_posts
 from scanner.report import write_html_reports
-from scanner.scoring import aggregate_posts, rank_tickers
+from scanner.scoring import aggregate_posts, rank_tickers_with_exclusions
 
 
-def write_results(results: list[dict], output_path: Path, history_dir: Path, run_date: str) -> None:
+def write_results(
+    results: list[dict],
+    excluded: list[dict],
+    output_path: Path,
+    excluded_path: Path,
+    history_dir: Path,
+    run_date: str,
+    backtest_summary: dict | None = None,
+) -> None:
     """Write current and historical JSON outputs."""
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
@@ -24,7 +33,8 @@ def write_results(results: list[dict], output_path: Path, history_dir: Path, run
     payload = json.dumps(results, indent=2) + "\n"
     output_path.write_text(payload, encoding="utf-8")
     (history_dir / f"{run_date}.json").write_text(payload, encoding="utf-8")
-    write_html_reports(results, output_path, history_dir, run_date)
+    excluded_path.write_text(json.dumps(excluded, indent=2) + "\n", encoding="utf-8")
+    write_html_reports(results, output_path, history_dir, run_date, backtest_summary=backtest_summary)
 
 
 def fetch_posts(config: ScannerConfig) -> list[dict]:
@@ -55,7 +65,7 @@ def run_pipeline(config: ScannerConfig | None = None) -> list[dict]:
     history_rows = load_recent_history(config.history_dir, run_date, days=7)
     history_snapshots = load_history_snapshots(config.history_dir, run_date, days=7)
     baselines = calculate_historical_baselines(history_rows, days=7)
-    results = rank_tickers(
+    results, excluded = rank_tickers_with_exclusions(
         aggregates,
         market_data,
         limit=15,
@@ -63,7 +73,35 @@ def run_pipeline(config: ScannerConfig | None = None) -> list[dict]:
         baselines=baselines,
         history_snapshots=history_snapshots,
     )
-    write_results(results, config.output_path, config.history_dir, run_date)
+
+    write_results(
+        results,
+        excluded,
+        config.output_path,
+        config.excluded_path,
+        config.history_dir,
+        run_date,
+        backtest_summary=None,
+    )
+
+    backtest_summary = None
+    try:
+        run_backtest(
+            history_dir=config.history_dir,
+            output_path=config.backtest_results_path,
+            summary_path=config.backtest_summary_path,
+        )
+        if config.backtest_summary_path.exists():
+            backtest_summary = json.loads(config.backtest_summary_path.read_text(encoding="utf-8"))
+            write_html_reports(
+                results,
+                config.output_path,
+                config.history_dir,
+                run_date,
+                backtest_summary=backtest_summary,
+            )
+    except Exception as error:
+        print(f"Backtest step skipped: {error}")
     return results
 
 
