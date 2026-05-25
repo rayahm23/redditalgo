@@ -231,7 +231,9 @@ Each ticker exports:
 - `primary_narrative`
 - `bullish_themes`, `bearish_themes`, `neutral_themes`
 - `narrative_confidence` / `narrative_confidence_score`
-- `narrative_keywords`
+- `narrative_keywords` (finance-aware phrases such as bigrams/trigrams and known terms like `free cash flow`; generic stopwords are filtered)
+
+Keyword extraction prioritizes finance phrases and clusters similar wording (for example AI demand + data center growth → `AI/datacenter demand`). The HTML dashboard shows **Primary Narrative** and bullish/bearish themes only—not raw keyword lists.
 
 Summaries in JSON/HTML use these themes when confidence is sufficient. Rule-based theme matching has limitations: sarcasm, typos, and sparse samples can produce `LOW` confidence or the fallback message:
 

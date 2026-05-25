@@ -3,10 +3,112 @@
 from __future__ import annotations
 
 import re
-from collections import Counter, defaultdict
+from collections import Counter
 from typing import Any
 
 FALLBACK_NARRATIVE = "Discussion was too limited or scattered to identify a clear narrative."
+
+CUSTOM_STOPWORDS = frozenset({
+    "have", "this", "that", "what", "also", "would", "could", "should", "really",
+    "think", "going", "still", "even", "just", "much", "very", "make", "made",
+    "many", "some", "more", "well", "good", "great", "thing", "things", "stock",
+    "company", "shares", "market", "today", "tomorrow", "people", "guys", "lol",
+    "lmao", "bro", "yeah", "with", "from", "they", "them", "your", "about", "into",
+    "been", "were", "will", "when", "than", "then", "here", "there", "where",
+    "like", "know", "want", "need", "said", "says", "does", "dont", "doesnt",
+    "been", "being", "only", "over", "under", "after", "before", "while", "because",
+    "reddit", "post", "posts", "comment", "comments", "thread", "threads",
+})
+
+KNOWN_FINANCE_PHRASES: tuple[str, ...] = (
+    "free cash flow",
+    "margin expansion",
+    "earnings guidance",
+    "ai demand",
+    "data center",
+    "data center growth",
+    "short squeeze",
+    "short interest",
+    "market share",
+    "revenue growth",
+    "analyst upgrade",
+    "analyst downgrade",
+    "operating leverage",
+    "price target",
+    "enterprise demand",
+    "gross margin",
+    "multiple expansion",
+    "relative strength",
+    "earnings beat",
+    "guidance raise",
+    "earnings optimism",
+    "enterprise ai",
+    "ai datacenter",
+    "ai growth",
+    "cash flow",
+    "operating margin",
+    "top line growth",
+    "fda approval",
+    "insider buying",
+    "insider selling",
+    "technical breakout",
+    "dilution risk",
+    "bankruptcy risk",
+)
+
+FINANCE_PHRASE_BOOST = 3
+
+PHRASE_CLUSTERS: tuple[dict[str, Any], ...] = (
+    {
+        "canonical": "AI/datacenter demand",
+        "patterns": (
+            "ai demand", "ai growth", "ai datacenter", "enterprise ai",
+            "data center", "data center growth", "datacenter", "gpu demand",
+            "generative ai", "inference demand",
+        ),
+    },
+    {
+        "canonical": "Earnings optimism",
+        "patterns": (
+            "earnings beat", "guidance raise", "strong earnings", "earnings guidance",
+            "earnings optimism", "eps beat", "beat estimates", "record revenue",
+        ),
+    },
+    {
+        "canonical": "Margin / cash flow strength",
+        "patterns": (
+            "margin expansion", "free cash flow", "cash flow", "gross margin",
+            "operating leverage", "operating margin",
+        ),
+    },
+    {
+        "canonical": "Short squeeze / interest",
+        "patterns": (
+            "short squeeze", "short interest", "covering shorts", "squeeze setup",
+        ),
+    },
+    {
+        "canonical": "Valuation / multiple debate",
+        "patterns": (
+            "valuation concerns", "multiple expansion", "overvalued", "rich multiple",
+            "priced in", "too expensive",
+        ),
+    },
+    {
+        "canonical": "Analyst / price target",
+        "patterns": (
+            "analyst upgrade", "analyst downgrade", "price target", "target raised",
+            "target cut", "outperform", "underperform",
+        ),
+    },
+    {
+        "canonical": "Revenue / market share",
+        "patterns": (
+            "revenue growth", "market share", "top line growth", "sales growth",
+            "enterprise demand",
+        ),
+    },
+)
 
 THEME_RULES: tuple[dict[str, Any], ...] = (
     {
@@ -22,6 +124,8 @@ THEME_RULES: tuple[dict[str, Any], ...] = (
             "generative ai",
             "llm",
             "nvda",
+            "ai demand",
+            "enterprise ai",
         ),
     },
     {
@@ -32,17 +136,17 @@ THEME_RULES: tuple[dict[str, Any], ...] = (
     {
         "label": "guidance strength",
         "polarity": "bullish",
-        "keywords": ("guidance raise", "raised guidance", "strong guidance", "guidance upgrade"),
+        "keywords": ("guidance raise", "raised guidance", "strong guidance", "guidance upgrade", "earnings guidance"),
     },
     {
         "label": "revenue growth",
         "polarity": "bullish",
-        "keywords": ("revenue growth", "top-line growth", "sales growth", "growing revenue"),
+        "keywords": ("revenue growth", "top-line growth", "sales growth", "growing revenue", "market share"),
     },
     {
         "label": "margin expansion",
         "polarity": "bullish",
-        "keywords": ("margin expansion", "margin improvement", "higher margins"),
+        "keywords": ("margin expansion", "margin improvement", "higher margins", "gross margin"),
     },
     {
         "label": "free cash flow",
@@ -77,12 +181,12 @@ THEME_RULES: tuple[dict[str, Any], ...] = (
     {
         "label": "technical breakout",
         "polarity": "bullish",
-        "keywords": ("breakout", "above resistance", "new high", "52-week high"),
+        "keywords": ("breakout", "above resistance", "new high", "52-week high", "relative strength"),
     },
     {
         "label": "analyst upgrade",
         "polarity": "bullish",
-        "keywords": ("upgrade", "price target raised", "outperform", "overweight", "buy rating"),
+        "keywords": ("upgrade", "price target raised", "outperform", "overweight", "buy rating", "analyst upgrade"),
     },
     {
         "label": "options activity",
@@ -97,7 +201,7 @@ THEME_RULES: tuple[dict[str, Any], ...] = (
     {
         "label": "valuation concerns",
         "polarity": "bearish",
-        "keywords": ("overvalued", "valuation", "too expensive", "priced in", "rich multiple"),
+        "keywords": ("overvalued", "valuation", "too expensive", "priced in", "rich multiple", "multiple expansion"),
     },
     {
         "label": "NVDA competition",
@@ -117,7 +221,7 @@ THEME_RULES: tuple[dict[str, Any], ...] = (
     {
         "label": "analyst downgrade",
         "polarity": "bearish",
-        "keywords": ("downgrade", "price target cut", "underperform", "underweight", "sell rating"),
+        "keywords": ("downgrade", "price target cut", "underperform", "underweight", "sell rating", "analyst downgrade"),
     },
     {
         "label": "insider selling",
@@ -131,9 +235,93 @@ THEME_RULES: tuple[dict[str, Any], ...] = (
     },
 )
 
+_TOKEN_RE = re.compile(r"[a-z][a-z0-9'-]{1,}")
+
 
 def _normalize_text(*parts: Any) -> str:
-    return f" {' '.join(str(part or '') for part in parts).lower()} "
+    cleaned = f" {' '.join(str(part or '') for part in parts).lower()} "
+    cleaned = re.sub(r"[^a-z0-9$%'\s/-]", " ", cleaned)
+    return re.sub(r"\s+", " ", cleaned)
+
+
+def _tokenize(text: str) -> list[str]:
+    tokens = []
+    for token in _TOKEN_RE.findall(text):
+        token = token.strip("'")
+        if len(token) < 2 or token in CUSTOM_STOPWORDS:
+            continue
+        tokens.append(token)
+    return tokens
+
+
+def _cluster_phrase(phrase: str) -> str:
+    normalized = phrase.strip().lower()
+    for cluster in PHRASE_CLUSTERS:
+        for pattern in cluster["patterns"]:
+            if pattern in normalized or normalized in pattern:
+                return str(cluster["canonical"])
+    return phrase.strip().title() if len(phrase) > 3 else phrase
+
+
+def _extract_known_finance_phrases(text: str) -> Counter[str]:
+    counts: Counter[str] = Counter()
+    for phrase in KNOWN_FINANCE_PHRASES:
+        occurrences = text.count(phrase)
+        if occurrences:
+            counts[_cluster_phrase(phrase)] += occurrences * FINANCE_PHRASE_BOOST
+    return counts
+
+
+def _extract_ngrams(tokens: list[str], n: int) -> Counter[str]:
+    counts: Counter[str] = Counter()
+    if len(tokens) < n:
+        return counts
+    for index in range(len(tokens) - n + 1):
+        window = tokens[index : index + n]
+        if any(token in CUSTOM_STOPWORDS for token in window):
+            continue
+        phrase = " ".join(window)
+        if all(len(part) <= 2 for part in window):
+            continue
+        counts[phrase] += 1 + (0.5 if n == 3 else 0.0)
+    return counts
+
+
+def extract_finance_phrases(text: str, *, ticker: str = "") -> list[str]:
+    """Extract ranked finance-aware phrases (bigrams/trigrams + known phrases)."""
+
+    normalized = _normalize_text(text)
+    ticker_lower = ticker.lower()
+    phrase_counts: Counter[str] = Counter()
+    phrase_counts.update(_extract_known_finance_phrases(normalized))
+
+    tokens = [token for token in _tokenize(normalized) if token != ticker_lower]
+    for n in (3, 2):
+        for phrase, count in _extract_ngrams(tokens, n).items():
+            if any(stop in phrase.split() for stop in CUSTOM_STOPWORDS):
+                continue
+            if phrase in KNOWN_FINANCE_PHRASES:
+                phrase_counts[_cluster_phrase(phrase)] += count * FINANCE_PHRASE_BOOST
+            else:
+                phrase_counts[_cluster_phrase(phrase)] += count
+
+    ranked = [
+        phrase
+        for phrase, _ in phrase_counts.most_common()
+        if phrase and not _is_low_value_phrase(phrase)
+    ]
+    return ranked[:8]
+
+
+def _is_low_value_phrase(phrase: str) -> bool:
+    words = phrase.lower().split()
+    if not words:
+        return True
+    if len(words) == 1 and words[0] in CUSTOM_STOPWORDS:
+        return True
+    if all(word in CUSTOM_STOPWORDS for word in words):
+        return True
+    return False
 
 
 def _theme_hits(text: str) -> Counter[str]:
@@ -155,7 +343,7 @@ def _collect_source_text(source: dict[str, Any]) -> str:
 def _themes_by_polarity(theme_counts: Counter[str]) -> dict[str, list[str]]:
     label_to_polarity = {rule["label"]: rule["polarity"] for rule in THEME_RULES}
     grouped: dict[str, list[str]] = {"bullish": [], "bearish": [], "neutral": []}
-    for label, count in theme_counts.most_common():
+    for label, _count in theme_counts.most_common():
         polarity = label_to_polarity.get(label, "neutral")
         grouped[polarity].append(label)
     return grouped
@@ -221,15 +409,15 @@ def extract_ticker_narrative(
         }
 
     theme_counts: Counter[str] = Counter()
-    keywords: Counter[str] = Counter()
+    phrase_counts: Counter[str] = Counter()
+    combined_text = ""
 
     for source in sources:
         text = _collect_source_text(source)
+        combined_text += text
         theme_counts.update(_theme_hits(text))
-        for token in re.findall(r"[a-z][a-z0-9]{3,}", text):
-            if token in {"stock", "stocks", "reddit", "discussion", ticker.lower()}:
-                continue
-            keywords[token] += 1
+        for phrase in extract_finance_phrases(text, ticker=ticker):
+            phrase_counts[phrase] += 1
 
     grouped = _themes_by_polarity(theme_counts)
     post_types = post_types or []
@@ -244,6 +432,10 @@ def extract_ticker_narrative(
         meme_share=meme_share,
     )
 
+    keywords = [phrase for phrase, _ in phrase_counts.most_common(8) if not _is_low_value_phrase(phrase)]
+    if not keywords:
+        keywords = extract_finance_phrases(combined_text, ticker=ticker)[:6]
+
     return {
         "primary_narrative": _compose_primary_narrative(
             ticker, grouped["bullish"], grouped["bearish"], grouped["neutral"]
@@ -253,7 +445,7 @@ def extract_ticker_narrative(
         "neutral_themes": grouped["neutral"][:3],
         "narrative_confidence": label,
         "narrative_confidence_score": confidence_score,
-        "narrative_keywords": [word for word, _ in keywords.most_common(8)],
+        "narrative_keywords": keywords,
         "narrative_sources_count": len(sources),
     }
 

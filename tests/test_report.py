@@ -77,6 +77,11 @@ def _sample_row() -> dict:
 def test_render_results_html_polished_dashboard_layout():
     html = render_results_html([_sample_row()])
 
+    assert "General Signals" in html
+    assert "Small Stocks Under $15" in html
+    assert "Discussion Summary" in html
+    assert "Primary Narrative" in html
+    assert "Narrative keywords" not in html
     assert "AMD" in html
     assert "68" in html
     assert "Volatile momentum setup" in html
