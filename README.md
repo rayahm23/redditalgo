@@ -115,7 +115,7 @@ The scanner is rule-based and explainable. It is designed to surface better watc
 
 ### Ticker extraction
 
-The scanner supports `$TSLA` cashtags and plain uppercase `TSLA` mentions. It filters common Reddit/trading false positives such as `DD`, `YOLO`, `CEO`, `CFO`, `SEC`, `USA`, `USD`, `AI`, `GDP`, `CPI`, `ETF`, `IPO`, `ATH`, `FOMO`, `IMO`, `LOL`, `OP`, `THE`, `FOR`, `AND`, `ARE`, `YOU`, `NOT`, `PUT`, `CALL`, `ITM`, `OTM`, `ATM`, `RH`, `FED`, `EV`, `EPS`, `PE`, and `IV`. Invalid tickers are removed by yfinance validation before ranking.
+The scanner supports `$TSLA` cashtags and plain uppercase `TSLA` mentions. It filters common Reddit/trading false positives such as `DD`, `YOLO`, `CEO`, `CFO`, `SEC`, `USA`, `USD`, `AI`, `GDP`, `CPI`, `ETF`, `IPO`, `ATH`, `FOMO`, `IMO`, `LOL`, `OP`, `THE`, `FOR`, `AND`, `ARE`, `YOU`, `NOT`, `PUT`, `CALL`, `ITM`, `OTM`, `ATM`, `RH`, `FED`, `EV`, `EPS`, `PE`, and `IV`. Plain `HBM` is ignored when the text is about high-bandwidth memory (for example `HBM demand`, `HBM5`, SK hynix); use `$HBM` or name Hudbay when you mean the mining stock. `IHBM` (SK hynix packaging tech) is never treated as a ticker. Invalid tickers are removed by yfinance validation before ranking.
 
 ### Historical baseline and attention acceleration
 

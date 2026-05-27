@@ -12,6 +12,22 @@ from scanner.config import EXCLUDED_TICKERS
 CASHTAG_PATTERN = re.compile(r"(?<![A-Za-z0-9_])\$([A-Za-z]{1,5})(?![A-Za-z])")
 PLAIN_TICKER_PATTERN = re.compile(r"(?<!\$)\b[A-Z]{2,5}\b")
 
+# IHBM is SK hynix packaging tech, not a tradeable symbol in this scanner's universe.
+MEMORY_PRODUCT_TICKERS = frozenset({"IHBM"})
+
+# Hudbay Minerals (HBM) vs high-bandwidth memory (HBM) industry jargon.
+HBM_STOCK_CONTEXT = re.compile(
+    r"(?i)\b(?:hudbay|hudbay\s+minerals)\b|(?:nyse|tsx)\s*:\s*hbm|\$hbm\b"
+)
+HBM_MEMORY_CONTEXT = re.compile(
+    r"(?i)"
+    r"\b(?:i?hbm[345]?\b|high[\s-]?bandwidth\s+memory)\b|"
+    r"\bhbm\s+(?:memory|stack|demand|supply|capacity|module|chips?|package|dies?|generation)s?\b|"
+    r"\bsk\s+hynix\b.*\bhbm\b|\bhbm\b.*\bsk\s+hynix\b|"
+    r"\bhbm\s+thermal\b|\bthermal\s+resistance\b.*\bhbm\b|"
+    r"\bhbm5\b|\bhbm4\b|\bhbm3\b"
+)
+
 
 def normalize_ticker(candidate: str) -> str:
     """Normalize a possible ticker symbol to uppercase letters only."""
@@ -28,7 +44,26 @@ def is_probable_ticker(candidate: str, excluded: set[str] | None = None) -> bool
         1 <= len(ticker) <= 5
         and ticker.isalpha()
         and ticker not in excluded_symbols
+        and ticker not in MEMORY_PRODUCT_TICKERS
     )
+
+
+def _plain_hbm_is_stock_context(text: str) -> bool:
+    """Return True when plain HBM likely refers to Hudbay Minerals, not memory tech."""
+
+    if HBM_STOCK_CONTEXT.search(text):
+        return True
+    if HBM_MEMORY_CONTEXT.search(text):
+        return False
+    return False
+
+
+def _allow_plain_ticker(ticker: str, text: str) -> bool:
+    """Apply symbol-specific plain-text disambiguation rules."""
+
+    if ticker == "HBM":
+        return _plain_hbm_is_stock_context(text)
+    return True
 
 
 def extract_tickers_from_text(
@@ -45,10 +80,13 @@ def extract_tickers_from_text(
         if is_probable_ticker(ticker, excluded):
             tickers.append(ticker)
 
-    for match in PLAIN_TICKER_PATTERN.findall(text):
-        ticker = normalize_ticker(match)
-        if is_probable_ticker(ticker, excluded):
-            tickers.append(ticker)
+    for match in PLAIN_TICKER_PATTERN.finditer(text):
+        ticker = normalize_ticker(match.group())
+        if not is_probable_ticker(ticker, excluded):
+            continue
+        if not _allow_plain_ticker(ticker, text):
+            continue
+        tickers.append(ticker)
 
     return tickers
 
