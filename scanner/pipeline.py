@@ -37,6 +37,31 @@ def write_results(
     write_html_reports(results, output_path, history_dir, run_date, backtest_summary=backtest_summary)
 
 
+def _load_previous_results(output_path: Path) -> list[dict]:
+    if not output_path.exists():
+        return []
+    try:
+        payload = json.loads(output_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return []
+    return payload if isinstance(payload, list) else []
+
+
+def _should_keep_previous_results(
+    posts: list[dict],
+    aggregates: dict,
+    results: list[dict],
+    previous: list[dict],
+) -> bool:
+    if results or not previous:
+        return False
+    if len(posts) < 5:
+        return True
+    if len(aggregates) == 0:
+        return True
+    return False
+
+
 def fetch_posts(config: ScannerConfig) -> list[dict]:
     """Fetch Reddit posts through the configured backend."""
 
@@ -72,6 +97,20 @@ def run_pipeline(config: ScannerConfig | None = None) -> list[dict]:
         generated_at=generated_at,
         baselines=baselines,
         history_snapshots=history_snapshots,
+    )
+
+    previous_results = _load_previous_results(config.output_path)
+    if _should_keep_previous_results(posts, aggregates, results, previous_results):
+        print(
+            "Scan produced no ranked tickers; keeping previous "
+            f"{len(previous_results)} results "
+            f"(posts={len(posts)}, aggregates={len(aggregates)})."
+        )
+        results = previous_results
+
+    print(
+        f"Pipeline summary: posts={len(posts)}, "
+        f"aggregates={len(aggregates)}, ranked={len(results)}, excluded={len(excluded)}"
     )
 
     write_results(

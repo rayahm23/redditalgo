@@ -69,7 +69,28 @@ def test_recency_weight_descends_and_filters_old_posts():
     assert recency_weight(TODAY, REFERENCE_TIME) == 1.0
     assert recency_weight(YESTERDAY, REFERENCE_TIME) == 0.85
     assert recency_weight(EIGHT_DAYS_AGO, REFERENCE_TIME) == 0.0
-    assert recency_weight(None, REFERENCE_TIME) == 0.0
+    assert recency_weight(None, REFERENCE_TIME) == 1.0
+    assert recency_weight(0, REFERENCE_TIME) == 1.0
+
+
+def test_aggregate_posts_keeps_mentions_when_created_utc_missing():
+    posts = [
+        {
+            "id": "missing-ts",
+            "subreddit": "stocks",
+            "title": "Watching NVDA into earnings",
+            "selftext": "",
+            "score": 40,
+            "num_comments": 8,
+            "created_utc": None,
+            "permalink": "https://reddit.com/missing-ts",
+            "top_comments": [],
+        }
+    ]
+
+    aggregates = aggregate_posts(posts, reference_time=REFERENCE_TIME)
+
+    assert aggregates["NVDA"].mention_count == 1
 
 
 def test_risk_flags_and_reasons_from_market_data():

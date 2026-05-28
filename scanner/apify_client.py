@@ -43,21 +43,23 @@ def _to_float(value: Any, default: float = 0.0) -> float:
         return default
 
 
-def _parse_created_utc(value: Any) -> float:
+def _parse_created_utc(value: Any) -> float | None:
     if value in (None, ""):
-        return 0.0
+        return None
     if isinstance(value, (int, float)):
         # Some actors return milliseconds, Reddit/PRAW returns seconds.
-        return float(value / 1000 if value > 10_000_000_000 else value)
+        timestamp = float(value / 1000 if value > 10_000_000_000 else value)
+        return timestamp if timestamp > 0 else None
     if isinstance(value, str):
         try:
             return _parse_created_utc(float(value))
         except ValueError:
             try:
-                return datetime.fromisoformat(value.replace("Z", "+00:00")).timestamp()
+                timestamp = datetime.fromisoformat(value.replace("Z", "+00:00")).timestamp()
+                return timestamp if timestamp > 0 else None
             except ValueError:
-                return 0.0
-    return 0.0
+                return None
+    return None
 
 
 def _normalize_subreddit(value: Any, permalink: str = "") -> str:
@@ -111,9 +113,31 @@ def _extract_comments(item: dict[str, Any], limit: int) -> list[str]:
     return []
 
 
+def _unwrap_nested_post(item: dict[str, Any]) -> dict[str, Any]:
+    """Merge nested post/submission payloads some Apify actors return."""
+
+    for key in ("post", "submission", "parentPost", "link"):
+        nested = item.get(key)
+        if isinstance(nested, dict):
+            merged = dict(nested)
+            merged.update(item)
+            return merged
+    return item
+
+
+def _is_comment_only_record(item: dict[str, Any], title: str, selftext: str) -> bool:
+    record_type = str(_first_value(item, "type", "dataType", "recordType", default="") or "").lower()
+    if record_type in {"comment", "reply"}:
+        return True
+    if not title and not selftext and _first_value(item, "parentId", "parent_id", "postId", "post_id"):
+        return True
+    return False
+
+
 def normalize_apify_item(item: dict[str, Any], top_comments_limit: int) -> dict[str, Any]:
     """Normalize a Reddit-shaped Apify dataset item to the scanner post schema."""
 
+    item = _unwrap_nested_post(item)
     permalink = _normalize_permalink(_first_value(item, "permalink", "url", "link", default=""))
     subreddit = _normalize_subreddit(
         _first_value(item, "subreddit", "subredditName", "communityName", "community", default=""),
@@ -138,22 +162,42 @@ def normalize_apify_item(item: dict[str, Any], top_comments_limit: int) -> dict[
             _first_value(item["author"], "name", "username", "userName", default=author) or author
         )
 
+    title = str(_first_value(item, "title", "heading", "postTitle", default="") or "")
+    selftext = str(
+        _first_value(item, "selftext", "body", "text", "description", "content", "postText", default="")
+        or ""
+    )
+    created = _parse_created_utc(
+        _first_value(
+            item,
+            "created_utc",
+            "createdUtc",
+            "createdAt",
+            "created",
+            "publishedAt",
+            "published_at",
+            "date",
+            "timestamp",
+            "time",
+            default=None,
+        )
+    )
+
     return {
         "id": post_id,
         "author": author,
         "subreddit": subreddit,
-        "title": str(_first_value(item, "title", "heading", default="") or ""),
-        "selftext": str(_first_value(item, "selftext", "body", "text", "description", default="") or ""),
+        "title": title,
+        "selftext": selftext,
         "score": _to_int(_first_value(item, "score", "upvotes", "upVotes", "ups", default=0)),
         "upvote_ratio": _to_float(_first_value(item, "upvote_ratio", "upvoteRatio", default=0.0)),
         "num_comments": _to_int(
             _first_value(item, "num_comments", "numComments", "commentCount", "commentsCount", default=0)
         ),
-        "created_utc": _parse_created_utc(
-            _first_value(item, "created_utc", "createdUtc", "createdAt", "date", "timestamp", default=0)
-        ),
+        "created_utc": created,
         "permalink": permalink,
         "top_comments": _extract_comments(item, top_comments_limit),
+        "_comment_only": _is_comment_only_record(item, title, selftext),
     }
 
 
@@ -197,6 +241,8 @@ def fetch_apify_posts(config: ScannerConfig) -> list[dict[str, Any]]:
             continue
         if post_id:
             seen_ids.add(post_id)
+        if post.pop("_comment_only", False):
+            continue
         if post.get("title") or post.get("selftext"):
             posts.append(post)
 

@@ -40,6 +40,46 @@ def test_default_apify_input_contains_subreddit_hot_and_top_urls():
     assert run_input["maxItems"] == len(config.subreddits) * config.posts_per_listing * 2
 
 
+def test_normalize_apify_item_leaves_missing_created_utc_as_none():
+    item = {
+        "id": "abc123",
+        "subredditName": "stocks",
+        "title": "NVDA setup",
+        "body": "Looks strong",
+        "createdAt": "not-a-date",
+    }
+
+    post = normalize_apify_item(item, top_comments_limit=2)
+
+    assert post["created_utc"] is None
+
+
+def test_normalize_apify_item_skips_comment_only_shape():
+    item = {
+        "id": "cmt1",
+        "type": "comment",
+        "body": "FAQ thread",
+        "parentId": "post1",
+    }
+
+    post = normalize_apify_item(item, top_comments_limit=2)
+
+    assert post["_comment_only"] is True
+
+
+def test_apify_input_json_gets_default_max_items():
+    config = ScannerConfig(
+        apify_token="token",
+        apify_actor_id="actor",
+        apify_input_json='{"startUrls":[{"url":"https://www.reddit.com/r/stocks/hot/"}]}',
+    )
+
+    run_input = config.get_apify_run_input()
+
+    assert run_input["maxItems"] == config.max_apify_items
+    assert run_input["maxPosts"] == config.max_apify_items
+
+
 def test_get_run_dataset_id_supports_dict_and_typed_models():
     class TypedRun:
         default_dataset_id = "typed-dataset-id"
