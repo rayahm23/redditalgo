@@ -1,8 +1,1 @@
-[
-  {
-    "ticker": "FAQ",
-    "excluded": true,
-    "exclusion_reason": "Invalid or missing market data.",
-    "generated_at": "2026-05-28T14:14:48.925689+00:00"
-  }
-]
+[]
