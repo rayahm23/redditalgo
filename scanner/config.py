@@ -50,6 +50,7 @@ EXCLUDED_TICKERS = {
     "EPS",
     "PE",
     "IV",
+    "FAQ",
 }
 
 
@@ -106,6 +107,8 @@ class ScannerConfig:
             parsed = json.loads(self.apify_input_json)
             if not isinstance(parsed, dict):
                 raise ValueError("APIFY_INPUT_JSON must decode to a JSON object")
+            parsed.setdefault("maxItems", self.max_apify_items)
+            parsed.setdefault("maxPosts", self.max_apify_items)
             return parsed
 
         start_urls = []

@@ -173,7 +173,8 @@ def recency_weight(created_utc: Any, reference_time: datetime | str | None = Non
 
     timestamp = _parse_created_utc(created_utc)
     if timestamp is None:
-        return 0.0
+        # Missing/unparseable timestamps should not drop posts (common with Apify actors).
+        return RECENCY_WEIGHTS[0]
 
     reference = _reference_datetime(reference_time)
     created_at = datetime.fromtimestamp(timestamp, tz=timezone.utc)
