@@ -1,12 +1,12 @@
 {
   "total_signals": 165,
-  "total_completed_signals": 0,
-  "total_pending_signals": 165,
-  "avg_1d_return": null,
+  "total_completed_signals": 115,
+  "total_pending_signals": 50,
+  "avg_1d_return": 0.0098,
   "avg_3d_return": null,
   "avg_7d_return": null,
   "avg_30d_return": null,
-  "win_rate_1d": null,
+  "win_rate_1d": 0.5652,
   "win_rate_7d": null,
   "win_rate_30d": null,
   "avg_spy_relative_7d": null,
@@ -15,5 +15,5 @@
   "performance_by_sector_group": {},
   "performance_by_under_15_flag": {},
   "performance_by_alert_type": {},
-  "message": "More daily history is needed before backtest statistics are meaningful."
+  "message": null
 }
