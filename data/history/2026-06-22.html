@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reddit Alpha Scanner</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f4f6f8;
+      --card: #ffffff;
+      --text: #1b2430;
+      --muted: #5f6b7a;
+      --line: #e4e9ef;
+      --accent: #0b57d0;
+      --accent-soft: #e8f1ff;
+      --up: #137333;
+      --up-soft: #e6f4ea;
+      --down: #b3261e;
+      --down-soft: #fce8e6;
+      --neutral: #5f6368;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f141b;
+        --card: #171d25;
+        --text: #e8edf3;
+        --muted: #9aa7b5;
+        --line: #2a3441;
+        --accent: #6ea8fe;
+        --accent-soft: #1a2a44;
+        --up: #6dd58c;
+        --up-soft: #173422;
+        --down: #ff8a80;
+        --down-soft: #3a1d1d;
+        --neutral: #b0bac5;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 40px 20px 56px; }
+    header h1 { margin: 0 0 6px; font-size: clamp(28px, 4vw, 36px); font-weight: 650; letter-spacing: -0.02em; }
+    .meta, .disclaimer, .muted { color: var(--muted); font-size: 14px; }
+    .signals-shell { margin-bottom: 32px; }
+    .signal-tabs {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 5px;
+      margin-bottom: 22px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      box-shadow: 0 4px 14px rgba(16, 24, 40, 0.04);
+    }
+    .signal-tab {
+      appearance: none;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background 0.15s ease, color 0.15s ease;
+    }
+    .signal-tab:hover {
+      color: var(--text);
+      background: var(--bg);
+    }
+    .signal-tab.is-active {
+      color: var(--text);
+      background: var(--accent-soft);
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .signal-tab:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.is-active { display: block; }
+    .tab-panel .section-subtitle {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 72ch;
+      line-height: 1.55;
+    }
+    .price-chip {
+      font-size: 12px;
+      font-weight: 650;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+    .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0 10px; }
+    .toolbar a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      font-size: 13px;
+    }
+    .grid { display: grid; gap: 22px; }
+    .card {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 24px 24px 18px;
+      box-shadow: 0 8px 24px rgba(16, 24, 40, 0.04);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+    .identity { display: flex; align-items: baseline; gap: 12px; }
+    .rank { color: var(--muted); font-size: 14px; font-weight: 700; }
+    h2 { margin: 0; font-size: 30px; letter-spacing: 0.03em; font-weight: 700; }
+    .score-block { text-align: right; }
+    .score-label { display: block; color: var(--muted); font-size: 12px; margin-bottom: 2px; }
+    .score {
+      display: inline-block;
+      font-size: 34px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .headline-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .recommendation {
+      font-size: 15px;
+      font-weight: 650;
+      color: var(--accent);
+      background: var(--accent-soft);
+      border-radius: 999px;
+      padding: 6px 12px;
+    }
+    .confidence-pill {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .meta-line { margin: 0 0 10px; color: var(--muted); font-size: 14px; }
+    .analyst-row { margin-bottom: 14px; }
+    .analyst-target { font-size: 15px; font-weight: 650; }
+    .analyst-upside { color: var(--up); }
+    .analyst-downside { color: var(--down); }
+    .analyst-neutral { color: var(--neutral); }
+    .summary {
+      margin: 0 0 16px;
+      font-size: 16px;
+      line-height: 1.65;
+      max-width: 72ch;
+    }
+    .narrative-panel {
+      margin: 0 0 20px;
+      padding: 14px 0 6px;
+      border-top: 1px solid var(--line);
+    }
+    .narrative-panel h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 650;
+    }
+    .primary-narrative {
+      margin: 0 0 12px;
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 72ch;
+    }
+    .theme-columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      font-size: 14px;
+    }
+    .theme-columns h4 {
+      margin: 0 0 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+    .theme-columns ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .evidence-block {
+      margin: 0 0 14px;
+      font-size: 14px;
+    }
+    .evidence-block h4 {
+      margin: 0 0 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+    .evidence-list {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+    .ma-direction {
+      margin: 0 0 12px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .watch-context {
+      margin: 0 0 14px;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .watch-context p { margin: 0 0 6px; }
+    .caution-line { color: var(--muted); }
+    .consensus-line, .peer-context { color: var(--muted); font-size: 13px; }
+    .alert-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .alert-chip {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      background: var(--bg);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 4px 10px;
+    }
+    .alert-row[data-level="HIGH"] .alert-chip {
+      color: var(--accent);
+      border-color: var(--accent-soft);
+      background: var(--accent-soft);
+    }
+    .backtest-panel {
+      margin-bottom: 36px;
+      padding: 18px 20px;
+      background: var(--card);
+      border-radius: 16px;
+      border: 1px solid var(--line);
+    }
+    .backtest-panel h2 { margin: 0 0 8px; font-size: 20px; }
+    .backtest-json {
+      font-size: 12px;
+      overflow-x: auto;
+      color: var(--muted);
+      white-space: pre-wrap;
+    }
+    .signal-panel {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 14px 0 4px;
+      border-top: 1px solid var(--line);
+    }
+    .signal-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 14px;
+    }
+    .signal-tier { font-weight: 650; }
+    .tier-strong { color: var(--up); }
+    .tier-moderate { color: var(--neutral); }
+    .tier-weak { color: var(--down); }
+    .tier-risk-high { color: var(--down); }
+    .tier-risk-low { color: var(--up); }
+    .key-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 14px 18px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+    .metric-label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .metric-value { font-size: 15px; font-weight: 600; }
+    .mini-trends {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+      color: var(--muted);
+    }
+    .mini-trend span {
+      display: block;
+      font-size: 11px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .sparkline { display: block; opacity: 0.8; }
+    details {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--text);
+      padding: 8px 0;
+    }
+    .secondary-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .readable-breakdown, .trend-series, .telemetry, .catalyst-details {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0;
+    }
+    .catalyst-details li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .readable-breakdown li, .trend-series li {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .nested-details { margin-top: 10px; }
+    a { color: var(--accent); }
+    .empty {
+      padding: 28px;
+      border-radius: 14px;
+      color: var(--muted);
+      background: var(--card);
+      text-align: center;
+    }
+    @media (max-width: 640px) {
+      .card-header { flex-direction: column; }
+      .score-block { text-align: left; }
+      h2 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <h1>Reddit Alpha Scanner</h1>
+      <div class="meta">Generated at: No scan results yet</div>
+      <div class="toolbar">
+        <a href="daily_results.json">Raw JSON</a>
+        <a href="history/">History folder</a>
+      </div>
+      <p class="disclaimer">Research/watchlist tool only. Not financial advice.</p>
+    </header>
+    
+      <section class="backtest-panel">
+        <h2>Forward backtest (building history)</h2>
+        <p class="section-subtitle">
+          Completed signals: 165 · Pending: 0 ·
+          Avg 7D return: +1% · 7D win rate: 49.70%
+        </p>
+        
+        <details class="nested-details">
+          <summary>Backtest breakdown</summary>
+          <pre class="backtest-json">{
+  &quot;total_signals&quot;: 165,
+  &quot;total_completed_signals&quot;: 165,
+  &quot;total_pending_signals&quot;: 0,
+  &quot;avg_1d_return&quot;: 0.0142,
+  &quot;avg_3d_return&quot;: 0.0369,
+  &quot;avg_7d_return&quot;: 0.0082,
+  &quot;avg_30d_return&quot;: null,
+  &quot;win_rate_1d&quot;: 0.6182,
+  &quot;win_rate_7d&quot;: 0.497,
+  &quot;win_rate_30d&quot;: null,
+  &quot;avg_spy_relative_7d&quot;: 0.0073,
+  &quot;performance_by_recommendation_type&quot;: {
+    &quot;High-upside catalyst trade&quot;: {
+      &quot;count&quot;: 8,
+      &quot;avg_return&quot;: -0.0211,
+      &quot;win_rate&quot;: 0.5
+    },
+    &quot;Analyst upside watch&quot;: {
+      &quot;count&quot;: 15,
+      &quot;avg_return&quot;: 0.0284,
+      &quot;win_rate&quot;: 0.7333
+    },
+    &quot;Strong retail acceleration&quot;: {
+      &quot;count&quot;: 5,
+      &quot;avg_return&quot;: -0.0678,
+      &quot;win_rate&quot;: 0.4
+    },
+    &quot;Institutional-style accumulation&quot;: {
+      &quot;count&quot;: 91,
+      &quot;avg_return&quot;: 0.0031,
+      &quot;win_rate&quot;: 0.4286
+    },
+    &quot;Volatile momentum setup&quot;: {
+      &quot;count&quot;: 2,
+      &quot;avg_return&quot;: -0.1331,
+      &quot;win_rate&quot;: 0.0
+    },
+    &quot;Aggressive growth watch&quot;: {
+      &quot;count&quot;: 11,
+      &quot;avg_return&quot;: 0.0816,
+      &quot;win_rate&quot;: 0.6364
+    },
+    &quot;Watchlist&quot;: {
+      &quot;count&quot;: 27,
+      &quot;avg_return&quot;: 0.0268,
+      &quot;win_rate&quot;: 0.6296
+    },
+    &quot;Panic selloff&quot;: {
+      &quot;count&quot;: 6,
+      &quot;avg_return&quot;: -0.0347,
+      &quot;win_rate&quot;: 0.3333
+    }
+  },
+  &quot;performance_by_confidence_label&quot;: {
+    &quot;HIGH&quot;: {
+      &quot;count&quot;: 27,
+      &quot;avg_return&quot;: 0.0148,
+      &quot;win_rate&quot;: 0.6667
+    },
+    &quot;MEDIUM&quot;: {
+      &quot;count&quot;: 138,
+      &quot;avg_return&quot;: 0.0069,
+      &quot;win_rate&quot;: 0.4638
+    }
+  },
+  &quot;performance_by_sector_group&quot;: {
+    &quot;unknown&quot;: {
+      &quot;count&quot;: 132,
+      &quot;avg_return&quot;: 0.0134,
+      &quot;win_rate&quot;: 0.4924
+    },
+    &quot;Space / aerospace&quot;: {
+      &quot;count&quot;: 5,
+      &quot;avg_return&quot;: -0.1609,
+      &quot;win_rate&quot;: 0.0
+    },
+    &quot;Semiconductors&quot;: {
+      &quot;count&quot;: 13,
+      &quot;avg_return&quot;: 0.0238,
+      &quot;win_rate&quot;: 0.6154
+    },
+    &quot;AI / software&quot;: {
+      &quot;count&quot;: 9,
+      &quot;avg_return&quot;: 0.0186,
+      &quot;win_rate&quot;: 0.7778
+    },
+    &quot;EV / clean energy&quot;: {
+      &quot;count&quot;: 4,
+      &quot;avg_return&quot;: -0.0399,
+      &quot;win_rate&quot;: 0.25
+    },
+    &quot;Biotech&quot;: {
+      &quot;count&quot;: 2,
+      &quot;avg_return&quot;: 0.0374,
+      &quot;win_rate&quot;: 0.5
+    }
+  },
+  &quot;performance_by_under_15_flag&quot;: {
+    &quot;unknown&quot;: {
+      &quot;count&quot;: 137,
+      &quot;avg_return&quot;: 0.0109,
+      &quot;win_rate&quot;: 0.5036
+    },
+    &quot;True&quot;: {
+      &quot;count&quot;: 28,
+      &quot;avg_return&quot;: -0.0051,
+      &quot;win_rate&quot;: 0.4643
+    }
+  },
+  &quot;performance_by_alert_type&quot;: {
+    &quot;Attention acceleration above 3x&quot;: {
+      &quot;count&quot;: 16,
+      &quot;avg_return&quot;: -0.0125,
+      &quot;win_rate&quot;: 0.625
+    },
+    &quot;Analyst upside above 20%&quot;: {
+      &quot;count&quot;: 10,
+      &quot;avg_return&quot;: -0.0362,
+      &quot;win_rate&quot;: 0.3
+    },
+    &quot;Bullish consensus strengthening&quot;: {
+      &quot;count&quot;: 3,
+      &quot;avg_return&quot;: 0.0849,
+      &quot;win_rate&quot;: 0.6667
+    },
+    &quot;New strong catalyst signal&quot;: {
+      &quot;count&quot;: 6,
+      &quot;avg_return&quot;: -0.038,
+      &quot;win_rate&quot;: 0.1667
+    },
+    &quot;Market confirmation improving&quot;: {
+      &quot;count&quot;: 2,
+      &quot;avg_return&quot;: 0.0084,
+      &quot;win_rate&quot;: 0.5
+    }
+  },
+  &quot;message&quot;: null
+}</pre>
+        </details>
+      </section>
+    
+    
+    <section class="signals-shell">
+      <nav class="signal-tabs" role="tablist" aria-label="Signal groups">
+        <button
+          type="button"
+          class="signal-tab is-active"
+          role="tab"
+          id="tab-general"
+          aria-selected="true"
+          aria-controls="panel-general"
+          data-tab="general"
+        >
+          General Signals (0)
+        </button>
+        <button
+          type="button"
+          class="signal-tab"
+          role="tab"
+          id="tab-under15"
+          aria-selected="false"
+          aria-controls="panel-under15"
+          data-tab="under15"
+        >
+          Under $15 Signals (0)
+        </button>
+      </nav>
+
+      <div
+        id="panel-general"
+        class="tab-panel is-active"
+        role="tabpanel"
+        aria-labelledby="tab-general"
+        data-panel="general"
+      >
+        <p class="section-subtitle">
+          Highest-quality Reddit-driven watchlist ideas across all price ranges.
+        </p>
+        <div class="grid"><div class="empty">No tickers in this section for the current scan.</div></div>
+      </div>
+
+      <div
+        id="panel-under15"
+        class="tab-panel"
+        role="tabpanel"
+        aria-labelledby="tab-under15"
+        data-panel="under15"
+        hidden
+      >
+        <p class="section-subtitle">
+          Lower-priced, higher-upside names with Reddit traction. These may be more volatile,
+          so review liquidity and risk carefully.
+        </p>
+        <div class="grid"><div class="empty">No under-$15 signals found in today&#x27;s scan.</div></div>
+      </div>
+    </section>
+    <script>
+      (function () {
+        const tabs = document.querySelectorAll(".signal-tab");
+        const panels = document.querySelectorAll(".tab-panel");
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            const target = tab.getAttribute("data-tab");
+            tabs.forEach((item) => {
+              const active = item === tab;
+              item.classList.toggle("is-active", active);
+              item.setAttribute("aria-selected", active ? "true" : "false");
+            });
+            panels.forEach((panel) => {
+              const show = panel.getAttribute("data-panel") === target;
+              panel.classList.toggle("is-active", show);
+              panel.hidden = !show;
+            });
+          });
+        });
+      })();
+    </script>
+    
+  </main>
+</body>
+</html>
