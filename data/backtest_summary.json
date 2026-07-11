@@ -1,19 +1,19 @@
 {
   "total_signals": 679,
-  "total_completed_signals": 678,
-  "total_pending_signals": 1,
+  "total_completed_signals": 676,
+  "total_pending_signals": 3,
   "avg_1d_return": 0.0054,
   "avg_3d_return": 0.0145,
   "avg_7d_return": 0.0049,
-  "avg_30d_return": -0.025,
-  "win_rate_1d": 0.5546,
+  "avg_30d_return": -0.0249,
+  "win_rate_1d": 0.5533,
   "win_rate_7d": 0.5486,
   "win_rate_30d": 0.52,
   "avg_spy_relative_7d": -0.0071,
   "performance_by_recommendation_type": {
     "High-upside catalyst trade": {
       "count": 33,
-      "avg_return": -0.0444,
+      "avg_return": -0.0443,
       "win_rate": 0.5152
     },
     "Analyst upside watch": {
@@ -28,7 +28,7 @@
     },
     "Institutional-style accumulation": {
       "count": 232,
-      "avg_return": 0.0033,
+      "avg_return": 0.0034,
       "win_rate": 0.5043
     },
     "Volatile momentum setup": {
@@ -38,7 +38,7 @@
     },
     "Aggressive growth watch": {
       "count": 34,
-      "avg_return": 0.0452,
+      "avg_return": 0.0454,
       "win_rate": 0.6765
     },
     "Watchlist": {
@@ -60,12 +60,12 @@
   "performance_by_confidence_label": {
     "HIGH": {
       "count": 60,
-      "avg_return": -0.0025,
+      "avg_return": -0.0024,
       "win_rate": 0.55
     },
     "MEDIUM": {
       "count": 401,
-      "avg_return": 0.006,
+      "avg_return": 0.0061,
       "win_rate": 0.5486
     },
     "LOW": {
@@ -77,7 +77,7 @@
   "performance_by_sector_group": {
     "unknown": {
       "count": 376,
-      "avg_return": 0.0033,
+      "avg_return": 0.0034,
       "win_rate": 0.5239
     },
     "Space / aerospace": {
@@ -87,7 +87,7 @@
     },
     "Semiconductors": {
       "count": 33,
-      "avg_return": -0.0131,
+      "avg_return": -0.013,
       "win_rate": 0.5455
     },
     "AI / software": {
@@ -114,19 +114,19 @@
   "performance_by_under_15_flag": {
     "unknown": {
       "count": 363,
-      "avg_return": 0.0111,
+      "avg_return": 0.0112,
       "win_rate": 0.5647
     },
     "True": {
       "count": 100,
-      "avg_return": -0.0179,
+      "avg_return": -0.0177,
       "win_rate": 0.49
     }
   },
   "performance_by_alert_type": {
     "Attention acceleration above 3x": {
       "count": 66,
-      "avg_return": 0.0035,
+      "avg_return": 0.0036,
       "win_rate": 0.5909
     },
     "Analyst upside above 20%": {
