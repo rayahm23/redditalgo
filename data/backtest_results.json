@@ -647,9 +647,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0166,
+    "return_3d": -0.0502,
+    "return_7d": 0.038,
+    "return_30d": null,
+    "spy_relative_1d": -0.0164,
+    "spy_relative_3d": -0.058,
+    "spy_relative_7d": 0.0293,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": -0.0502,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-05-25",
