@@ -9084,8 +9084,18 @@
       "New strong catalyst signal"
     ],
     "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending_reason": "Not enough forward data yet",
+    "error": null,
+    "return_1d": null,
+    "return_3d": null,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": null,
+    "spy_relative_3d": null,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-06-27",
