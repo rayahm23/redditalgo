@@ -4,32 +4,32 @@
   "total_pending_signals": 2,
   "avg_1d_return": 0.0092,
   "avg_3d_return": 0.0166,
-  "avg_7d_return": 0.0176,
-  "avg_30d_return": -0.0129,
+  "avg_7d_return": 0.0182,
+  "avg_30d_return": 0.0046,
   "win_rate_1d": 0.5917,
-  "win_rate_7d": 0.5828,
-  "win_rate_30d": 0.51,
-  "avg_spy_relative_7d": -0.0043,
+  "win_rate_7d": 0.5858,
+  "win_rate_30d": 0.5414,
+  "avg_spy_relative_7d": -0.004,
   "performance_by_recommendation_type": {
     "High-upside catalyst trade": {
-      "count": 93,
-      "avg_return": -0.0274,
-      "win_rate": 0.4624
+      "count": 96,
+      "avg_return": -0.0247,
+      "win_rate": 0.4792
     },
     "Analyst upside watch": {
-      "count": 62,
-      "avg_return": 0.0315,
-      "win_rate": 0.6129
+      "count": 63,
+      "avg_return": 0.0307,
+      "win_rate": 0.6032
     },
     "Strong retail acceleration": {
-      "count": 48,
-      "avg_return": 0.0154,
-      "win_rate": 0.5417
+      "count": 49,
+      "avg_return": 0.016,
+      "win_rate": 0.551
     },
     "Institutional-style accumulation": {
-      "count": 589,
-      "avg_return": 0.0247,
-      "win_rate": 0.5976
+      "count": 609,
+      "avg_return": 0.0258,
+      "win_rate": 0.6026
     },
     "Volatile momentum setup": {
       "count": 8,
@@ -37,14 +37,14 @@
       "win_rate": 0.25
     },
     "Aggressive growth watch": {
-      "count": 80,
-      "avg_return": 0.026,
-      "win_rate": 0.625
+      "count": 82,
+      "avg_return": 0.0251,
+      "win_rate": 0.622
     },
     "Watchlist": {
-      "count": 135,
-      "avg_return": 0.0164,
-      "win_rate": 0.6
+      "count": 137,
+      "avg_return": 0.0145,
+      "win_rate": 0.5912
     },
     "Panic selloff": {
       "count": 8,
@@ -59,14 +59,14 @@
   },
   "performance_by_confidence_label": {
     "HIGH": {
-      "count": 149,
-      "avg_return": 0.0203,
-      "win_rate": 0.5973
+      "count": 151,
+      "avg_return": 0.0206,
+      "win_rate": 0.6026
     },
     "MEDIUM": {
-      "count": 869,
-      "avg_return": 0.0172,
-      "win_rate": 0.58
+      "count": 896,
+      "avg_return": 0.0179,
+      "win_rate": 0.5826
     },
     "LOW": {
       "count": 8,
@@ -76,9 +76,9 @@
   },
   "performance_by_sector_group": {
     "unknown": {
-      "count": 829,
-      "avg_return": 0.0121,
-      "win_rate": 0.5561
+      "count": 857,
+      "avg_return": 0.013,
+      "win_rate": 0.5601
     },
     "Space / aerospace": {
       "count": 18,
@@ -91,9 +91,9 @@
       "win_rate": 0.5522
     },
     "AI / software": {
-      "count": 72,
-      "avg_return": 0.0914,
-      "win_rate": 0.9028
+      "count": 73,
+      "avg_return": 0.0913,
+      "win_rate": 0.9041
     },
     "EV / clean energy": {
       "count": 16,
@@ -118,41 +118,41 @@
   },
   "performance_by_under_15_flag": {
     "unknown": {
-      "count": 840,
-      "avg_return": 0.024,
-      "win_rate": 0.6036
+      "count": 867,
+      "avg_return": 0.0238,
+      "win_rate": 0.6055
     },
     "True": {
-      "count": 186,
-      "avg_return": -0.0114,
-      "win_rate": 0.4892
+      "count": 188,
+      "avg_return": -0.0077,
+      "win_rate": 0.4947
     }
   },
   "performance_by_alert_type": {
     "Attention acceleration above 3x": {
-      "count": 142,
-      "avg_return": 0.024,
-      "win_rate": 0.5915
+      "count": 143,
+      "avg_return": 0.0236,
+      "win_rate": 0.5874
     },
     "Analyst upside above 20%": {
-      "count": 92,
+      "count": 94,
       "avg_return": 0.061,
-      "win_rate": 0.7174
+      "win_rate": 0.7234
     },
     "Bullish consensus strengthening": {
-      "count": 58,
-      "avg_return": 0.0406,
-      "win_rate": 0.6034
+      "count": 59,
+      "avg_return": 0.0364,
+      "win_rate": 0.5932
     },
     "New strong catalyst signal": {
-      "count": 179,
-      "avg_return": 0.0255,
-      "win_rate": 0.6034
+      "count": 185,
+      "avg_return": 0.0287,
+      "win_rate": 0.6054
     },
     "Market confirmation improving": {
-      "count": 56,
-      "avg_return": -0.0162,
-      "win_rate": 0.5179
+      "count": 57,
+      "avg_return": -0.0158,
+      "win_rate": 0.5263
     }
   },
   "message": null
