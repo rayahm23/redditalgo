@@ -1,35 +1,35 @@
 {
   "total_signals": 1529,
-  "total_completed_signals": 1522,
-  "total_pending_signals": 7,
-  "avg_1d_return": 0.007,
-  "avg_3d_return": 0.0135,
-  "avg_7d_return": 0.0228,
+  "total_completed_signals": 1524,
+  "total_pending_signals": 5,
+  "avg_1d_return": 0.0069,
+  "avg_3d_return": 0.0133,
+  "avg_7d_return": 0.0225,
   "avg_30d_return": 0.0043,
-  "win_rate_1d": 0.5644,
-  "win_rate_7d": 0.6029,
+  "win_rate_1d": 0.565,
+  "win_rate_7d": 0.6019,
   "win_rate_30d": 0.5449,
   "avg_spy_relative_7d": 0.0008,
   "performance_by_recommendation_type": {
     "High-upside catalyst trade": {
-      "count": 116,
-      "avg_return": -0.0109,
-      "win_rate": 0.5172
+      "count": 117,
+      "avg_return": -0.011,
+      "win_rate": 0.5128
     },
     "Analyst upside watch": {
-      "count": 70,
-      "avg_return": 0.0281,
-      "win_rate": 0.6
+      "count": 71,
+      "avg_return": 0.0288,
+      "win_rate": 0.6056
     },
     "Strong retail acceleration": {
-      "count": 53,
-      "avg_return": 0.0144,
-      "win_rate": 0.5472
+      "count": 55,
+      "avg_return": 0.0148,
+      "win_rate": 0.5455
     },
     "Institutional-style accumulation": {
-      "count": 704,
-      "avg_return": 0.0306,
-      "win_rate": 0.6179
+      "count": 716,
+      "avg_return": 0.0301,
+      "win_rate": 0.6173
     },
     "Volatile momentum setup": {
       "count": 10,
@@ -37,14 +37,14 @@
       "win_rate": 0.4
     },
     "Aggressive growth watch": {
-      "count": 98,
-      "avg_return": 0.0307,
-      "win_rate": 0.6531
+      "count": 101,
+      "avg_return": 0.0301,
+      "win_rate": 0.6535
     },
     "Watchlist": {
-      "count": 162,
-      "avg_return": 0.0164,
-      "win_rate": 0.6049
+      "count": 165,
+      "avg_return": 0.0159,
+      "win_rate": 0.6
     },
     "Panic selloff": {
       "count": 8,
@@ -59,14 +59,14 @@
   },
   "performance_by_confidence_label": {
     "HIGH": {
-      "count": 164,
-      "avg_return": 0.0203,
-      "win_rate": 0.6037
+      "count": 166,
+      "avg_return": 0.0205,
+      "win_rate": 0.6024
     },
     "MEDIUM": {
-      "count": 1052,
-      "avg_return": 0.0233,
-      "win_rate": 0.6027
+      "count": 1072,
+      "avg_return": 0.0229,
+      "win_rate": 0.6017
     },
     "LOW": {
       "count": 8,
@@ -76,9 +76,9 @@
   },
   "performance_by_sector_group": {
     "unknown": {
-      "count": 993,
-      "avg_return": 0.0178,
-      "win_rate": 0.5791
+      "count": 1009,
+      "avg_return": 0.0174,
+      "win_rate": 0.5768
     },
     "Space / aerospace": {
       "count": 24,
@@ -86,24 +86,24 @@
       "win_rate": 0.5833
     },
     "Semiconductors": {
-      "count": 76,
-      "avg_return": 0.0254,
-      "win_rate": 0.5789
+      "count": 78,
+      "avg_return": 0.0264,
+      "win_rate": 0.5897
     },
     "AI / software": {
-      "count": 88,
-      "avg_return": 0.0833,
-      "win_rate": 0.8523
+      "count": 90,
+      "avg_return": 0.0818,
+      "win_rate": 0.8444
     },
     "EV / clean energy": {
-      "count": 17,
-      "avg_return": 0.0127,
-      "win_rate": 0.6471
+      "count": 18,
+      "avg_return": 0.0133,
+      "win_rate": 0.6667
     },
     "Biotech": {
-      "count": 14,
-      "avg_return": 0.0313,
-      "win_rate": 0.7143
+      "count": 15,
+      "avg_return": 0.0349,
+      "win_rate": 0.7333
     },
     "Fintech": {
       "count": 8,
@@ -118,26 +118,26 @@
   },
   "performance_by_under_15_flag": {
     "unknown": {
-      "count": 1017,
-      "avg_return": 0.0278,
-      "win_rate": 0.6195
+      "count": 1037,
+      "avg_return": 0.0275,
+      "win_rate": 0.6181
     },
     "True": {
-      "count": 207,
-      "avg_return": -0.0019,
-      "win_rate": 0.5217
+      "count": 209,
+      "avg_return": -0.0025,
+      "win_rate": 0.5215
     }
   },
   "performance_by_alert_type": {
     "Attention acceleration above 3x": {
-      "count": 155,
-      "avg_return": 0.0265,
-      "win_rate": 0.5935
+      "count": 159,
+      "avg_return": 0.0266,
+      "win_rate": 0.5975
     },
     "Analyst upside above 20%": {
-      "count": 107,
-      "avg_return": 0.065,
-      "win_rate": 0.729
+      "count": 111,
+      "avg_return": 0.0637,
+      "win_rate": 0.7207
     },
     "Bullish consensus strengthening": {
       "count": 66,
@@ -145,9 +145,9 @@
       "win_rate": 0.5909
     },
     "New strong catalyst signal": {
-      "count": 224,
-      "avg_return": 0.0283,
-      "win_rate": 0.6027
+      "count": 229,
+      "avg_return": 0.0286,
+      "win_rate": 0.6026
     },
     "Market confirmation improving": {
       "count": 68,
