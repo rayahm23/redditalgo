@@ -11488,13 +11488,13 @@
     "return_1d": 0.0009,
     "return_3d": 0.0023,
     "return_7d": 0.0072,
-    "return_30d": 0.0157,
+    "return_30d": null,
     "spy_relative_1d": -0.0069,
     "spy_relative_3d": -0.0028,
     "spy_relative_7d": -0.0073,
-    "spy_relative_30d": -0.0242,
+    "spy_relative_30d": null,
     "max_drawdown_7d": -0.0022,
-    "max_drawdown_30d": -0.0022
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-06-28",
