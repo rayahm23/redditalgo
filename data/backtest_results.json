@@ -39694,9 +39694,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0166,
+    "return_3d": -0.0131,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0143,
+    "spy_relative_3d": -0.001,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-27",
@@ -39714,9 +39724,19 @@
       "Analyst upside above 20%",
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.1253,
+    "return_3d": -0.0915,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.123,
+    "spy_relative_3d": -0.0794,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-27",
@@ -39733,9 +39753,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0462,
+    "return_3d": -0.0544,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0439,
+    "spy_relative_3d": -0.0423,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-27",
@@ -39752,9 +39782,19 @@
     "alerts": [
       "Market confirmation improving"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0952,
+    "return_3d": -0.1393,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0929,
+    "spy_relative_3d": -0.1272,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-27",
@@ -39769,9 +39809,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.1315,
+    "return_3d": -0.1308,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.1292,
+    "spy_relative_3d": -0.1187,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-27",
@@ -39788,9 +39838,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0941,
+    "return_3d": -0.1191,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0918,
+    "spy_relative_3d": -0.107,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-27",
@@ -39808,9 +39868,19 @@
       "Analyst upside above 20%",
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0202,
+    "return_3d": 0.0404,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0225,
+    "spy_relative_3d": 0.0525,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-27",
@@ -39827,9 +39897,19 @@
     "alerts": [
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0306,
+    "return_3d": -0.1259,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0283,
+    "spy_relative_3d": -0.1138,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -39846,9 +39926,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.006,
+    "return_3d": 0.0036,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.009,
+    "spy_relative_3d": 0.009,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -39867,9 +39957,19 @@
       "Analyst upside above 20%",
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0148,
+    "return_3d": 0.0315,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0178,
+    "spy_relative_3d": 0.0369,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -39887,9 +39987,19 @@
       "Attention acceleration above 3x",
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0094,
+    "return_3d": 0.0108,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0124,
+    "spy_relative_3d": 0.0162,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -39904,9 +40014,19 @@
     "sector_group": "AI / software",
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0098,
+    "return_3d": 0.0257,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0068,
+    "spy_relative_3d": 0.0311,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -39924,9 +40044,19 @@
       "Attention acceleration above 3x",
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0339,
+    "return_3d": 0.0333,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0309,
+    "spy_relative_3d": 0.0387,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -39943,9 +40073,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0058,
+    "return_3d": 0.0099,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0088,
+    "spy_relative_3d": 0.0153,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -39964,9 +40104,19 @@
       "Analyst upside above 20%",
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0229,
+    "return_3d": -0.0468,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0199,
+    "spy_relative_3d": -0.0414,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -39984,9 +40134,19 @@
       "Attention acceleration above 3x",
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.071,
+    "return_3d": -0.1086,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.068,
+    "spy_relative_3d": -0.1032,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40001,9 +40161,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0072,
+    "return_3d": 0.0067,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0042,
+    "spy_relative_3d": 0.0121,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40020,9 +40190,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0005,
+    "return_3d": -0.01,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0035,
+    "spy_relative_3d": -0.0046,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40041,9 +40221,19 @@
       "Analyst upside above 20%",
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.009,
+    "return_3d": -0.0282,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.006,
+    "spy_relative_3d": -0.0228,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40062,9 +40252,19 @@
       "Market confirmation improving",
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.025,
+    "return_3d": -0.043,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.022,
+    "spy_relative_3d": -0.0376,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40081,9 +40281,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0017,
+    "return_3d": 0.0014,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0013,
+    "spy_relative_3d": 0.0068,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40100,9 +40310,19 @@
     "alerts": [
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0442,
+    "return_3d": -0.0324,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0472,
+    "spy_relative_3d": -0.027,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40119,9 +40339,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0014,
+    "return_3d": -0.0587,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0016,
+    "spy_relative_3d": -0.0533,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40136,9 +40366,19 @@
     "sector_group": "AI / software",
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0105,
+    "return_3d": -0.0676,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0135,
+    "spy_relative_3d": -0.0622,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40156,9 +40396,19 @@
       "Attention acceleration above 3x",
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0141,
+    "return_3d": 0.0011,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0111,
+    "spy_relative_3d": 0.0065,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40173,9 +40423,19 @@
     "sector_group": "Semiconductors",
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0277,
+    "return_3d": 0.0249,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0307,
+    "spy_relative_3d": 0.0303,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40192,9 +40452,19 @@
     "alerts": [
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0137,
+    "return_3d": -0.0243,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0107,
+    "spy_relative_3d": -0.0189,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40211,9 +40481,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.1141,
+    "return_3d": 0.1187,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.1171,
+    "spy_relative_3d": 0.1241,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40230,9 +40510,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0283,
+    "return_3d": 0.102,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0253,
+    "spy_relative_3d": 0.1074,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40249,9 +40539,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0803,
+    "return_3d": 0.0482,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0833,
+    "spy_relative_3d": 0.0536,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40268,9 +40568,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0303,
+    "return_3d": -0.05,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0273,
+    "spy_relative_3d": -0.0446,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40287,9 +40597,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0169,
+    "return_3d": -0.0029,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0199,
+    "spy_relative_3d": 0.0025,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40304,9 +40624,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.003,
+    "return_3d": -0.0054,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0,
+    "spy_relative_3d": 0.0,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40321,9 +40651,19 @@
     "sector_group": "Biotech",
     "under_15_flag": true,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0316,
+    "return_3d": -0.0253,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0286,
+    "spy_relative_3d": -0.0199,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40340,9 +40680,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0061,
+    "return_3d": -0.1483,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0091,
+    "spy_relative_3d": -0.1429,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40360,9 +40710,19 @@
       "Attention acceleration above 3x",
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0124,
+    "return_3d": 0.0023,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0094,
+    "spy_relative_3d": 0.0077,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40379,9 +40739,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0321,
+    "return_3d": 0.0931,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0351,
+    "spy_relative_3d": 0.0985,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40399,9 +40769,19 @@
       "Analyst upside above 20%",
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0221,
+    "return_3d": -0.0273,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0251,
+    "spy_relative_3d": -0.0219,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40416,9 +40796,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0019,
+    "return_3d": 0.0018,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0049,
+    "spy_relative_3d": 0.0072,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40435,9 +40825,19 @@
     "alerts": [
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0001,
+    "return_3d": 0.0167,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0031,
+    "spy_relative_3d": 0.0221,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40452,9 +40852,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.036,
+    "return_3d": -0.0796,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.033,
+    "spy_relative_3d": -0.0742,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40471,9 +40881,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0122,
+    "return_3d": -0.0325,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0092,
+    "spy_relative_3d": -0.0271,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40488,9 +40908,19 @@
     "sector_group": null,
     "under_15_flag": true,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0014,
+    "return_3d": -0.0344,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0016,
+    "spy_relative_3d": -0.029,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40507,9 +40937,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0062,
+    "return_3d": -0.0059,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0032,
+    "spy_relative_3d": -0.0005,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40524,9 +40964,19 @@
     "sector_group": null,
     "under_15_flag": true,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0607,
+    "return_3d": 0.0794,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0637,
+    "spy_relative_3d": 0.0848,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40543,9 +40993,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0298,
+    "return_3d": -0.1181,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0268,
+    "spy_relative_3d": -0.1127,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40563,9 +41023,19 @@
       "Analyst upside above 20%",
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0174,
+    "return_3d": -0.0317,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0144,
+    "spy_relative_3d": -0.0263,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40580,9 +41050,19 @@
     "sector_group": null,
     "under_15_flag": true,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0363,
+    "return_3d": 0.0,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0333,
+    "spy_relative_3d": 0.0054,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40600,9 +41080,19 @@
       "Analyst upside above 20%",
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0204,
+    "return_3d": -0.0037,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0234,
+    "spy_relative_3d": 0.0017,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40619,9 +41109,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0054,
+    "return_3d": -0.0022,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0084,
+    "spy_relative_3d": 0.0032,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40638,9 +41138,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0232,
+    "return_3d": 0.0391,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0262,
+    "spy_relative_3d": 0.0445,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40655,9 +41165,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0033,
+    "return_3d": -0.0054,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0003,
+    "spy_relative_3d": 0.0,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40674,9 +41194,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0524,
+    "return_3d": -0.0122,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0554,
+    "spy_relative_3d": -0.0068,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40693,9 +41223,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0063,
+    "return_3d": 0.04,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0033,
+    "spy_relative_3d": 0.0454,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40712,9 +41252,19 @@
     "alerts": [
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0173,
+    "return_3d": 0.0291,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0203,
+    "spy_relative_3d": 0.0345,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40731,9 +41281,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0233,
+    "return_3d": -0.08,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0203,
+    "spy_relative_3d": -0.0746,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40750,9 +41310,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0109,
+    "return_3d": 0.0009,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0079,
+    "spy_relative_3d": 0.0063,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-28",
@@ -40767,9 +41337,19 @@
     "sector_group": null,
     "under_15_flag": true,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0111,
+    "return_3d": 0.0722,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0141,
+    "spy_relative_3d": 0.0776,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40787,9 +41367,19 @@
       "Attention acceleration above 3x",
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0124,
+    "return_3d": 0.0056,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0055,
+    "spy_relative_3d": -0.0024,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40807,9 +41397,19 @@
       "Analyst upside above 20%",
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0151,
+    "return_3d": 0.0347,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0082,
+    "spy_relative_3d": 0.0267,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40824,9 +41424,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0214,
+    "return_3d": 0.0553,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0145,
+    "spy_relative_3d": 0.0473,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40843,9 +41453,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0187,
+    "return_3d": -0.0033,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0118,
+    "spy_relative_3d": -0.0113,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40864,9 +41484,19 @@
       "Analyst upside above 20%",
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.006,
+    "return_3d": -0.0134,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0009,
+    "spy_relative_3d": -0.0214,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40884,9 +41514,19 @@
       "Analyst upside above 20%",
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0108,
+    "return_3d": 0.067,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0177,
+    "spy_relative_3d": 0.059,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40903,9 +41543,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0351,
+    "return_3d": 0.0756,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0282,
+    "spy_relative_3d": 0.0676,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40922,9 +41572,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0044,
+    "return_3d": 0.0999,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0113,
+    "spy_relative_3d": 0.0919,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40939,9 +41599,19 @@
     "sector_group": "Biotech",
     "under_15_flag": true,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0033,
+    "return_3d": 0.0065,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0102,
+    "spy_relative_3d": -0.0015,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40956,9 +41626,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.002,
+    "return_3d": 0.0065,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0089,
+    "spy_relative_3d": -0.0015,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40975,9 +41655,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0398,
+    "return_3d": -0.0543,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0329,
+    "spy_relative_3d": -0.0623,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -40995,9 +41685,19 @@
       "Attention acceleration above 3x",
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0204,
+    "return_3d": 0.0367,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0135,
+    "spy_relative_3d": 0.0287,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41012,9 +41712,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0127,
+    "return_3d": 0.0013,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0058,
+    "spy_relative_3d": -0.0067,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41031,9 +41741,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0002,
+    "return_3d": 0.0042,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0071,
+    "spy_relative_3d": -0.0038,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41048,9 +41768,19 @@
     "sector_group": "AI / software",
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0128,
+    "return_3d": 0.0092,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0059,
+    "spy_relative_3d": 0.0012,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41068,9 +41798,19 @@
       "Attention acceleration above 3x",
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0382,
+    "return_3d": 0.0202,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0313,
+    "spy_relative_3d": 0.0122,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41085,9 +41825,19 @@
     "sector_group": "Semiconductors",
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0264,
+    "return_3d": -0.0006,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0195,
+    "spy_relative_3d": -0.0086,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41104,9 +41854,19 @@
     "alerts": [
       "Attention acceleration above 3x"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0132,
+    "return_3d": 0.0,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0063,
+    "spy_relative_3d": -0.008,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41123,9 +41883,19 @@
     "alerts": [
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0236,
+    "return_3d": -0.0309,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0167,
+    "spy_relative_3d": -0.0389,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41142,9 +41912,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0033,
+    "return_3d": -0.0121,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0102,
+    "spy_relative_3d": -0.0201,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41161,9 +41941,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0216,
+    "return_3d": -0.0017,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0147,
+    "spy_relative_3d": -0.0097,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41178,9 +41968,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.068,
+    "return_3d": 0.1324,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0611,
+    "spy_relative_3d": 0.1244,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41198,9 +41998,19 @@
       "Attention acceleration above 3x",
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0394,
+    "return_3d": -0.0048,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0325,
+    "spy_relative_3d": -0.0128,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41217,9 +42027,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0137,
+    "return_3d": 0.0031,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0068,
+    "spy_relative_3d": -0.0049,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41234,9 +42054,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0032,
+    "return_3d": 0.0106,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0101,
+    "spy_relative_3d": 0.0026,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41251,9 +42081,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0458,
+    "return_3d": -0.0377,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0389,
+    "spy_relative_3d": -0.0457,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41270,9 +42110,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0606,
+    "return_3d": 0.0894,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0537,
+    "spy_relative_3d": 0.0814,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41289,9 +42139,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0145,
+    "return_3d": -0.1378,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0076,
+    "spy_relative_3d": -0.1458,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41309,9 +42169,19 @@
       "Attention acceleration above 3x",
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.1499,
+    "return_3d": -0.0218,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.143,
+    "spy_relative_3d": -0.0298,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41326,9 +42196,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0329,
+    "return_3d": 0.0209,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.026,
+    "spy_relative_3d": 0.0129,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41345,9 +42225,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0194,
+    "return_3d": -0.0059,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0125,
+    "spy_relative_3d": -0.0139,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41362,9 +42252,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0082,
+    "return_3d": 0.0222,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0013,
+    "spy_relative_3d": 0.0142,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41379,9 +42279,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0029,
+    "return_3d": -0.0398,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0098,
+    "spy_relative_3d": -0.0478,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41396,9 +42306,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0069,
+    "return_3d": 0.008,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0,
+    "spy_relative_3d": 0.0,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41413,9 +42333,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0702,
+    "return_3d": 0.0705,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0771,
+    "spy_relative_3d": 0.0625,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41432,9 +42362,19 @@
     "alerts": [
       "Bullish consensus strengthening"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0501,
+    "return_3d": -0.0737,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0432,
+    "spy_relative_3d": -0.0817,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41449,9 +42389,19 @@
     "sector_group": "Space / aerospace",
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0124,
+    "return_3d": -0.027,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0055,
+    "spy_relative_3d": -0.035,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41466,9 +42416,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0073,
+    "return_3d": -0.0033,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0004,
+    "spy_relative_3d": -0.0113,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41485,9 +42445,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.069,
+    "return_3d": -0.0694,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0621,
+    "spy_relative_3d": -0.0774,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41504,9 +42474,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0247,
+    "return_3d": -0.0057,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0316,
+    "spy_relative_3d": -0.0137,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41521,9 +42501,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0077,
+    "return_3d": 0.0075,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0008,
+    "spy_relative_3d": -0.0005,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41540,9 +42530,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0261,
+    "return_3d": 0.0359,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.033,
+    "spy_relative_3d": 0.0279,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41557,9 +42557,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0701,
+    "return_3d": -0.0437,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0632,
+    "spy_relative_3d": -0.0517,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41576,9 +42586,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0447,
+    "return_3d": -0.0255,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0378,
+    "spy_relative_3d": -0.0335,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41595,9 +42615,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0065,
+    "return_3d": 0.0083,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0004,
+    "spy_relative_3d": 0.0003,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41612,9 +42642,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0042,
+    "return_3d": -0.0033,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0027,
+    "spy_relative_3d": -0.0113,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41631,9 +42671,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0008,
+    "return_3d": -0.006,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0061,
+    "spy_relative_3d": -0.014,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41650,9 +42700,19 @@
     "alerts": [
       "New strong catalyst signal"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.012,
+    "return_3d": -0.0177,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0051,
+    "spy_relative_3d": -0.0257,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41667,9 +42727,19 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.0312,
+    "return_3d": 0.0595,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": -0.0243,
+    "spy_relative_3d": 0.0515,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-08-29",
@@ -41684,8 +42754,18 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": -0.003,
+    "return_3d": 0.017,
+    "return_7d": null,
+    "return_30d": null,
+    "spy_relative_1d": 0.0039,
+    "spy_relative_3d": 0.009,
+    "spy_relative_7d": null,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": null,
+    "max_drawdown_30d": null
   }
 ]
