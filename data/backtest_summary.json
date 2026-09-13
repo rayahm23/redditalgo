@@ -1,15 +1,15 @@
 {
   "total_signals": 1529,
-  "total_completed_signals": 1524,
-  "total_pending_signals": 5,
+  "total_completed_signals": 1522,
+  "total_pending_signals": 7,
   "avg_1d_return": 0.0071,
   "avg_3d_return": 0.0127,
   "avg_7d_return": 0.0187,
   "avg_30d_return": 0.0416,
-  "win_rate_1d": 0.565,
-  "win_rate_7d": 0.5814,
+  "win_rate_1d": 0.5644,
+  "win_rate_7d": 0.5808,
   "win_rate_30d": 0.6027,
-  "avg_spy_relative_7d": 0.0013,
+  "avg_spy_relative_7d": 0.0014,
   "performance_by_recommendation_type": {
     "High-upside catalyst trade": {
       "count": 153,
@@ -27,9 +27,9 @@
       "win_rate": 0.5
     },
     "Institutional-style accumulation": {
-      "count": 876,
-      "avg_return": 0.026,
-      "win_rate": 0.6005
+      "count": 874,
+      "avg_return": 0.0261,
+      "win_rate": 0.5995
     },
     "Volatile momentum setup": {
       "count": 13,
@@ -64,9 +64,9 @@
       "win_rate": 0.5688
     },
     "MEDIUM": {
-      "count": 1295,
-      "avg_return": 0.0191,
-      "win_rate": 0.583
+      "count": 1293,
+      "avg_return": 0.0192,
+      "win_rate": 0.5824
     },
     "LOW": {
       "count": 11,
@@ -76,9 +76,9 @@
   },
   "performance_by_sector_group": {
     "unknown": {
-      "count": 1238,
+      "count": 1236,
       "avg_return": 0.0137,
-      "win_rate": 0.5565
+      "win_rate": 0.5558
     },
     "Space / aerospace": {
       "count": 26,
@@ -118,9 +118,9 @@
   },
   "performance_by_under_15_flag": {
     "unknown": {
-      "count": 1253,
+      "count": 1251,
       "avg_return": 0.0235,
-      "win_rate": 0.5946
+      "win_rate": 0.5939
     },
     "True": {
       "count": 271,
