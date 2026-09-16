@@ -5,10 +5,10 @@
   "avg_1d_return": 0.0071,
   "avg_3d_return": 0.0127,
   "avg_7d_return": 0.0187,
-  "avg_30d_return": 0.0416,
+  "avg_30d_return": 0.0353,
   "win_rate_1d": 0.5644,
   "win_rate_7d": 0.5808,
-  "win_rate_30d": 0.6027,
+  "win_rate_30d": 0.5728,
   "avg_spy_relative_7d": 0.0014,
   "performance_by_recommendation_type": {
     "High-upside catalyst trade": {
