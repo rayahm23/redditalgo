@@ -1,159 +1,19 @@
 {
-  "total_signals": 1529,
-  "total_completed_signals": 1520,
-  "total_pending_signals": 9,
-  "avg_1d_return": 0.0071,
-  "avg_3d_return": 0.0127,
-  "avg_7d_return": 0.0187,
-  "avg_30d_return": 0.0353,
-  "win_rate_1d": 0.5638,
-  "win_rate_7d": 0.5803,
-  "win_rate_30d": 0.5728,
-  "avg_spy_relative_7d": 0.0013,
-  "performance_by_recommendation_type": {
-    "High-upside catalyst trade": {
-      "count": 153,
-      "avg_return": -0.012,
-      "win_rate": 0.4902
-    },
-    "Analyst upside watch": {
-      "count": 98,
-      "avg_return": 0.0253,
-      "win_rate": 0.5918
-    },
-    "Strong retail acceleration": {
-      "count": 78,
-      "avg_return": 0.005,
-      "win_rate": 0.5
-    },
-    "Institutional-style accumulation": {
-      "count": 873,
-      "avg_return": 0.0261,
-      "win_rate": 0.5991
-    },
-    "Volatile momentum setup": {
-      "count": 13,
-      "avg_return": -0.0487,
-      "win_rate": 0.4615
-    },
-    "Aggressive growth watch": {
-      "count": 118,
-      "avg_return": 0.0271,
-      "win_rate": 0.6186
-    },
-    "Watchlist": {
-      "count": 175,
-      "avg_return": 0.0131,
-      "win_rate": 0.5829
-    },
-    "Panic selloff": {
-      "count": 9,
-      "avg_return": -0.0065,
-      "win_rate": 0.4444
-    },
-    "Contrarian watchlist": {
-      "count": 3,
-      "avg_return": -0.0511,
-      "win_rate": 0.6667
-    }
-  },
-  "performance_by_confidence_label": {
-    "HIGH": {
-      "count": 218,
-      "avg_return": 0.0166,
-      "win_rate": 0.5688
-    },
-    "MEDIUM": {
-      "count": 1291,
-      "avg_return": 0.0191,
-      "win_rate": 0.5817
-    },
-    "LOW": {
-      "count": 11,
-      "avg_return": 0.0124,
-      "win_rate": 0.6364
-    }
-  },
-  "performance_by_sector_group": {
-    "unknown": {
-      "count": 1234,
-      "avg_return": 0.0137,
-      "win_rate": 0.5551
-    },
-    "Space / aerospace": {
-      "count": 26,
-      "avg_return": -0.0042,
-      "win_rate": 0.5385
-    },
-    "Semiconductors": {
-      "count": 95,
-      "avg_return": 0.029,
-      "win_rate": 0.6211
-    },
-    "AI / software": {
-      "count": 107,
-      "avg_return": 0.0725,
-      "win_rate": 0.7944
-    },
-    "EV / clean energy": {
-      "count": 19,
-      "avg_return": 0.0165,
-      "win_rate": 0.6842
-    },
-    "Biotech": {
-      "count": 22,
-      "avg_return": 0.0095,
-      "win_rate": 0.6364
-    },
-    "Fintech": {
-      "count": 8,
-      "avg_return": 0.039,
-      "win_rate": 0.875
-    },
-    "Crypto equities": {
-      "count": 9,
-      "avg_return": 0.0391,
-      "win_rate": 0.5556
-    }
-  },
-  "performance_by_under_15_flag": {
-    "unknown": {
-      "count": 1249,
-      "avg_return": 0.0235,
-      "win_rate": 0.5933
-    },
-    "True": {
-      "count": 271,
-      "avg_return": -0.0034,
-      "win_rate": 0.5203
-    }
-  },
-  "performance_by_alert_type": {
-    "Attention acceleration above 3x": {
-      "count": 234,
-      "avg_return": 0.0189,
-      "win_rate": 0.5769
-    },
-    "Analyst upside above 20%": {
-      "count": 157,
-      "avg_return": 0.0514,
-      "win_rate": 0.6752
-    },
-    "Bullish consensus strengthening": {
-      "count": 120,
-      "avg_return": 0.0232,
-      "win_rate": 0.5583
-    },
-    "New strong catalyst signal": {
-      "count": 274,
-      "avg_return": 0.02,
-      "win_rate": 0.5474
-    },
-    "Market confirmation improving": {
-      "count": 80,
-      "avg_return": 0.0006,
-      "win_rate": 0.575
-    }
-  },
-  "message": null
+  "total_signals": 1579,
+  "total_completed_signals": 0,
+  "total_pending_signals": 1579,
+  "avg_1d_return": null,
+  "avg_3d_return": null,
+  "avg_7d_return": null,
+  "avg_30d_return": null,
+  "win_rate_1d": null,
+  "win_rate_7d": null,
+  "win_rate_30d": null,
+  "avg_spy_relative_7d": null,
+  "performance_by_recommendation_type": {},
+  "performance_by_confidence_label": {},
+  "performance_by_sector_group": {},
+  "performance_by_under_15_flag": {},
+  "performance_by_alert_type": {},
+  "message": "More daily history is needed before backtest statistics are meaningful."
 }
