@@ -1,19 +1,159 @@
 {
   "total_signals": 1679,
-  "total_completed_signals": 0,
-  "total_pending_signals": 1679,
-  "avg_1d_return": null,
-  "avg_3d_return": null,
-  "avg_7d_return": null,
-  "avg_30d_return": null,
-  "win_rate_1d": null,
-  "win_rate_7d": null,
-  "win_rate_30d": null,
-  "avg_spy_relative_7d": null,
-  "performance_by_recommendation_type": {},
-  "performance_by_confidence_label": {},
-  "performance_by_sector_group": {},
-  "performance_by_under_15_flag": {},
-  "performance_by_alert_type": {},
-  "message": "More daily history is needed before backtest statistics are meaningful."
+  "total_completed_signals": 1305,
+  "total_pending_signals": 374,
+  "avg_1d_return": 0.0092,
+  "avg_3d_return": 0.0164,
+  "avg_7d_return": 0.0223,
+  "avg_30d_return": 0.0353,
+  "win_rate_1d": 0.5916,
+  "win_rate_7d": 0.6008,
+  "win_rate_30d": 0.5728,
+  "avg_spy_relative_7d": 0.0013,
+  "performance_by_recommendation_type": {
+    "High-upside catalyst trade": {
+      "count": 122,
+      "avg_return": -0.0108,
+      "win_rate": 0.5082
+    },
+    "Analyst upside watch": {
+      "count": 74,
+      "avg_return": 0.0286,
+      "win_rate": 0.6081
+    },
+    "Strong retail acceleration": {
+      "count": 56,
+      "avg_return": 0.013,
+      "win_rate": 0.5357
+    },
+    "Institutional-style accumulation": {
+      "count": 751,
+      "avg_return": 0.0302,
+      "win_rate": 0.6205
+    },
+    "Volatile momentum setup": {
+      "count": 10,
+      "avg_return": -0.0541,
+      "win_rate": 0.4
+    },
+    "Aggressive growth watch": {
+      "count": 110,
+      "avg_return": 0.028,
+      "win_rate": 0.6364
+    },
+    "Watchlist": {
+      "count": 170,
+      "avg_return": 0.0149,
+      "win_rate": 0.5941
+    },
+    "Panic selloff": {
+      "count": 9,
+      "avg_return": -0.0065,
+      "win_rate": 0.4444
+    },
+    "Contrarian watchlist": {
+      "count": 3,
+      "avg_return": -0.0511,
+      "win_rate": 0.6667
+    }
+  },
+  "performance_by_confidence_label": {
+    "HIGH": {
+      "count": 174,
+      "avg_return": 0.0195,
+      "win_rate": 0.5977
+    },
+    "MEDIUM": {
+      "count": 1123,
+      "avg_return": 0.0227,
+      "win_rate": 0.6011
+    },
+    "LOW": {
+      "count": 8,
+      "avg_return": 0.0136,
+      "win_rate": 0.625
+    }
+  },
+  "performance_by_sector_group": {
+    "unknown": {
+      "count": 1058,
+      "avg_return": 0.0172,
+      "win_rate": 0.5756
+    },
+    "Space / aerospace": {
+      "count": 24,
+      "avg_return": -0.0014,
+      "win_rate": 0.5833
+    },
+    "Semiconductors": {
+      "count": 80,
+      "avg_return": 0.027,
+      "win_rate": 0.6
+    },
+    "AI / software": {
+      "count": 93,
+      "avg_return": 0.0804,
+      "win_rate": 0.8387
+    },
+    "EV / clean energy": {
+      "count": 19,
+      "avg_return": 0.0165,
+      "win_rate": 0.6842
+    },
+    "Biotech": {
+      "count": 18,
+      "avg_return": 0.0228,
+      "win_rate": 0.6667
+    },
+    "Fintech": {
+      "count": 8,
+      "avg_return": 0.039,
+      "win_rate": 0.875
+    },
+    "Crypto equities": {
+      "count": 5,
+      "avg_return": 0.038,
+      "win_rate": 0.6
+    }
+  },
+  "performance_by_under_15_flag": {
+    "unknown": {
+      "count": 1083,
+      "avg_return": 0.027,
+      "win_rate": 0.6159
+    },
+    "True": {
+      "count": 222,
+      "avg_return": -0.0008,
+      "win_rate": 0.527
+    }
+  },
+  "performance_by_alert_type": {
+    "Attention acceleration above 3x": {
+      "count": 174,
+      "avg_return": 0.0258,
+      "win_rate": 0.6092
+    },
+    "Analyst upside above 20%": {
+      "count": 121,
+      "avg_return": 0.0586,
+      "win_rate": 0.7025
+    },
+    "Bullish consensus strengthening": {
+      "count": 67,
+      "avg_return": 0.032,
+      "win_rate": 0.597
+    },
+    "New strong catalyst signal": {
+      "count": 234,
+      "avg_return": 0.0276,
+      "win_rate": 0.594
+    },
+    "Market confirmation improving": {
+      "count": 69,
+      "avg_return": -0.0061,
+      "win_rate": 0.5507
+    }
+  },
+  "message": null
 }
