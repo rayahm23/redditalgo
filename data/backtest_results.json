@@ -27741,13 +27741,13 @@
     "error": null,
     "return_1d": -0.0061,
     "return_3d": -0.0265,
-    "return_7d": -0.0312,
+    "return_7d": -0.0313,
     "return_30d": null,
     "spy_relative_1d": -0.0133,
     "spy_relative_3d": -0.0665,
-    "spy_relative_7d": -0.0735,
+    "spy_relative_7d": -0.0736,
     "spy_relative_30d": null,
-    "max_drawdown_7d": -0.0312,
+    "max_drawdown_7d": -0.0313,
     "max_drawdown_30d": null
   },
   {
