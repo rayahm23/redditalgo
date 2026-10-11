@@ -1,55 +1,55 @@
 {
   "total_signals": 1679,
-  "total_completed_signals": 1665,
-  "total_pending_signals": 14,
-  "avg_1d_return": 0.0058,
-  "avg_3d_return": 0.0105,
-  "avg_7d_return": 0.0171,
-  "avg_30d_return": 0.0257,
-  "win_rate_1d": 0.5477,
-  "win_rate_7d": 0.5719,
-  "win_rate_30d": 0.5447,
-  "avg_spy_relative_7d": 0.0003,
+  "total_completed_signals": 1350,
+  "total_pending_signals": 329,
+  "avg_1d_return": 0.0092,
+  "avg_3d_return": 0.0158,
+  "avg_7d_return": 0.0222,
+  "avg_30d_return": 0.0286,
+  "win_rate_1d": 0.5919,
+  "win_rate_7d": 0.5979,
+  "win_rate_30d": 0.5504,
+  "avg_spy_relative_7d": 0.0018,
   "performance_by_recommendation_type": {
     "High-upside catalyst trade": {
-      "count": 170,
-      "avg_return": -0.0077,
-      "win_rate": 0.5
+      "count": 127,
+      "avg_return": -0.0097,
+      "win_rate": 0.5118
     },
     "Analyst upside watch": {
-      "count": 118,
-      "avg_return": 0.0205,
-      "win_rate": 0.5339
+      "count": 76,
+      "avg_return": 0.0281,
+      "win_rate": 0.6053
     },
     "Strong retail acceleration": {
-      "count": 96,
-      "avg_return": 0.0064,
-      "win_rate": 0.5
+      "count": 60,
+      "avg_return": 0.0107,
+      "win_rate": 0.5167
     },
     "Institutional-style accumulation": {
-      "count": 932,
-      "avg_return": 0.0235,
-      "win_rate": 0.5955
+      "count": 769,
+      "avg_return": 0.0301,
+      "win_rate": 0.6177
     },
     "Volatile momentum setup": {
-      "count": 16,
-      "avg_return": -0.0431,
-      "win_rate": 0.4375
+      "count": 12,
+      "avg_return": -0.0424,
+      "win_rate": 0.5
     },
     "Aggressive growth watch": {
-      "count": 126,
-      "avg_return": 0.0257,
-      "win_rate": 0.6032
+      "count": 110,
+      "avg_return": 0.0287,
+      "win_rate": 0.6273
     },
     "Watchlist": {
-      "count": 176,
-      "avg_return": 0.0128,
-      "win_rate": 0.5795
+      "count": 172,
+      "avg_return": 0.0148,
+      "win_rate": 0.593
     },
     "Panic selloff": {
-      "count": 10,
-      "avg_return": -0.0096,
-      "win_rate": 0.4
+      "count": 9,
+      "avg_return": -0.0065,
+      "win_rate": 0.4444
     },
     "Contrarian watchlist": {
       "count": 3,
@@ -59,14 +59,14 @@
   },
   "performance_by_confidence_label": {
     "HIGH": {
-      "count": 271,
-      "avg_return": 0.016,
-      "win_rate": 0.5609
+      "count": 177,
+      "avg_return": 0.0195,
+      "win_rate": 0.5932
     },
     "MEDIUM": {
-      "count": 1365,
-      "avg_return": 0.0174,
-      "win_rate": 0.5736
+      "count": 1150,
+      "avg_return": 0.0227,
+      "win_rate": 0.5983
     },
     "LOW": {
       "count": 11,
@@ -76,34 +76,34 @@
   },
   "performance_by_sector_group": {
     "unknown": {
-      "count": 1327,
-      "avg_return": 0.0121,
-      "win_rate": 0.5456
+      "count": 1083,
+      "avg_return": 0.017,
+      "win_rate": 0.5706
     },
     "Space / aerospace": {
-      "count": 29,
-      "avg_return": -0.0047,
-      "win_rate": 0.5172
+      "count": 24,
+      "avg_return": -0.0014,
+      "win_rate": 0.5833
     },
     "Semiconductors": {
-      "count": 111,
-      "avg_return": 0.0287,
-      "win_rate": 0.6216
+      "count": 83,
+      "avg_return": 0.0277,
+      "win_rate": 0.6024
     },
     "AI / software": {
-      "count": 116,
-      "avg_return": 0.0673,
-      "win_rate": 0.7845
+      "count": 96,
+      "avg_return": 0.0791,
+      "win_rate": 0.8438
     },
     "EV / clean energy": {
-      "count": 20,
-      "avg_return": 0.0185,
-      "win_rate": 0.7
+      "count": 19,
+      "avg_return": 0.0165,
+      "win_rate": 0.6842
     },
     "Biotech": {
-      "count": 27,
-      "avg_return": 0.0117,
-      "win_rate": 0.6296
+      "count": 19,
+      "avg_return": 0.0224,
+      "win_rate": 0.6842
     },
     "Fintech": {
       "count": 8,
@@ -111,48 +111,48 @@
       "win_rate": 0.875
     },
     "Crypto equities": {
-      "count": 9,
-      "avg_return": 0.0391,
-      "win_rate": 0.5556
+      "count": 6,
+      "avg_return": 0.0582,
+      "win_rate": 0.6667
     }
   },
   "performance_by_under_15_flag": {
     "unknown": {
-      "count": 1353,
-      "avg_return": 0.0216,
-      "win_rate": 0.5846
+      "count": 1102,
+      "avg_return": 0.0269,
+      "win_rate": 0.6116
     },
     "True": {
-      "count": 294,
-      "avg_return": -0.0035,
-      "win_rate": 0.5136
+      "count": 236,
+      "avg_return": 0.0003,
+      "win_rate": 0.5339
     }
   },
   "performance_by_alert_type": {
     "Attention acceleration above 3x": {
-      "count": 296,
-      "avg_return": 0.015,
-      "win_rate": 0.5608
+      "count": 186,
+      "avg_return": 0.0258,
+      "win_rate": 0.6022
     },
     "Analyst upside above 20%": {
-      "count": 177,
-      "avg_return": 0.043,
-      "win_rate": 0.6158
+      "count": 122,
+      "avg_return": 0.0575,
+      "win_rate": 0.6721
     },
     "Bullish consensus strengthening": {
-      "count": 118,
-      "avg_return": 0.0229,
-      "win_rate": 0.5508
+      "count": 76,
+      "avg_return": 0.0375,
+      "win_rate": 0.5921
     },
     "New strong catalyst signal": {
-      "count": 293,
-      "avg_return": 0.019,
-      "win_rate": 0.5529
+      "count": 235,
+      "avg_return": 0.0272,
+      "win_rate": 0.5915
     },
     "Market confirmation improving": {
-      "count": 84,
-      "avg_return": 0.0018,
-      "win_rate": 0.5952
+      "count": 76,
+      "avg_return": 0.0054,
+      "win_rate": 0.5921
     }
   },
   "message": null
