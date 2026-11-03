@@ -20527,19 +20527,9 @@
     "sector_group": null,
     "under_15_flag": false,
     "alerts": [],
-    "pending": false,
-    "pending_reason": null,
-    "error": null,
-    "return_1d": 0.0139,
-    "return_3d": -0.0087,
-    "return_7d": 0.0098,
-    "return_30d": null,
-    "spy_relative_1d": 0.0115,
-    "spy_relative_3d": -0.0122,
-    "spy_relative_7d": -0.0317,
-    "spy_relative_30d": null,
-    "max_drawdown_7d": -0.0394,
-    "max_drawdown_30d": null
+    "pending": true,
+    "pending_reason": "Price history unavailable",
+    "error": null
   },
   {
     "scan_date": "2026-07-25",

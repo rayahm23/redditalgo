@@ -1,13 +1,13 @@
 {
   "total_signals": 1729,
-  "total_completed_signals": 1715,
-  "total_pending_signals": 14,
+  "total_completed_signals": 1714,
+  "total_pending_signals": 15,
   "avg_1d_return": 0.0065,
   "avg_3d_return": 0.0108,
   "avg_7d_return": 0.0172,
   "avg_30d_return": 0.0258,
-  "win_rate_1d": 0.5528,
-  "win_rate_7d": 0.576,
+  "win_rate_1d": 0.5525,
+  "win_rate_7d": 0.5757,
   "win_rate_30d": 0.5451,
   "avg_spy_relative_7d": 0.0004,
   "performance_by_recommendation_type": {
@@ -27,9 +27,9 @@
       "win_rate": 0.5152
     },
     "Institutional-style accumulation": {
-      "count": 940,
+      "count": 939,
       "avg_return": 0.0236,
-      "win_rate": 0.5979
+      "win_rate": 0.5974
     },
     "Volatile momentum setup": {
       "count": 16,
@@ -64,9 +64,9 @@
       "win_rate": 0.5704
     },
     "MEDIUM": {
-      "count": 1377,
+      "count": 1376,
       "avg_return": 0.0175,
-      "win_rate": 0.5766
+      "win_rate": 0.5763
     },
     "LOW": {
       "count": 11,
@@ -76,9 +76,9 @@
   },
   "performance_by_sector_group": {
     "unknown": {
-      "count": 1345,
+      "count": 1344,
       "avg_return": 0.0122,
-      "win_rate": 0.5509
+      "win_rate": 0.5506
     },
     "Space / aerospace": {
       "count": 29,
@@ -118,9 +118,9 @@
   },
   "performance_by_under_15_flag": {
     "unknown": {
-      "count": 1371,
+      "count": 1370,
       "avg_return": 0.0216,
-      "win_rate": 0.5894
+      "win_rate": 0.5891
     },
     "True": {
       "count": 294,
