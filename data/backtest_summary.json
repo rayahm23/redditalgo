@@ -7,7 +7,7 @@
   "avg_7d_return": 0.0155,
   "avg_30d_return": -0.0056,
   "win_rate_1d": 0.5522,
-  "win_rate_7d": 0.568,
+  "win_rate_7d": 0.5686,
   "win_rate_30d": 0.4956,
   "avg_spy_relative_7d": -0.0009,
   "performance_by_recommendation_type": {
@@ -23,8 +23,8 @@
     },
     "Strong retail acceleration": {
       "count": 105,
-      "avg_return": -0.0001,
-      "win_rate": 0.4952
+      "avg_return": -0.0,
+      "win_rate": 0.5048
     },
     "Institutional-style accumulation": {
       "count": 950,
@@ -66,7 +66,7 @@
     "MEDIUM": {
       "count": 1394,
       "avg_return": 0.0166,
-      "win_rate": 0.5732
+      "win_rate": 0.5739
     },
     "LOW": {
       "count": 11,
@@ -78,7 +78,7 @@
     "unknown": {
       "count": 1381,
       "avg_return": 0.0107,
-      "win_rate": 0.5453
+      "win_rate": 0.546
     },
     "Space / aerospace": {
       "count": 31,
@@ -120,7 +120,7 @@
     "unknown": {
       "count": 1414,
       "avg_return": 0.0199,
-      "win_rate": 0.5813
+      "win_rate": 0.582
     },
     "True": {
       "count": 299,
@@ -132,7 +132,7 @@
     "Attention acceleration above 3x": {
       "count": 342,
       "avg_return": 0.0091,
-      "win_rate": 0.5409
+      "win_rate": 0.5439
     },
     "Analyst upside above 20%": {
       "count": 202,
