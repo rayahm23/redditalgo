@@ -8618,9 +8618,19 @@
     "alerts": [
       "Analyst upside above 20%"
     ],
-    "pending": true,
-    "pending_reason": "Price history unavailable",
-    "error": null
+    "pending": false,
+    "pending_reason": null,
+    "error": null,
+    "return_1d": 0.0349,
+    "return_3d": 0.0631,
+    "return_7d": 0.0316,
+    "return_30d": null,
+    "spy_relative_1d": 0.0184,
+    "spy_relative_3d": 0.0401,
+    "spy_relative_7d": 0.0091,
+    "spy_relative_30d": null,
+    "max_drawdown_7d": -0.049,
+    "max_drawdown_30d": null
   },
   {
     "scan_date": "2026-06-26",
